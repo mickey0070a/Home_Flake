@@ -1,0 +1,10 @@
+# Home_Flake structure
+
+.
+├── flake.nix
+├── default.nix
+└── systems/
+    ├── server-host.nix
+    ├── 3d-printer-server.nix
+    ├── michael.nix
+    └── ceri.nix
