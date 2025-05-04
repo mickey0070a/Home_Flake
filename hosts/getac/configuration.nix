@@ -60,7 +60,7 @@
 
   # Enable the Enlightenment Desktop Environment.
   services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.windowManager.awesome.enable = true;	
+ # services.xserver.windowManager.awesome.enable = true;	
  # services.xserver.desktopManager.enlightenment.enable = true;
   
   # Enable acpid
@@ -135,79 +135,6 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
-	#System
-	awesome
-	alacritty
-	ranger
-	krusader
-	htop
-	neovim
-	syncthing
-	git
-	mc
-	kate
-	ventoy
-	gparted
-	pacman
-	python312Packages.pyqt6
-	nmap
-	pulseaudioFull
-	pavucontrol
-	zip
-	unzip
-
-	#Game
-	endless-sky
-
-	#Work	
-	libreoffice
-	davmail
-	obsidian
-	evolutionWithPlugins
-	evolution
-	evolution-ews
-	brave
-	librecad
-	qalculate-gtk
-	gmsh
-	calculix
-
-	#Personal
-	kmymoney
-	inkscape-with-extensions
-
-	#Optional
-	kiwix
-	kdevelop
-	
-	#Java
-	openjdk11
-
-	#AwesomeWM
-	alsa-utils
-	curl
-	dmenu
-	mpc-cli
-	mpd
-	scrot
-	unclutter
-	xorg.xbacklight
-	xsel
-	slock
-	lua
-	lua54Packages.luarocks
-
-	#Awesome-copycats
-	tamsyn
-	font-awesome
-	roboto
-  ];
-
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -233,6 +160,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "24.11"; # Did you read the comment?
 
 }
