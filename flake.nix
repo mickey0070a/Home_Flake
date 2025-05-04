@@ -11,41 +11,18 @@
   };
 
   # Outputs: Define a set of system configurations (machines)
-  outputs = { self, nixpkgs, nixpkgs-unstable, nixos, flake-utils, home-manager }: flake-utils.lib.eachSystem {
-    # For each system, we define specific configurations
-    system: let
-      pkgs = import nixpkgs {
-        system = system;
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixos, flake-utils, home-manager }: 
+  {
+      nixosConfigurations.getac = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+          modules = [
+            ./hosts/getac/configuration.nix
+            home-manager.nixosModules.home-manager {
+              home-manager.useUserPackages = true;
+              home-manager.users.michael = import ./home/michaelh.nix;
+              #home-manager.users.ceri = import ./home/ceri.nix;
+            }
+          ];
       };
-      # Use the corresponding system configuration based on the architecture
-    in {
-      # This will include the system configurations for each machine
-      nixosConfigurations = {
-        serverHost = import ./hosts/mydesktop/configuration.nix { inherit pkgs; inherit system; };
-        printerServer = import ./hosts/asus/configuration.nix { inherit pkgs; inherit system; };
-        michael = import ./hosts/getac/configuration.nix { inherit pkgs; inherit system; };
-        ceri = import ./hosts/chrome/configuration.nix { inherit pkgs; inherit system; };
-      };
-
-      # Optional: Define home-manager configurations if desired for user environments
-      homeConfigurations = {
-        michael = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs system;
-          configuration = import ./home/michael.nix { inherit pkgs system; };
-        };
-        ceri = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs system;
-          configuration = import ./home/ceri.nix { inherit pkgs system; };
-        };
-        ender = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs system;
-          configuration = import ./home/ender.nix
-        };
-        server = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs system;
-          configuration = import ./home/server.nix
-        };
-      };
-    }
-  };
-}
+    };
+  }
