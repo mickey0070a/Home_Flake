@@ -3,10 +3,10 @@
 
   # Define the Nixpkgs and NixOS channels as inputs
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05"; # Can change this to whichever version you're using
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11"; # Can change this to whichever version you're using
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager/release-23.05";
-    nixos.url = "github:NixOS/nixos/nixos-23.05";
+    home-manager.url = "github:nix-community/home-manager/release-24.11";
+    nixos.url = "github:NixOS/nixos/nixos-24.11";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
