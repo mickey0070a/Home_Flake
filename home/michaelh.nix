@@ -5,9 +5,9 @@
 	../modules/office-packages.nix
 	../modules/system-packages.nix
 	../modules/engineering.nix
-  ../modules/core.nix
-  ../modules/awesome.nix
-];
+  	../modules/core.nix
+  	../modules/awesome.nix
+  ];
 
   home.username = "michaelh";
   home.homeDirectory = "/home/michaelh";
@@ -30,6 +30,25 @@
   home.packages = with pkgs; [
   ];
 
+  {
+  home.sessionVariables = {
+    LUA_PATH = "$HOME/.luarocks/share/lua/5.3/?.lua;;";
+    LUA_CPATH = "$HOME/.luarocks/lib/lua/5.3/?.so;;";
+  };
+
+  xsession.windowManager.command = ''
+	if ! luarocks --tree "$HOME/.luarocks" show lain > /dev/null 2>&1; then
+		luarocks --tree "$HOME/.luarocks" install lain
+	fi
+	if ! luarocks --tree "$HOME/.luarocks" show awesome-freedesktop > /dev/null 2>&1; then
+		luarocks --true "$HOME/.luarocks" install awesome-freedesktop
+	fi
+
+    exec awesome
+  '';
+}
+
+  
   xsession.enable = true;
   xsession.windowManager.command = "${pkgs.awesome}/bin/awesome";
 
