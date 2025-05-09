@@ -17,7 +17,7 @@
         system = "x86_64-linux";
 
            specialArgs = {
-          pkgs-stable = import nixpkgs-stable {
+          pkgs-stable = import nixpkgs {
             inherit system;
             config.allowUnfree = true;
           };
