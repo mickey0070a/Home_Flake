@@ -18,7 +18,7 @@
           modules = [
             ./hosts/getac/configuration.nix
             home-manager.nixosModules.home-manager {
-              _module.arge = { inherit inputs; };
+              _module.arge = { inherit outputs; };
               home-manager.useUserPackages = true;
               home-manager.users.michael = import ./home/michaelh.nix;
               #home-manager.users.ceri = import ./home/ceri.nix;
