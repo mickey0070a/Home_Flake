@@ -48,7 +48,7 @@
 }
 
   
-  xsession.enable = true;
+  #xsession.enable = true;
   xsession.windowManager.command = "${pkgs.awesome}/bin/awesome";
 
   programs = {
