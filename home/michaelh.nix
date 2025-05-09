@@ -30,7 +30,6 @@
   home.packages = with pkgs; [
   ];
 
-  {
   home.sessionVariables = {
     LUA_PATH = "$HOME/.luarocks/share/lua/5.3/?.lua;;";
     LUA_CPATH = "$HOME/.luarocks/lib/lua/5.3/?.so;;";
