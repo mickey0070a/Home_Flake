@@ -18,11 +18,11 @@
 
            specialArgs = {
           pkgs-stable = import nixpkgs {
-            inherit system;
+            system = "x86_64-linux";
             config.allowUnfree = true;
           };
           pkgs-unstable = import nixpkgs-unstable {
-            inherit system;
+            isystem = "x86_64-linux";
             config.allowUnfree = true;
           };
         };
