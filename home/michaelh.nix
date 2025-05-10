@@ -32,19 +32,19 @@
     LUA_CPATH = "$HOME/.luarocks/lib/lua/5.3/?.so;;";
   };
 
-  xsession.windowManager.command = ''
-	if ! luarocks --tree "$HOME/.luarocks" show lain > /dev/null 2>&1; then
-		luarocks --tree "$HOME/.luarocks" install lain
-	fi
-	if ! luarocks --tree "$HOME/.luarocks" show awesome-freedesktop > /dev/null 2>&1; then
-		luarocks --true "$HOME/.luarocks" install awesome-freedesktop
-	fi
+  xsession.enable = true;
 
-    exec awesome
-  '';
+  #xsession.windowManager.command = ''
+	#if ! luarocks --tree "$HOME/.luarocks" show lain > /dev/null 2>&1; then
+	#	luarocks --tree "$HOME/.luarocks" install lain
+	#fi
+	#if ! luarocks --tree "$HOME/.luarocks" show awesome-freedesktop > /dev/null 2>&1; then
+	#	luarocks --true "$HOME/.luarocks" install awesome-freedesktop
+	#fi
+    #exec awesome
+  #'';
   
-  #xsession.enable = true;
-  #xsession.windowManager.command = "${pkgs.awesome}/bin/awesome";
+  xsession.windowManager.awesome.enable = true;
 
   programs = {
 	  git = {

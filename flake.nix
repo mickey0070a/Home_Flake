@@ -17,7 +17,7 @@
         system = "x86_64-linux";
 
            specialArgs = {
-          pkgs-stable = import nixpkgs {
+          pkgs = import nixpkgs {
             system = "x86_64-linux";
             config.allowUnfree = true;
           };
