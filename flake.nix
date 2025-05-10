@@ -31,7 +31,7 @@
             ./hosts/getac/configuration.nix
             home-manager.nixosModules.home-manager {
               home-manager.useUserPackages = true;
-              home-manager.users.michael = import ./home/michaelh.nix;
+              home-manager.users.michaelh = import ./home/michaelh.nix;
               #home-manager.users.ceri = import ./home/ceri.nix;
             }
           ];

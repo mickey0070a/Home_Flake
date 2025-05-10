@@ -79,7 +79,7 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  sound.enable = true;
+  #sound.enable = true;
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = true;
@@ -117,6 +117,7 @@
     isNormalUser = true;
     description = "Michael Hall";
     extraGroups = [ "networkmanager" "wheel" "storage" ];
+    password = "test";
     packages = with pkgs; [
     #  thunderbird
     ];

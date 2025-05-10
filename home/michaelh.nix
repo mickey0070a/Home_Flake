@@ -2,10 +2,7 @@
 
 {
     imports = [
-	../modules/office-packages.nix
 	../modules/system-packages.nix
-	../modules/engineering.nix
-  	../modules/core.nix
   	../modules/awesome.nix
   ];
 
@@ -45,11 +42,9 @@
 
     exec awesome
   '';
-}
-
   
   #xsession.enable = true;
-  xsession.windowManager.command = "${pkgs.awesome}/bin/awesome";
+  #xsession.windowManager.command = "${pkgs.awesome}/bin/awesome";
 
   programs = {
 	  git = {
