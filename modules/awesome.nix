@@ -16,6 +16,7 @@
 	slock
 	lua
 	lua54Packages.luarocks
+ lua54Packages.Vicious
 
 	# Awesome-Copycats
 	tamsyn
