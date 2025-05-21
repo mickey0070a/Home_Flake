@@ -21,6 +21,9 @@
   # Set up a user for printer management (can be used for more specific permissions)
   users.users.printer = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ 
+        "wheel"
+        "dialout" 
+   ];
   };
 }
