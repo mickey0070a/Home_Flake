@@ -3,7 +3,7 @@
 {
   home.packages = with pkgs; [
 	libreoffice
-	#trillium-next-desktop
+	pkgs-unstable.trillium-next-desktop
 	evolutionWithPlugins
 	evolution-ews
 	brave
