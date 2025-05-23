@@ -11,22 +11,11 @@
   };
 
   # Outputs: Define a set of system configurations (machines)
-  outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, home-manager }: 
+  outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, home-manager }@inputs:
   {
       nixosConfigurations.getac = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-
-           specialArgs = {
-          pkgs = import nixpkgs {
-            system = "x86_64-linux";
-            config.allowUnfree = true;
-          };
-          pkgs-unstable = import nixpkgs-unstable {
-            isystem = "x86_64-linux";
-            config.allowUnfree = true;
-          };
-        };
-
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
           modules = [
             ./hosts/getac/configuration.nix
             home-manager.nixosModules.home-manager {

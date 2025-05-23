@@ -16,8 +16,8 @@ local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
 theme.default_dir                               = require("awful.util").get_themes_dir() .. "default"
-theme.icon_dir                                  = os.getenv("HOME") .. "/.config/awesome/themes/holo/icons"
-theme.wallpaper                                 = os.getenv("HOME") .. "/.config/awesome/Wallpapers/40k.png"
+theme.icon_dir                                  = os.getenv("HOME") .. "/.config/awesome/icons"
+theme.wallpaper                                 = os.getenv("HOME") .. "/.config/awesome/40k.png"
 theme.font                                      = "Roboto Bold 10"
 theme.taglist_font                              = "Roboto Condensed Regular 8"
 theme.fg_normal                                 = "#FFFFFF"
