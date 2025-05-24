@@ -1,16 +1,16 @@
 { config, inputs, pkgs, pkgs-unstable, ... }:
 
 {
-  _module.args.pkgsUnstable = import inputs.nixpkgs-unstable {
+  _module.args.unstable = import inputs.nixpkgs-unstable {
 	inherit (pkgs.stdenv.hostPlatform) system;
 	inherit (config.nixpkgs) config;
   };
-  home.packages = with pkgs; [
-	libreoffice
-	pkgs-unstable.trillium-next-desktop
-	evolutionWithPlugins
-	evolution-ews
-	brave
-	kmymoney
+  home.packages = [
+	pkgs.libreoffice
+	#pkgs.unstable.trilium-next-desktop
+	pkgs.evolutionWithPlugins
+	pkgs.evolution-ews
+	pkgs.brave
+	pkgs.kmymoney
   ];
 }

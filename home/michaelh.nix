@@ -1,14 +1,11 @@
 { config, pkgs, lib, pkgs-unstable,  ... }:
 
 {
-    _module.args.pkgs-unstable = import inputs.nixpkgs-unstable {
-      inherit (pkgs.stdenv.hostPlatform) system;
-      inherit (config.nixpkgs) config;
-    };
     imports = [
 	../modules/system-packages.nix
   	../modules/awesome.nix
   	../modules/office.nix
+  	../modules/engineering.nix
   ];
 
   home.username = "michaelh";

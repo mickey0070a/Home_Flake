@@ -122,7 +122,7 @@
     isNormalUser = true;
     description = "Michael Hall";
     extraGroups = [ "networkmanager" "wheel" "storage" ];
-    password = "test";
+    hashedPassword = "$6$3I8MN8i5U0Fn1d0Z$dPFjE6bBjIEviFmQze4TB.Ay3/HuOsOvl4PTVLX62u6IXv.3uh5n1EFU1XpccB.D49dAO/I.qmDsVP7wIPnnw0";
     packages = with pkgs; [
     #  thunderbird
     ];

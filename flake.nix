@@ -19,9 +19,11 @@
           modules = [
             ./hosts/getac/configuration.nix
             home-manager.nixosModules.home-manager {
+              home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.users.michaelh = import ./home/michaelh.nix;
               #home-manager.users.ceri = import ./home/ceri.nix;
+              home-manager.extraSpecialArgs = { inherit inputs; };
             }
           ];
       };
