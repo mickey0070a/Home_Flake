@@ -71,7 +71,7 @@
             
             windowManager.awesome = {
                 enable = true;
-                luaModules = with pkgs.luaPackages; [
+                luaModules = with pkgs.lua54Packages; [
                      luarocks
                      luadbi-mysql
                      vicious
@@ -86,9 +86,7 @@
   };
 
 
- nix.extraOptions = ''
-    experimental-features = nix-command
-    '';
+  nix.settings.experimental-features = [ "nix-command" ];
 
   # Enable acpid
   services.acpid.enable = true;

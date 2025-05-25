@@ -14,8 +14,9 @@
 	xorg.xbacklight
 	xsel
 	slock
-	lua
-        
+	lua54Packages.lua
+        lua54Packages.luarocks
+        lua54Packages.vicious
 	# Awesome-Copycats
 	tamsyn
 	font-awesome

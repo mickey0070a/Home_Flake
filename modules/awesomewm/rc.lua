@@ -11,8 +11,9 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 
 local home = os.getenv("HOME")
-package.path = package.path .. ";" .. home .. "/.luarocks/share/lua/5.4/?.lua"
-package.cpath = package.cpath .. ";" .. home .. "/.luarocks/lib/lua/5.4/?.so"
+package.path = package.path
+.. ";" .. home .. "/.luarocks/share/lua/5.4/?.lua"
+.. ";" .. home .. "/.luarocks/lib/lua/5.4/?.so"
 
 pcall(require, "luarocks.loader")
 local ensure	    = require("plugins")
