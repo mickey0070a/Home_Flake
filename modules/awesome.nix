@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
+ environment.systemPackages = with pkgs; [
 	# AwesomeWM
 	#awesome
 	alsa-utils
@@ -15,7 +15,7 @@
 	xsel
 	slock
 	lua
-
+        
 	# Awesome-Copycats
 	tamsyn
 	font-awesome

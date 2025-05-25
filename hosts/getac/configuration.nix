@@ -9,7 +9,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      .../modules/awesome.nix
+      ../../modules/awesome.nix
     ];
   
   # Bootloader.
@@ -56,7 +56,7 @@
   };
 
   # Enable the X11 windowing system.
-   services.xserver.enable = true;
+  # services.xserver.enable = true;
 
   # Enable the Enlightenment Desktop Environment.
   # services.xserver.displayManager.lightdm.enable = true;
@@ -77,13 +77,13 @@
                      vicious
                 ];
              };
-         };
          
-         displayManager = {
-             lightdm = true;
-             defaultSession = "none+awesome";
+         displayManager.lightdm = {
+             enable = true;
+            # defaultSession = "none+awesome";
          };
-    };
+       };
+  };
 
 
  nix.extraOptions = ''
