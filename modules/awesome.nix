@@ -15,7 +15,6 @@
 	xsel
 	slock
 	lua
-	lua54Packages.luarocks
 
 	# Awesome-Copycats
 	tamsyn
