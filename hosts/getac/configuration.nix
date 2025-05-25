@@ -70,6 +70,21 @@
             
             windowManager.awesome = {
                 enable = true;
+                luaModules = with pkgs.luaPackages; [
+                     luarocks
+                     luadbi-mysql
+                     vicious
+                ];
+             };
+         };
+         
+         displayManager = {
+             lightdm = true;
+             defaultSession = "none+awesome";
+         };
+    };
+
+
  nix.extraOptions = ''
     experimental-features = nix-command
     '';
