@@ -2,7 +2,9 @@
 
 {
   home.packages = with pkgs; [
-	alacritty
+	xorg.xauth
+        xorg.xinit
+        alacritty
 	krusader
 	htop
 	neovim

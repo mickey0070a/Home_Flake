@@ -3,7 +3,7 @@
 {
   home.packages = with pkgs; [
 	# AwesomeWM
-	awesome
+	#awesome
 	alsa-utils
 	curl
 	dmenu

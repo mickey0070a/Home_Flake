@@ -58,14 +58,16 @@
    services.xserver.enable = true;
 
   # Enable the Enlightenment Desktop Environment.
-  #services.xserver.displayManager.lightdm.enable = true;
- # services.xserver.windowManager.awesome.enable = true;	
+   services.xserver.displayManager.lightdm.enable = true;
+   services.xserver.windowManager.awesome.enable = true;	
  # services.xserver.desktopManager.enlightenment.enable = true;
   
  #services.displayManager.enable = false;
-  services.xserver.windowManager.i3.enable = true;
+  #services.xserver.windowManager.i3.enable = true;
 
-
+ nix.extraOptions = ''
+    experimental-features = nix-command
+    '';
 
   # Enable acpid
   services.acpid.enable = true;
@@ -138,7 +140,7 @@
   };
 
   # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  #nixpkgs.config.allowUnfree = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -151,7 +153,7 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

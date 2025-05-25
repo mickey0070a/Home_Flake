@@ -9,7 +9,12 @@
 
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
---pcall(require, "luarocks.loader")
+
+local home = os.getenv("HOME")
+package.path = package.path .. ";" .. home .. "/.luarocks/share/lua/5.4/?.lua"
+package.cpath = package.cpath .. ";" .. home .. "/.luarocks/lib/lua/5.4/?.so"
+
+pcall(require, "luarocks.loader")
 local ensure	    = require("plugins")
 local gears         = require("gears")
 local awful         = require("awful")
