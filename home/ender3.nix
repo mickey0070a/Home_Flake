@@ -9,7 +9,7 @@
   networking.networkmanager.enable = true;
 
   # Enable Klipper or related printer software
-  home.systemPackages = with pkgs; [
+  home.packages = with pkgs; [
     klipper
     moonraker
     octoprint
