@@ -1,29 +1,43 @@
-{ pkgs, system, ... }:
+{ config, pkgs, lib, pkgs-unstable,  ... }:
 
 {
-  imports = [
-    ./hardware-configuration.nix
-    # Import any specific user services (e.g., home-manager for dotfiles)
+    imports = [
+        ../modules/system-packages.nix
+          #../modules/awesome.nix
+          ../modules/office.nix
+          ../modules/engineering.nix
   ];
 
-  # Basic system setup
-  networking.hostName = "ceri-laptop";
-  users.users.ceri = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ];
-    shell = pkgs.bash;
-  };
+  home.username = "cerih";
+  home.homeDirectory = "/home/cerih";
 
-  # Example: Home Manager for Ceri's dotfiles (if using home-manager)
-  home-manager.users.ceri = {
-    home.packages = with pkgs; [
-      vim
-      zsh
-      htop
-    ];
+  home.stateVersion = "24.11";
 
-    programs.zsh.enable = true;
-    programs.vim.enable = true;
-    programs.htop.enable = true;
+  programs.home-manager.enable = true;
+
+  programs.zsh.enable = true;
+  programs.zsh.oh-my-zsh.enable = true;
+
+  #xsession.enable = true;
+  #xsession.windowManager.awesome.enable = true;
+
+    #home.activation.copyAwesomeConfig = lib.hm.dag.entryAfter #["writeBoundary"] ''
+    #rm -rf ~/.config/awesome
+    #cp -r ${../modules/awesomewm} ~/.config/awesome
+    #'';
+
+  xdg.configFile."awesome".source = ../modules/awesomewm;
+
+  nixpkgs.config.allowUnfree = true;
+
+   #home.packages = with pkgs; [
+  #];
+
+   programs = {
+          git = {
+                  enable = true;
+                  userName = "mickey0070a";
+                  userEmail = "0mike0hall0@gmail.com";
+          };
   };
 }
