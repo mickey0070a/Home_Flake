@@ -19,7 +19,7 @@
   services.moonraker.enable = true;
 
   # Set up a user for printer management (can be used for more specific permissions)
-  users.users.printer = {
+  users.users.ender3 = {
     isNormalUser = true;
     extraGroups = [ 
         "wheel"
