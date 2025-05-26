@@ -65,7 +65,16 @@
   
  #services.displayManager.enable = false;
   #services.xserver.windowManager.i3.enable = true;
-  services = {
+
+ nixpkgs.overlays = [
+	(self: super: {
+		awesome = super.awesome.override {
+			lua = self.lua53Packages.lua;
+		};
+	})
+ ]; 
+
+ services = {
         xserver ={
             enable = true;
             

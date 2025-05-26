@@ -13,10 +13,10 @@
 
 local home = os.getenv("HOME")
 package.path = package.path
-  .. ";" .. home .. "/.luarocks/share/lua/5.2/?.lua"
-  .. ";" .. home .. "/.luarocks/share/lua/5.2/?/init.lua"
+  .. ";" .. home .. "/.luarocks/share/lua/5.3/?.lua"
+  .. ";" .. home .. "/.luarocks/share/lua/5.3/?/init.lua"
 package.cpath = package.cpath
-  .. ";" .. home .. "/.luarocks/lib/luarocks/rocks-5.2/?.so"
+  .. ";" .. home .. "/.luarocks/lib/luarocks/rocks-5.3/?.so"
 --local home = os.getenv("HOME")
 --package.path = package.path
 --.. ";" .. home .. "/.luarocks/share/lua/5.4/?.lua"
