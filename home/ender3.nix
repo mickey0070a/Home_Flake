@@ -5,6 +5,16 @@
     #./hardware-configuration.nix
   ];
 
+  home.username = "ender3";
+  home.homeDirectory = "/home/ender3";
+
+  home.stateVersion = "24.11";
+
+  programs.home-manager.enable = true;
+
+  programs.zsh.enable = true;
+  programs.zsh.oh-my-zsh.enable = true;
+
   #networking.hostName = "3d-printer-server";
   #networking.networkmanager.enable = true;
 
