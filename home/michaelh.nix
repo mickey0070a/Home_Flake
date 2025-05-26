@@ -2,8 +2,7 @@
 
 {
     imports = [
-	../modules/system-packages.nix
-  	#../modules/awesome.nix
+  	../modules/system-packages.nix
   	../modules/office.nix
   	../modules/engineering.nix
   ];
