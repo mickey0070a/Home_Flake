@@ -27,5 +27,19 @@
             }
           ];
       };
+        nixosConfigurations.aspire = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./hosts/getac/configuration.nix
+            home-manager.nixosModules.home-manager {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.ender3 = import ./home/ender3.nix;
+              #home-manager.users.ceri = import ./home/ceri.nix;
+              home-manager.extraSpecialArgs = { inherit inputs; };
+          }
+        ];
+      };
     };
   }
