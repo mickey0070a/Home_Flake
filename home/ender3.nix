@@ -15,9 +15,6 @@
     octoprint
   ];
 
-  # Enable services like Moonraker (for API)
-  services.moonraker.enable = true;
-
   # Set up a user for printer management (can be used for more specific permissions)
   users.users.ender3 = {
     isNormalUser = true;
