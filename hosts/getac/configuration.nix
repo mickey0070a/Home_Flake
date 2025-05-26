@@ -55,10 +55,6 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  54awesome = super.awesome.override {
-      lua = super.lua5_4;
-  };
-
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
 
@@ -89,7 +85,7 @@
                      luadbi-mysql
                      vicious
                 ];
-                package = 54awesome;
+               # package = 54awesome;
              };
          
          displayManager.lightdm = {
