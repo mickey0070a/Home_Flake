@@ -1,0 +1,24 @@
+got nix with awesome deployment working and nix deployment for 3d printer working. 
+
+planning on this file to help track the goals I am trying to reach for this project. as time goes I will mark things completed or abandoned in the header for each section. I will keep the goals if able or necessary to help track the development. will use fit commit as well for this endeavor.
+
+need to do:
+
+User Profiles:
+I had to use GitHub to hijack luaRocks install to get the full freedesktop environment. I need to fix the loader to install Lain via luaRocks and got download to freedesktop. I also had to use symlinks to get awesome to recognize the folder path. I would like to automate this if possible and keep it under awesome. 
+
+need to create a theme setter for each profile, so create a theme branch and get user ID to target that branch in awesome. also need to find out how to allow love updates without needing to rebuild each time.
+
+ender3 Profile:
+I have successful deployment of the ender 3 build, I need to learn how to use Moonraker, fluid, and klipper from cli
+
+cerih profile:
+I need to mimick how mine is setup but have a few changes to focus on what Ceri would use. 
+
+for her theme I need to mimic how Google OS and windows is handled to keep familiarity. also probably desktop icons. 
+
+server profile:
+need to look up nix tools for a server that can be used, if I can use syncthing from cli, as well as allowing remote VIM. also allowing file exploration and connection automatically from the laptops. 
+
+entertainment profile:
+need to set it up and figure out how to beat use it. 
