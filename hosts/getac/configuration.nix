@@ -80,7 +80,7 @@
             
             windowManager.awesome = {
                 enable = true;
-                luaModules = with pkgs.lua54Packages; [
+                luaModules = with pkgs.lua53Packages; [
                      luarocks
                      luadbi-mysql
                      vicious
