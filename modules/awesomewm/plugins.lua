@@ -7,6 +7,8 @@ local function require_or_install(module_name, rock_name)
     -- Install via LuaRocks
     local install_cmd = "luarocks install --local " .. (rock_name or module_name)
     local success = os.execute(install_cmd)
+    os.execute("git clone https://github.com/lcpz/awesome-freedesktop ~/.config/awesome/freedesktop")
+
 
     -- Try loading again
     if success then
