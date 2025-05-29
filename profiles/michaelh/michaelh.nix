@@ -2,9 +2,9 @@
 
 {
     imports = [
-  	../modules/system-packages.nix
-  	../modules/office.nix
-  	../modules/engineering.nix
+  	../../modules/system-packages.nix
+  	../../modules/office.nix
+  	../../modules/engineering.nix
   ];
 
   home.username = "michaelh";
