@@ -22,7 +22,7 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.users.michaelh = import ./profiles/michaelh/michaelh.nix;
-              #home-manager.users.cerih = import ./profiles/CeriH/cerih.nix;
+              home-manager.users.cerih = import ./profiles/cerih/cerih.nix;
               home-manager.extraSpecialArgs = { inherit inputs; };
             }
           ];
@@ -35,7 +35,7 @@
             home-manager.nixosModules.home-manager {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.ender3 = import ./home/ender3.nix;
+              home-manager.users.ender3 = import ./profiles/ender3.nix;
               #home-manager.users.ceri = import ./home/ceri.nix;
               home-manager.extraSpecialArgs = { inherit inputs; };
           }
