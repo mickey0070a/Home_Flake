@@ -11,21 +11,22 @@ local function is_rock_installed(rock_name)
     return false
 end
 
-local rock = "lain"
-local rock2 = "lcpz/awesome-freedesktop" 
+local rock1 = "lain"
+local rock2name = "freedesktop"
+local rock2module = "lcpz/awesome-freedesktop"
 
-if not is_rock_installed(rock) then
-    print(rock .. " not found, installing...")
-    os.execute("luarocks install " .. rock)
+if not is_rock_installed(rock1) then
+    print(rock1 .. " not found, installing...")
+    os.execute("luarocks install --local " .. rock1)
 else
-    print(rock .. " is already installed.")
+    print(rock1 .. " is already installed.")
 end
 
-if not is_rock_installed(rock2) then
-    print(rock2 .. " not found, installing...")
-    os.execute("luarocks install " .. rock2)
-    os.execute("cd ~/.luarocks/")
-    os.execute("git clone https://github.com/lcpz/awesome-freedesktop.git")
+if not is_rock_installed(rock2name) then
+    print(rock2name .. " not found, installing...")
+    os.execute("luarocks install --local " .. rock2module)
+    os.execute("cd ~/.luarocks/share/lua/5.3/")
+    os.execute("git clone https://github.com/lcpz/awesome-freedesktop.git ./freedesktop")
 else
-    print(rock2 .. " is already installed.")
+    print(rock2name .. " is already installed.")
 end
