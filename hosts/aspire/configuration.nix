@@ -76,8 +76,6 @@
   services.moonraker = {
     enable = true;
     address = "0.0.0.0";
-    user = "ender3";
-    group = "wheel";
     allowSystemControl = true;
   };
     
