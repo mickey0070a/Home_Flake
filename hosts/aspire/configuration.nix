@@ -73,9 +73,15 @@
   ];
 
   # Enable services like Moonraker (for API)
-  services.moonraker.enable = true;
-
-  #Enabble Mainsail Services
+  services.moonraker = {
+    enable = true;
+    address = "0.0.0.0";
+    user = "ender3";
+    group = "wheel";
+    allowSystemControl = true;
+  };
+    
+  #Enable Mainsail Services
   services.mainsail.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
