@@ -77,7 +77,7 @@
     firmwares = {
       mcu = {
         enable = true;
-        configFile = ./avr.cfg;
+        #configFile = ./avr.cfg;
         #serial =  Need to capture the serial device location may not need this in hind sight
       };
     };
