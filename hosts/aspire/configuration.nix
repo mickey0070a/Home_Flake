@@ -93,7 +93,7 @@
       cors_domins - [
         "*.local"
         "*.lan"
-        "*://app.fluidd.xyz"
+        #"*://app.fluidd.xyz"
         "*://my.mainsail.xyz"
       ];
     };
