@@ -72,20 +72,33 @@
   gh
   ];
 
-  # Enable services like Moonraker (for API)
-  services.moonraker = {
-    enable = true;
-    address = "0.0.0.0";
-    allowSystemControl = true;
-  };
-
   services.klipper = {
     enable = true;
     firmwares = {
       mcu = {
         enable = true;
         configFile = ./avr.cfg;
-        serial = 
+        #serial =  Need to capture the serial device location may not need this in hind sight
+      };
+    };
+  };
+
+  # Enable services like Moonraker (for API)
+  services.moonraker = {
+    enable = true;
+    address = "0.0.0.0";
+    allowSystemControl = true;
+    settings = {
+      force_logins = true;
+      cors_domins - [
+        "*.local"
+        "*.lan"
+        "*://app.fluidd.xyz"
+        "*://my.mainsail.xyz"
+      ];
+    };
+  };
+
   #Enable Mainsail Services
   services.mainsail.enable = true;
 
