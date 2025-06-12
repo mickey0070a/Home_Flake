@@ -90,7 +90,7 @@
     allowSystemControl = true;
     settings = {
       force_logins = true;
-      cors_domins - [
+      cors_domins = [
         "*.local"
         "*.lan"
         #"*://app.fluidd.xyz"
