@@ -19,6 +19,28 @@
   
   #xsession.enable = true;
   #xsession.windowManager.awesome.enable = true;
+
+  nixpkgs.overlays = [
+	(self: super: {
+		awesome = super.awesome.override {
+			lua = self.lua53Packages.lua;
+		};
+	})
+  ]; 
+
+  xserver ={
+	enable = true;
+        windowManager.awesome = {
+		enable = true;
+                luaModules = with pkgs.lua53Packages; [
+                     luarocks
+                     luadbi-mysql
+                     vicious
+                ];
+               # package = 54awesome;
+	};
+  };
+
   
     #home.activation.copyAwesomeConfig = lib.hm.dag.entryAfter #["writeBoundary"] ''
     #rm -rf ~/.config/awesome
