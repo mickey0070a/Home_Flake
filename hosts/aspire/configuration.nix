@@ -96,15 +96,15 @@
     enable = true;
     address = "0.0.0.0";
     allowSystemControl = true;
-    settings = {
-      force_logins = true;
+    #settings = {
+      #force_logins = true;
       #cors_domins = [
         #"*.local"
         #"*.lan"
         #"*://app.fluidd.xyz"
         #"*://my.mainsail.xyz"
       #];
-    };
+    #};
   };
 
   #Enable Mainsail Services
