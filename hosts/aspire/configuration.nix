@@ -81,7 +81,7 @@
   ];
 
   services.klipper = {
-    enable = true;
+    enable = false;
     #firmwares = {
       #mcu = {
         #enable = true;
