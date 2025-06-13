@@ -71,8 +71,13 @@
   git
   gh
   usbutils
+  klipper
+  klipper-flash
+  klipper-firmware
   klipper-genconfig
-  
+  klipper-estimator
+  mainsail
+  moonraker
   ];
 
   services.klipper = {
