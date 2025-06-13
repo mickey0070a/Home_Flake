@@ -98,12 +98,12 @@
     allowSystemControl = true;
     settings = {
       force_logins = true;
-      cors_domins = [
-        "*.local"
-        "*.lan"
+      #cors_domins = [
+        #"*.local"
+        #"*.lan"
         #"*://app.fluidd.xyz"
-        "*://my.mainsail.xyz"
-      ];
+        #"*://my.mainsail.xyz"
+      #];
     };
   };
 
