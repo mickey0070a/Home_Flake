@@ -74,7 +74,7 @@
   klipper
   klipper-flash
   klipper-firmware
-  klipper-genconfig
+  klipper-genconf
   klipper-estimator
   mainsail
   moonraker
