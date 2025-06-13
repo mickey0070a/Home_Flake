@@ -70,6 +70,9 @@
   #  wget
   git
   gh
+  usbutils
+  klipper-genconfig
+  
   ];
 
   services.klipper = {
