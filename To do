@@ -1,3 +1,12 @@
+need to fully install klipper and any software related to mainsail or Moonraker. these have been broken up into different programs on nix. also need to run through carefully the blog explaining how to do it, I am skipping steps and relying on chatgpt which is failing on this quite heavily.
+
+
+
+
+
+
+
+
 To run Moonraker on NixOS, you need to configure the services.moonraker option in your NixOS configuration file. This involves setting up the necessary parameters such as the address, port, and other specific settings. Here's a step-by-step guide:
 
 Enable Moonraker: Set services.moonraker.enable = true; to enable the Moonraker service.
