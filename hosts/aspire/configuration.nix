@@ -85,7 +85,7 @@
     firmwares = {
       mcu = {
         enable = true;
-        #configFile = ./avr.cfg;
+        configFile = /home/ender3/config;
         serial = "/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0";
       };
     };
