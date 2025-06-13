@@ -78,7 +78,7 @@
       mcu = {
         enable = true;
         #configFile = ./avr.cfg;
-        #serial =  Need to capture the serial device location may not need this in hind sight
+        serial = "/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0"
       };
     };
   };
