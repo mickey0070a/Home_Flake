@@ -56,47 +56,47 @@
   };
 
   # Enable the X11 windowing system.
-  # services.xserver.enable = true;
+  services.xserver.enable = true;
 
   # Enable the Enlightenment Desktop Environment.
-  # services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.displayManager.lightdm.enable = true;
  #  services.xserver.windowManager.awesome.enable = true;	
  # services.xserver.desktopManager.enlightenment.enable = true;
   
  #services.displayManager.enable = false;
   #services.xserver.windowManager.i3.enable = true;
 
- nixpkgs.overlays = [
-	(self: super: {
-		awesome = super.awesome.override {
-			lua = self.lua53Packages.lua;
-		};
-	})
- ]; 
+# nixpkgs.overlays = [
+#	(self: super: {
+#		awesome = super.awesome.override {
+#			lua = self.lua53Packages.lua;
+#		};
+#	})
+# ]; 
 
- services = {
-        xserver ={
-            enable = true;
-            
-            windowManager.awesome = {
-                enable = true;
-                luaModules = with pkgs.lua53Packages; [
-                     luarocks
-                     luadbi-mysql
-                     vicious
-                ];
-               # package = 54awesome;
-             };
-         
-         displayManager.lightdm = {
-             enable = true;
-            # defaultSession = "none+awesome";
-         };
-       };
-  };
+# services = {
+#        xserver ={
+#            enable = true;
+#            
+#            windowManager.awesome = {
+#                enable = true;
+#                luaModules = with pkgs.lua53Packages; [
+#                     luarocks
+#                     luadbi-mysql
+#                     vicious
+#                ];
+#               # package = 54awesome;
+#             };
+#         
+#         displayManager.lightdm = {
+#             enable = true;
+#            # defaultSession = "none+awesome";
+#        };
+#       };
+#  };
 
 
-  nix.settings.experimental-features = [ "nix-command" ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Enable acpid
   services.acpid.enable = true;
