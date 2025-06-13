@@ -96,7 +96,7 @@
   };
 
 
-  nix.settings.experimental-features = [ "nix-command" ];
+  nix.settings.extra-experimental-features = [ "nix-command" "flakes"];
 
   # Enable acpid
   services.acpid.enable = true;
