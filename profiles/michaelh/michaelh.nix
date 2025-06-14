@@ -28,7 +28,7 @@
 	})
   ]; 
 
-  xserver ={
+  xsession ={
 	enable = true;
         windowManager.awesome = {
 		enable = true;
