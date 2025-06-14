@@ -80,16 +80,17 @@
   moonraker
   ];
 
-  services.klipper = {
-    enable = true;
-    firmwares = {
-      mcu = {
-        enable = true;
-        configFile = /home/ender3/klipper.config;
-        serial = "/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0";
-      };
-    };
-  };
+ #services.klipper = {
+    #enable = true;
+    #configFile = "/home/ender3/klipper.config"; 
+    #firmwares = {
+      #mcu = {
+        #enable = true;
+        #configFile = /home/ender3/klipper.config;
+        #serial = "/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0";
+      #};
+    #};
+  #};
 
   # Enable services like Moonraker (for API)
   services.moonraker = {
