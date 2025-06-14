@@ -9,7 +9,6 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/awesome.nix
     ];
   
   # Bootloader.
@@ -59,7 +58,8 @@
   services.xserver.enable = true;
 
   # Enable the Enlightenment Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.displayManager.lightdm.enable = false;
+  services.xserver.displayManager.sddm.enable = true;
  #  services.xserver.windowManager.awesome.enable = true;	
  # services.xserver.desktopManager.enlightenment.enable = true;
   
