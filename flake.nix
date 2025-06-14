@@ -19,7 +19,7 @@
           modules = [
             ./hosts/getac/configuration.nix
             home-manager.nixosModules.home-manager {
-              home-manager.useGlobalPkgs = true;
+              home-manager.useGlobalPkgs = false;
               home-manager.useUserPackages = true;
               home-manager.users.michaelh = import ./profiles/michaelh/michaelh.nix;
               home-manager.users.cerih = import ./profiles/cerih/cerih.nix;
