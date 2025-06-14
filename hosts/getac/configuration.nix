@@ -59,7 +59,7 @@
 
   # Enable the Enlightenment Desktop Environment.
   services.xserver.displayManager.lightdm.enable = false;
-  services.xserver.displayManager.sddm.enable = true;
+  services.displayManager.sddm.enable = true;
  #  services.xserver.windowManager.awesome.enable = true;	
  # services.xserver.desktopManager.enlightenment.enable = true;
   
@@ -107,9 +107,9 @@
   services.udisks2.enable = true;
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "us";
-    xkbVariant = "";
+    variant = "";
   };
 
   # Enable CUPS to print documents.
@@ -134,7 +134,7 @@
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
 
   # Service to allow touchpad usage after sleep state
   systemd.services.touchpadrestart = {
