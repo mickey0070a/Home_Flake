@@ -10,7 +10,7 @@
   home.username = "michaelh";
   home.homeDirectory = "/home/michaelh";
   
-  home.stateVersion = "24.11";
+  home.stateVersion = "25.05";
   
   programs.home-manager.enable = true;
   
@@ -32,11 +32,11 @@
 	enable = true;
         windowManager.awesome = {
 		enable = true;
-                luaModules = with pkgs.lua53Packages; [
-                     luarocks
-                     luadbi-mysql
-                     vicious
-                ];
+                #luaModules = with pkgs.lua53Packages; [
+                     #luarocks
+                     #luadbi-mysql
+                     #vicious
+                #];
                # package = 54awesome;
 	};
   };
