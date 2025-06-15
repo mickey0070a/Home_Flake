@@ -55,20 +55,23 @@
   };
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  services.xserver = {
+	enable = true;
+	#displayManager.session = [
+	#{
+		#manage = "desktop";
+		#name = "Xsession";
+		#start = ''exec $HOME/.xsession'';
+	#}
+	#];
+  };
 
   # Enable the Enlightenment Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = false;
-  services.displayManager = {
-	sddm.enable = true;
-  	#session = [
-      	#{
-        	#manage = "desktop";
-        	#name = "AwesomeWM";
-        	#start = ''exec $HOME/.xsession'';
-      	#}
-    	#];
-  };
+  services.xserver.displayManager.lightdm.enable = true;
+  #services.displayManager.sddm = {
+	#enable = true;
+	#xsession = true;
+  #};
 
  #  services.xserver.windowManager.awesome.enable = true;	
  # services.xserver.desktopManager.enlightenment.enable = true;
