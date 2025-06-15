@@ -61,13 +61,13 @@
   services.xserver.displayManager.lightdm.enable = false;
   services.displayManager = {
 	sddm.enable = true;
-  	session = [
-      	{
-        	manage = "desktop";
-        	name = "AwesomeWM";
-        	start = ''exec $HOME/.xsession'';
-      	}
-    	];
+  	#session = [
+      	#{
+        	#manage = "desktop";
+        	#name = "AwesomeWM";
+        	#start = ''exec $HOME/.xsession'';
+      	#}
+    	#];
   };
 
  #  services.xserver.windowManager.awesome.enable = true;	
