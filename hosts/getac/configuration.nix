@@ -59,7 +59,17 @@
 
   # Enable the Enlightenment Desktop Environment.
   services.xserver.displayManager.lightdm.enable = false;
-  services.displayManager.sddm.enable = true;
+  services.displayManager = {
+	sddm.enable = true;
+  	session = [
+      	{
+        	manage = "desktop";
+        	name = "AwesomeWM";
+        	start = ''exec $HOME/.xsession'';
+      	}
+    	];
+  };
+
  #  services.xserver.windowManager.awesome.enable = true;	
  # services.xserver.desktopManager.enlightenment.enable = true;
   
