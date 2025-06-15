@@ -8,7 +8,7 @@
   home.username = "ender3";
   home.homeDirectory = "/home/ender3";
 
-  home.stateVersion = "25.0t";
+  home.stateVersion = "25.05";
 
   programs.home-manager.enable = true;
 
