@@ -12,7 +12,7 @@
 	git
 	mc
 	pkgs.kdePackages.kate
-	ventoy
+	#ventoy
 	gparted
 	pacman
 	python312Packages.pyqt6
