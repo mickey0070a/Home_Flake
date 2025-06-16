@@ -55,15 +55,19 @@
   };
 
   # Enable the X11 windowing system.
-  services.xserver = {
-	enable = true;
-	#displayManager.session = [
-	#{
-		#manage = "desktop";
-		#name = "Xsession";
-		#start = ''exec $HOME/.xsession'';
-	#}
-	#];
+  services.xserver.enable = true;
+
+	services.xserver.displayManager = [
+    session = [
+	     {
+		    manage = "desktop";
+		    name = "Xsession";
+		    start = ''
+        ${pkgs.runtimeShell} $HOME/.xsession &
+        waitPID=$!
+      '';
+	     }
+	     ];
   };
 
   # Enable the Enlightenment Desktop Environment.
