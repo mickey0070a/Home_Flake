@@ -14,7 +14,12 @@ Configure Address and Port: Specify the address and port for Moonraker to listen
 Set Up User and Group: Define the user and group for Moonraker. For instance, services.moonraker.user = "klipper"; and services.moonraker.group = "klipper";.
 Allow System Control: If you need to allow control of system-wide reboot and shutdown via the client API, set services.moonraker.allowSystemControl = true;.
 Configure Settings: Customize settings such as the maximum upload size and other options. For example, services.moonraker.settings.server.max_upload_size = 16384;.
+
+
 Set Up Authorization: Configure authorization settings to restrict access. For example, services.moonraker.settings.authorization.cors_domains = [ "http://*.lan" "http://*.local" ]; and services.moonraker.settings.authorization.trusted_clients = [ "10.0.0.0/8" "127.0.0.1" ];.
+
+
+
 Ensure Klipper Integration: Make sure Klipper is properly configured and running, as Moonraker interacts with Klipper to control the 3D printer. This includes setting up the Klipper configuration file and ensuring the Unix Domain Socket is correctly configured.
 Install Moonraker Package: Use the services.moonraker.package option to specify the Moonraker package to use. The default is pkgs.moonraker, but you can customize this if needed.
 Check for Warnings: Be aware of any warnings that might appear, such as the Klipper configuration file not being in the expected location. Adjust the configuration paths accordingly to resolve these warnings.
