@@ -57,62 +57,25 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-	services.xserver.displayManager = [
-    session = [
-	     {
-		    manage = "desktop";
-		    name = "Xsession";
-		    start = ''
-        ${pkgs.runtimeShell} $HOME/.xsession &
-        waitPID=$!
-      '';
-	     }
-	     ];
+  services.xserver.displayManager = {
+  	session = [
+	{
+	manage = "desktop";
+	name = "Xsession";
+	start = ''
+		${pkgs.runtimeShell} $HOME/.xsession &
+       		waitPID=$!
+	'';
+	}
+	];
   };
 
   # Enable the Enlightenment Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  #services.displayManager.sddm = {
-	#enable = true;
-	#xsession = true;
-  #};
-
- #  services.xserver.windowManager.awesome.enable = true;	
- # services.xserver.desktopManager.enlightenment.enable = true;
+  services.xserver.displayManager.lightdm.enable = false;
+  services.displayManager.sddm.enable = true;
+	
+# services.xserver.desktopManager.enlightenment.enable = true;
   
- #services.displayManager.enable = false;
-  #services.xserver.windowManager.i3.enable = true;
-
-# nixpkgs.overlays = [
-#	(self: super: {
-#		awesome = super.awesome.override {
-#			lua = self.lua53Packages.lua;
-#		};
-#	})
-# ]; 
-
-# services = {
-#        xserver ={
-#            enable = true;
-#            
-#            windowManager.awesome = {
-#                enable = true;
-#                luaModules = with pkgs.lua53Packages; [
-#                     luarocks
-#                     luadbi-mysql
-#                     vicious
-#                ];
-#               # package = 54awesome;
-#             };
-#         
-#         displayManager.lightdm = {
-#             enable = true;
-#            # defaultSession = "none+awesome";
-#        };
-#       };
-#  };
-
-
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Enable acpid
