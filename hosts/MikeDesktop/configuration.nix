@@ -55,19 +55,28 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Enable the X11 windowing system
-  services.xserver.enable = true;
+   services.xserver.enable = true;
+
+  services.xserver.displayManager = {
+  	session = [
+	{
+	manage = "desktop";
+	name = "Xsession";
+	start = ''
+		${pkgs.runtimeShell} $HOME/.xsession &
+       		waitPID=$!
+	'';
+	}
+	];
+  };
 
   # Enable the Enlightenment Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
- #  services.xserver.windowManager.awesome.enable = true;	
- # services.xserver.desktopManager.enlightenment.enable = true;
+  services.xserver.displayManager.lightdm.enable = false;
+  services.displayManager.sddm.enable = true;
+	
+# services.xserver.desktopManager.enlightenment.enable = true;
   
- #services.displayManager.enable = false;
-  #services.xserver.windowManager.i3.enable = true;
-
-
-  nix.settings.extra-experimental-features = [ "nix-command" "flakes"];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Enable acpid
   services.acpid.enable = true;
