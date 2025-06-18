@@ -26,7 +26,7 @@
   services.thermald.enable = true;
   services.tlp.enable = true;
 
-  networking.hostName = "nixos-getac"; # Define your hostname.
+  networking.hostName = "nixserver"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;
 
@@ -113,21 +113,6 @@
     #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
-
-  # Service to allow touchpad usage after sleep state
-  systemd.services.touchpadrestart = {
-  	description = "Fixes the touchpad from not working after sleep state";
-	wantedBy = [ "sleep.target" ];
-  	serviceConfig.ExecStart = ''
-		#!/bin/bash
-		sudo modprobe -r psmouse
-		sudo modprobe psmouse synaptics_intertouch=1
-	'';
-	serviceConfig.Type = "oneshot";
-  };
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.michaelh = {
     isNormalUser = true;
@@ -157,8 +142,6 @@
 	enable = true;
 	binfmt = true;
   };
-
-
 
   # Required for remote admin
   services.openssh.enable = true;
