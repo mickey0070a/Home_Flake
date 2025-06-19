@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
- environment.systemPackages = with pkgs; [
+ home.Packages = with pkgs; [
 	# AwesomeWM
 	#awesome
 	alsa-utils
