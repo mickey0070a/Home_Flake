@@ -9,7 +9,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      #../../modules/awesome.nix
+      ../../modules/samba.nix
     ];
   
   # Bootloader.
@@ -129,6 +129,18 @@
     description = "Ceri Hall";
     extraGroups = [ "networkmanager" "wheel" "storage" ];
     hashedPassword = "$6$Vhoyi8jFQBEzuGZV$IV7cElFLzzVUn8thZ9jrREXssDg7yeE/4U8GyEBBaYPGpqfZZVm7Duczl3gCmqMy3nk8EtXjXRvrCgBiwUzRb0";
+    packages = with pkgs; [
+    #  thunderbird
+    ];
+  };
+
+  users.groups.server = {};
+  
+  users.users.server = {
+    isNormalUser = true;
+    description = "server";
+    extraGroups = [ "server" ];
+    Password = server;
     packages = with pkgs; [
     #  thunderbird
     ];
