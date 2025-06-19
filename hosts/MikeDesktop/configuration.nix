@@ -140,7 +140,7 @@
     isNormalUser = true;
     description = "server";
     extraGroups = [ "server" ];
-    Password = "server";
+    password = "server";
     packages = with pkgs; [
     #  thunderbird
     ];
