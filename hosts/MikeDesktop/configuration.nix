@@ -159,24 +159,24 @@
   };
 
   # Samba (SMB file share)
-  services.samba = {
-    enable = true;
-    shares = {
-      public = {
-        path = "/srv/public";
-        browseable = true;
-        "read only" = false;
-        "guest ok" = true;
-      };
-    };
-    settings = ''
-      workgroup = WORKGROUP
-      server string = nixos
-      netbios name = nixserver
-      security = user
-      map to guest = Bad User
-    '';
-  };
+  #services.samba = {
+    #enable = true;
+    #shares = {
+      #public = {
+        #path = "/srv/public";
+        #browseable = true;
+        #"read only" = false;
+        #"guest ok" = true;
+      #};
+    #};
+    #settings = ''
+      #workgroup = WORKGROUP
+      #server string = nixos
+      #netbios name = nixserver
+      #security = user
+      #map to guest = Bad User
+    #'';
+  #};
 
   # ZFS/Btrfs (if using snapshotting or deduplication)
   #boot.supportedFilesystems = [ "zfs" ]; # or "btrfs" if preferred
