@@ -42,4 +42,20 @@
         ];
       };
     };
-  }
+        nixosConfigurations.MikeDesktop= nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./hosts/MikeDesktop/configuration.nix
+            home-manager.nixosModules.home-manager {
+              home-manager.useGlobalPkgs = false;
+              home-manager.useUserPackages = true;
+              home-manager.users.michaelh = import ./profiles/michaelh/michaelh.nix;
+              home-manager.users.cerih = import ./profiles/cerih/cerih.nix;
+              home-manager.extraSpecialArgs = { inherit inputs; };
+            }
+          ];
+      };
+
+
+}
