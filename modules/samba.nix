@@ -13,7 +13,7 @@
       "disable netbios" = "yes";
       "unix extensions" = "yes";
       "map to guest" = "Bad User";
-      server.string = "Nix file server";
+      #server.string = "Nix file server";
     };
     public = {
       path = "/srv/public";
