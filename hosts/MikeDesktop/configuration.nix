@@ -169,7 +169,7 @@
         "guest ok" = true;
       };
     };
-    extraConfig = ''
+    settings = ''
       workgroup = WORKGROUP
       server string = nixos
       netbios name = nixserver
