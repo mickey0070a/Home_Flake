@@ -1,16 +1,31 @@
-{ config, inputs, pkgs, pkgs-unstable, ... }:
+{ pkgs, ... }:
 
 {
-  _module.args.unstable = import inputs.nixpkgs-unstable {
-        inherit (pkgs.stdenv.hostPlatform) system;
-        inherit (config.nixpkgs) config;
-  };
-  home.packages = [
-        pkgs.libreoffice
-        #pkgs.unstable.trilium-next-desktop
-        pkgs.evolutionWithPlugins
-        pkgs.evolution-ews
-        pkgs.brave
-        pkgs.kmymoney
+ environment.systemPackages = with pkgs; [
+        samba
   ];
+  services.samba = {
+  enable = true;
+  openFirewall = true;
+  settings = {
+    global = {
+      workgroup = "WORKGROUP";
+      "disable netbios" = "yes";
+      "unix extensions" = "yes";
+      "map to guest" = "Bad User";
+      server string = "Nix file server";
+    };
+    public = {
+      path = "/srv/public";
+      browseable = "yes";
+      "guest ok" = "yes";
+      "read only" = "no";
+      "create mask" = "0664";
+      "directory mask" = "0775";
+      "force user" = "server";
+      "force group" = "server";
+    };
+  };
+};
+
 }
