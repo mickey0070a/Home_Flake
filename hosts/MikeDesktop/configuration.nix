@@ -179,7 +179,7 @@
   };
 
   # ZFS/Btrfs (if using snapshotting or deduplication)
-  boot.supportedFilesystems = [ "zfs" ]; # or "btrfs" if preferred
+  #boot.supportedFilesystems = [ "zfs" ]; # or "btrfs" if preferred
 
   # Optional for remote mounting/automation
   services.openssh.knownHosts.enable = true;
