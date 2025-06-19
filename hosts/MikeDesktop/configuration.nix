@@ -113,11 +113,13 @@
     #media-session.enable = true;
   };
 
+  users.groups.server = {};
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.michaelh = {
     isNormalUser = true;
     description = "Michael Hall";
-    extraGroups = [ "networkmanager" "wheel" "storage" ];
+    extraGroups = [ "networkmanager" "wheel" "storage" "server" ];
     hashedPassword = "$6$bSnWiQcaHCpYd2qB$8dFX7vGp1TnKm3H/e/NFw/hvOUQ3FooLphnNVZrW4kEwpni910oeSfTo9FZmD5JIHADWV7sAjnYHFZ1/W2feV/";
     packages = with pkgs; [
     #  thunderbird
@@ -133,8 +135,6 @@
     #  thunderbird
     ];
   };
-
-  users.groups.server = {};
   
   users.users.server = {
     isNormalUser = true;
