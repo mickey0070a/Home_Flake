@@ -24,7 +24,6 @@ end
 
 if not is_rock_installed(rock2name) then
     print(rock2name .. " not found, installing...")
-    os.execute("luarocks install --local " .. rock2module)
     os.execute("cd ~/.luarocks/share/lua/5.3/")
     os.execute("git clone https://github.com/lcpz/awesome-freedesktop.git ~/.luarocks/share/lua/5.3/freedesktop")
 else
