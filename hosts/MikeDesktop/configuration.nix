@@ -9,7 +9,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/awesome.nix
+      #../../modules/awesome.nix
     ];
   
   # Bootloader.
@@ -182,5 +182,5 @@
   #boot.supportedFilesystems = [ "zfs" ]; # or "btrfs" if preferred
 
   # Optional for remote mounting/automation
-  services.openssh.knownHosts.enable = true;
+  #services.openssh.knownHosts.enable = true;
 }
