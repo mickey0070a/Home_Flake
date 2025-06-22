@@ -5,14 +5,22 @@
 	xorg.xauth
         xorg.xinit
         alacritty
+<<<<<<< HEAD
 
 	#File Managers
+=======
+	mucommander
+	# Thunar program and plugins
+>>>>>>> c8ccf79 (updated file managers)
 	xfce.thunar
 	xfce.thunar-volman
 	xfce.thunar-dropbox-plugin
 	xfce.thunar-archive-plugin
 	xfce.thunar-media-tags-plugin
+<<<<<<< HEAD
 	mucommander
+=======
+>>>>>>> c8ccf79 (updated file managers)
 	
 	htop
 	neovim
