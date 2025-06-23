@@ -82,7 +82,7 @@
 
  services.klipper = {
     enable = true;
-    #configFile = "/home/ender3/klipper.config"; 
+    configFile = "./printer.config"; 
     #firmwares = {
       #mcu = {
         #enable = true;
