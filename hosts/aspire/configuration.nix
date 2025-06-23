@@ -80,8 +80,8 @@
   moonraker
   ];
 
- #services.klipper = {
-    #enable = true;
+ services.klipper = {
+    enable = true;
     #configFile = "/home/ender3/klipper.config"; 
     #firmwares = {
       #mcu = {
@@ -90,22 +90,22 @@
         #serial = "/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0";
       #};
     #};
-  #};
+  };
 
   # Enable services like Moonraker (for API)
   services.moonraker = {
     enable = true;
     address = "0.0.0.0";
     allowSystemControl = true;
-    #settings = {
+    settings = {
       #force_logins = true;
-      #cors_domins = [
+      cors_domins = [
         #"*.local"
-        #"*.lan"
+        "*.lan"
         #"*://app.fluidd.xyz"
         #"*://my.mainsail.xyz"
-      #];
-    #};
+      ];
+    };
   };
 
   #Enable Mainsail Services
