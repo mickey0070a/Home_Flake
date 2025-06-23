@@ -82,7 +82,7 @@
 
  services.klipper = {
     enable = true;
-    configFile = "./printer.config"; 
+    configFile = ./printer.config; 
     #firmwares = {
       #mcu = {
         #enable = true;
