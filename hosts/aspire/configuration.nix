@@ -100,10 +100,10 @@
     settings = {
       #force_logins = true;
       cors_domins = [
-        #"*.local"
+        "*.local"
         "*.lan"
         #"*://app.fluidd.xyz"
-        #"*://my.mainsail.xyz"
+        "*://my.mainsail.xyz"
       ];
     };
   };
