@@ -98,16 +98,18 @@
     address = "0.0.0.0";
     allowSystemControl = true;
     settings = {
-      #force_logins = true;
-      #cors_domins = [
-        #"*.local"
-        #"*.lan"
+      authorization = {
+        force_logins = true;
+        cors_domins = [
+          "*.local"
+          "*.lan"
         #"*://app.fluidd.xyz"
-        "*://my.mainsail.xyz"
-      #];
-      trusted_clients = [
-        "192.168.86.0/24" 
-      ];
+          "*://my.mainsail.xyz"
+        ];
+        trusted_clients = [
+          "192.168.86.0/24" 
+        ];
+      };
     };
   };
 
