@@ -94,7 +94,7 @@
 
   # Udev Rule to allow Klipper and other Services to access USB port
   services.udev.extraRules = ''
-    SUBSYSTEM=="tty", ATTRS{IdVendor}=="0403", ATTRS{idProduct}=="6001", MODE="0660", SYMLINK+="Ender3"
+    SUBSYSTEM=="tty", ATTRS{IdVendor}=="1a86", ATTRS{idProduct}=="7523", MODE="0660", SYMLINK+="Ender3"
   '';
 
   # Enable services like Moonraker (for API)
