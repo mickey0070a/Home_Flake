@@ -92,6 +92,11 @@
     #};
   };
 
+  # Udev Rule to allow Klipper and other Services to access USB port
+  services.udev.extraRules = ''
+    SUBSYSTEM=="tty", ATTRS{IdVendor}=="0403", ATTRS{idProduct}=="6001", MODE="0660", SYMLINK+="Ender3"
+  '';
+
   # Enable services like Moonraker (for API)
   services.moonraker = {
     enable = true;
