@@ -54,7 +54,7 @@
   users.users.ender3 = {
     isNormalUser = true;
     description = "Ender3";
-    extraGroups = [ "networkmanager" "wheel" "root" "dialout"  ];
+    extraGroups = [ "networkmanager" "wheel" "dialout"  ];
     packages = with pkgs; [];
   };
 
@@ -115,7 +115,7 @@
 
   # Enable services like Moonraker (for API)
   services.moonraker = {
-    user = "ender3";
+    #user = "ender3";
     enable = true;
     address = "0.0.0.0";
     allowSystemControl = true;
