@@ -67,10 +67,11 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+  wget
   git
   gh
+  htop
   usbutils
   klipper
   klipper-flash
@@ -79,6 +80,18 @@
   klipper-estimator
   mainsail
   moonraker
+
+  # Additional Packages
+  python3
+  pkgsCross.avr.stdenv.cc
+  gcc-arm-embedded
+  bintools-unwrapped
+  libffi
+  libusb1
+  avrdude
+  stm32flash
+  pkg-config
+  python313Packages.pyserial
   ];
 
  services.klipper = {
@@ -102,9 +115,11 @@
 
   # Enable services like Moonraker (for API)
   services.moonraker = {
+    user = "ender3";
     enable = true;
     address = "0.0.0.0";
     allowSystemControl = true;
+    klipperSockete.enable = true;
     settings = {
       authorization = {
         force_logins = true;
