@@ -90,12 +90,14 @@
         #serial = "/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0";
       #};
     #};
+    user = "root";
+    group = "root";
   };
 
   # Udev Rule to allow Klipper and other Services to access USB port
-  services.udev.extraRules = ''
-    SUBSYSTEM=="tty", ATTRS{IdVendor}=="1a86", ATTRS{idProduct}=="7523", MODE="0660", SYMLINK+="Ender3"
-  '';
+  #services.udev.extraRules = ''
+    #SUBSYSTEM=="tty", ATTRS{IdVendor}=="1a86", ATTRS{idProduct}=="7523", MODE="0660", SYMLINK+="Ender3"
+  #'';
 
   # Enable services like Moonraker (for API)
   services.moonraker = {
