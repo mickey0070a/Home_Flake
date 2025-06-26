@@ -53,7 +53,7 @@
   users.users.ender3 = {
     isNormalUser = true;
     description = "Ender3";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "root" "dialout"  ];
     packages = with pkgs; [];
   };
 
@@ -90,7 +90,7 @@
         #serial = "/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0";
       #};
     #};
-    user = "root";
+    user = "ender3";
     group = "root";
   };
 
