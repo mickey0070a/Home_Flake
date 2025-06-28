@@ -136,7 +136,7 @@
         };
       };
     };
-  };
+  
 
   #Enable Mainsail Services
   services.mainsail.enable = true;
