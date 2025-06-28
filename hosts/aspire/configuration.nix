@@ -119,7 +119,7 @@
     enable = true;
     address = "0.0.0.0";
     allowSystemControl = true;
-    klipperSocket = /run/klipper/api;
+    klipperSocket = "/run/klipper/api";
     settings = {
       authorization = {
         force_logins = true;
