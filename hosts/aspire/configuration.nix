@@ -120,7 +120,7 @@
     enable = true;
     address = "0.0.0.0";
     allowSystemControl = true;
-    klipperSocket = /tmp/klippy_uds;
+    klipperSocket = "/tmp/klippy_uds";
     settings = {
       authorization = {
         force_logins = true;
