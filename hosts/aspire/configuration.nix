@@ -119,7 +119,7 @@
     enable = true;
     address = "0.0.0.0";
     allowSystemControl = true;
-    klipperSocket = "~/server/klipper.sock";
+    klipperSocket = "/home/ender3/server/klipper.sock";
     settings = {
       authorization = {
         force_logins = true;
