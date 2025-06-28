@@ -133,9 +133,7 @@
         trusted_clients = [
           "192.168.86.0/24" 
         ];
-      };
-      server = {
-          klippy_uds_address = "/tmp/klipper_uds";
+        };
       };
     };
   };
