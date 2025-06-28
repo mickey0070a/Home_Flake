@@ -127,12 +127,12 @@
       };
       authorization = {
         force_logins = true;
-        cors_domins = [
+        #cors_domins = [
           #"*.local"
           #"*.lan"
         #"*://app.fluidd.xyz"
           #"*://my.mainsail.xyz"
-        ];
+        #];
         trusted_clients = [
           "192.168.86.0/24" 
         ];
