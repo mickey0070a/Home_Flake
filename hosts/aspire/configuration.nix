@@ -122,13 +122,16 @@
     allowSystemControl = true;
     klipperSocket = "/tmp/klippy_uds";
     settings = {
+      server = {
+        enable_ssl = false;
+      };
       authorization = {
         force_logins = true;
         cors_domins = [
-          "*.local"
-          "*.lan"
+          #"*.local"
+          #"*.lan"
         #"*://app.fluidd.xyz"
-          "*://my.mainsail.xyz"
+          #"*://my.mainsail.xyz"
         ];
         trusted_clients = [
           "192.168.86.0/24" 
