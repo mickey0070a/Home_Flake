@@ -97,6 +97,7 @@
  services.klipper = {
     enable = true;
     configFile = ./printer.config; 
+    apiSocket = "/tmp/klippy_uds";
     #firmwares = {
       #mcu = {
         #enable = true;
@@ -119,7 +120,7 @@
     enable = true;
     address = "0.0.0.0";
     allowSystemControl = true;
-    klipperSocket = "/run/klipper/api";
+    klipperSocket = "/tmp/klippy_uds";
     settings = {
       authorization = {
         force_logins = true;
