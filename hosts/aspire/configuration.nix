@@ -105,8 +105,8 @@
  services.klipper = {
     enable = true;
     configFile = ./printer.cfg; 
-    #apiSocket = "/tmp/printer";
-    octoprintIntegration = true;
+    apiSocket = "/tmp/printer";
+    #octoprintIntegration = true;
     logFile = "/tmp/klippy.log";
     #firmwares = {
       #mcu = {
