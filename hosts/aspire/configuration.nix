@@ -111,8 +111,29 @@
     group = "wheel";
   };
 
+  nixpkgs.overlays = [(self: super: {
+    octoprint = super.octoprint.override {
+      packageOverrides = pyself: pysuper: {
+        OctoprintKlipperPlugin = pyself.buildPythonPackage rec {
+          pname = "OctoprintKlipperPlugin";
+          version = "0.3.9.5";
+          src = self.fetchFromGitHub {
+            owner = "thelastWallE"; 
+            repo = "OctoprintKlipperPlugin";
+            rev = "v${version}";
+            sha256 = "1ag5ajlkirw69m1hfaljxfjbxvm3wgsbn0q4n5yq8p5b7km61p0a";
+          };
+          propagatedBuildInputs = [ pysuper.octoprint ];
+          doCheck = false;
+        };
+      };
+    };
+  })];
+
+
   services.octoprint = {
     enable = true;
+    plugins = plugins: with plugins; [ OctoprintKlipperPlugin ];
     openFirewall = true;
     group = "wheel";
   };
