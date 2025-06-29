@@ -107,7 +107,7 @@
         #serial = "/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0";
       #};
     #};
-    user = "ender3";
+    #user = "ender3";
     group = "root";
   };
 
