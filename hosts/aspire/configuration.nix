@@ -108,13 +108,13 @@
       #};
     #};
     #user = "ender3";
-    group = "root";
+    group = "wheel";
   };
 
   services.octoprint = {
     enable = true;
     openFirewall = true;
-    group = "root";
+    group = "wheel";
   };
 
   # Udev Rule to allow Klipper and other Services to access USB port
