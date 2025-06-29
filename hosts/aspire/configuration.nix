@@ -106,7 +106,7 @@
     enable = true;
     configFile = ./printer.cfg; 
     #apiSocket = "/tmp/printer";
-    octoprintIntegration = false;
+    octoprintIntegration = true;
     logFile = "/tmp/klippy.log";
     #firmwares = {
       #mcu = {
