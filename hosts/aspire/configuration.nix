@@ -98,7 +98,7 @@
  services.klipper = {
     enable = true;
     configFile = ./printer.config; 
-    apiSocket = "/tmp/klippy_uds";
+    #apiSocket = "/tmp/klippy_uds";
     octoprintIntegration = true;
     #firmwares = {
       #mcu = {
