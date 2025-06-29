@@ -117,7 +117,7 @@
   services.octoprint = {
     enable = true;
     openFirewall = true;
-    plugins = plugins: with plugins; [ octoklipper themify psucontrol simpleemergencystop ];
+    plugins = plugins: with plugins; [ octoklipper themeify psucontrol simpleemergencystop ];
     group = "wheel";
   };
 
