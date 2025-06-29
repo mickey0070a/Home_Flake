@@ -116,7 +116,6 @@
 
   services.octoprint = {
     enable = true;
-    plugins = plugins: with plugins; [ OctoprintKlipperPlugin ];
     openFirewall = true;
     group = "wheel";
   };
