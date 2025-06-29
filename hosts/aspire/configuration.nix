@@ -78,7 +78,8 @@
   klipper-firmware
   klipper-genconf
   klipper-estimator
-  mainsail
+  #mainsail
+  octoprint 
   moonraker
 
   # Additional Packages
@@ -98,6 +99,7 @@
     enable = true;
     configFile = ./printer.config; 
     apiSocket = "/tmp/klippy_uds";
+    octoprintIntegration = true;
     #firmwares = {
       #mcu = {
         #enable = true;
@@ -109,40 +111,46 @@
     group = "root";
   };
 
+  services.octoprint = {
+    enable = true;
+    openFirewall = true;
+    group = "root";
+  };
+
   # Udev Rule to allow Klipper and other Services to access USB port
   #services.udev.extraRules = ''
     #SUBSYSTEM=="tty", ATTRS{IdVendor}=="1a86", ATTRS{idProduct}=="7523", MODE="0660", SYMLINK+="Ender3"
   #'';
 
   # Enable services like Moonraker (for API)
-  services.moonraker = {
-    user = "ender3";
-    enable = true;
-    address = "0.0.0.0";
-    allowSystemControl = true;
-    klipperSocket = "/tmp/klippy_uds";
-    settings = {
-      server = {
-        enable_ssl = false;
-      };
-      authorization = {
-        force_logins = true;
+  #services.moonraker = {
+    #user = "ender3";
+   # enable = true;
+    #address = "0.0.0.0";
+   # allowSystemControl = true;
+   # klipperSocket = "/tmp/klippy_uds";
+    #settings = {
+     # server = {
+      #  enable_ssl = false;
+    #  };
+    #  authorization = {
+     #   force_logins = true;
         #cors_domins = [
           #"*.local"
           #"*.lan"
         #"*://app.fluidd.xyz"
           #"*://my.mainsail.xyz"
         #];
-        trusted_clients = [
-          "192.168.86.0/24" 
-        ];
-        };
-      };
-    };
+     #   trusted_clients = [
+   #       "192.168.86.0/24" 
+     #   ];
+    #    };
+   #   };
+  #  };
   
 
   #Enable Mainsail Services
-  services.mainsail.enable = true;
+#  services.mainsail.enable = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
