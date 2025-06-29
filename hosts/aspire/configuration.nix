@@ -100,6 +100,7 @@
     configFile = ./printer.config; 
     #apiSocket = "/tmp/klippy_uds";
     octoprintIntegration = true;
+    logFile = "/tmp/klippy.log";
     #firmwares = {
       #mcu = {
         #enable = true;
