@@ -70,6 +70,7 @@
   users.users.klipper = {
     isSystemUser = true;
     description = "Klipper";
+    group = "klipper";
     extraGroups = [ "root" "networkmanager" "wheel" "dialout" "klipper"];
   };
 
