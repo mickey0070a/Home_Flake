@@ -88,6 +88,7 @@
   git
   gh
   htop
+  udevil
   usbutils
   klipper
   klipper-flash
