@@ -50,19 +50,27 @@
     xkbVariant = "";
   };
 
+  users.groups.klipper = {};
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.ender3 = {
     isNormalUser = true;
     description = "Ender3";
-    extraGroups = [ "networkmanager" "wheel" "dialout"  ];
+    extraGroups = [ "networkmanager" "wheel" "dialout" "klipper" "octoprint" ];
     packages = with pkgs; [];
   };
 
   users.users.octoprint = {
     isSystemUser = true;
     description = "Octoprint";
-    extraGroups = [ "root" "networkmanager" "wheel" "dialout" " klipper" ];
+    extraGroups = [ "root" "networkmanager" "wheel" "dialout" "klipper" ];
     packages = with pkgs; [];
+  };
+
+  users.users.klipper = {
+    isSystemUser = true;
+    description = "Klipper";
+    extraGroups = [ "root" "networkmanager" "wheel" "dialout" "klipper"];
   };
 
   # Enable automatic login for the user.
@@ -116,7 +124,7 @@
       #};
     #};
     #user = "ender3";
-    group = "wheel";
+    #group = "wheel";
   };
 
   
