@@ -110,6 +110,7 @@
   stm32flash
   pkg-config
   python313Packages.pyserial
+  ncurses
   ];
 
  services.klipper = {
