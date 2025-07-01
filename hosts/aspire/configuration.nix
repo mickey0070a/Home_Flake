@@ -63,7 +63,7 @@
   users.users.octoprint = {
     isSystemUser = true;
     description = "Octoprint";
-    extraGroups = [ "root" "networkmanager" "wheel" "dialout" "klipper" ];
+    extraGroups = [ "root" "networkmanager" "wheel" "dialout" "klipper" "octoprint" "users" ];
     packages = with pkgs; [];
   };
 
@@ -71,7 +71,7 @@
     isSystemUser = true;
     description = "Klipper";
     group = "klipper";
-    extraGroups = [ "root" "networkmanager" "wheel" "dialout" "klipper"];
+    extraGroups = [ "root" "networkmanager" "wheel" "dialout" "klipper" "octoprint" " users" ];
   };
 
   # Enable automatic login for the user.
