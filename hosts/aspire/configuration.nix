@@ -116,8 +116,8 @@
  services.klipper = {
     enable = true;
     configFile = ./printer.cfg; 
-    apiSocket = "/run/klipper/printer";
-    #octoprintIntegration = true;
+   # apiSocket = "/tmp/printer.ser";
+    octoprintIntegration = true;
     logFile = "/tmp/klippy.log";
     #firmwares = {
       #mcu = {
@@ -126,8 +126,8 @@
         #serial = "/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0";
       #};
     #};
-    user = "ender3";
-    group = "wheel";
+   # user = "ender3";
+   # group = "wheel";
   };
 
   
