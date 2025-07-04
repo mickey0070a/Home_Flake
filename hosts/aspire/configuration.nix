@@ -117,8 +117,10 @@
     enable = true;
     configFile = ./printer.cfg; 
    # apiSocket = "/tmp/printer.ser";
+    inputTTY = "/tmp/printer";
     octoprintIntegration = true;
     logFile = "/tmp/klippy.log";
+    mutableConfig = true;
     #firmwares = {
       #mcu = {
         #enable = true;
