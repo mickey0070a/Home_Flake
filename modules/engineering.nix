@@ -9,5 +9,6 @@
 	inkscape-with-extensions
 	gimp
 	freecad
+	super-slicer
   ];
 }
