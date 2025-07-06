@@ -49,6 +49,8 @@
     layout = "us";
     xkbVariant = "";
   };
+  
+  services.logind.lidSwitch = "ignore";
 
   users.groups.klipper = {};
 
@@ -73,6 +75,18 @@
     group = "klipper";
     extraGroups = [ "root" "networkmanager" "wheel" "dialout" "klipper" "octoprint" " users" ];
   };
+  
+  security.sudo.extraRules = [
+	{
+		users = [ "octoprint" ];
+		commands = [
+			{
+			command = "ALL";
+			options = [ "SETENV" "NOPASSWD" ];
+			}
+		];
+	}
+  ];
 
   # Enable automatic login for the user.
   services.getty.autologinUser = "ender3";
@@ -138,7 +152,7 @@
   services.octoprint = {
     enable = true;
     openFirewall = true;
-    plugins = plugins: with plugins; [ octoklipper themeify psucontrol simpleemergencystop ];
+    plugins = plugins: with plugins; [ octoklipper themeify psucontrol simpleemergencystop bedlevelvisualizer printtimegenius gcodeeditor ];
     group = "wheel";
   };
 
