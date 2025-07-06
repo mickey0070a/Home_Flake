@@ -5,7 +5,15 @@
 	xorg.xauth
         xorg.xinit
         alacritty
-	krusader
+
+	#File Managers
+	xfce.thunar
+	xfce.thunar-volman
+	xfce.thunar-dropbox-plugin
+	xfce.thunar-archive-plugin
+	xfce.thunar-media-tags-plugin
+	mucommander
+	
 	htop
 	neovim
 	syncthing
