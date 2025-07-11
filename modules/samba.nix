@@ -8,11 +8,8 @@
     options = [ "defaults" ];
   };
 
- environment.systemPackages = with pkgs; [
-        samba4Full
-  ];
-
   services.samba = {
+  package = pkgs.samba4Full;
   enable = true;
   openFirewall = true;
   settings = {
