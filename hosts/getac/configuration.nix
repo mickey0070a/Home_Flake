@@ -86,6 +86,16 @@
   services.gvfs.enable = true;
   services.udisks2.enable = true;
 
+  services.autofs = {
+  enable = true;
+  extraConfig = ''
+    /mnt/samba /etc/auto.samba --timeout=60 --ghost
+  '';
+  extraAutoConfig = ''
+    myshare -fstype=cifs,guest ://192.168.86.148/public
+  '';
+};
+
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
