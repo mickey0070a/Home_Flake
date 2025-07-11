@@ -9,7 +9,7 @@
   };
 
  environment.systemPackages = with pkgs; [
-        samba
+        samba4Full
   ];
 
   services.samba = {
