@@ -13,22 +13,28 @@
 	xfce.thunar-archive-plugin
 	xfce.thunar-media-tags-plugin
 	mucommander
-	
-	htop
-	neovim
+
+	# Drive/File Managements
 	syncthing
 	git
+	gh
 	mc
+	gparted
+	zip
+	unzip
+	cifs-utils
+        autofs
+
+	# Other system tools
+	htop
+	neovim
 	pkgs.kdePackages.kate
 	#ventoy
-	gparted
 	pacman
 	python312Packages.pyqt6
 	nmap
 	pulseaudioFull
 	pavucontrol
-	zip
-	unzip
 	openjdk11
   ];
 }
