@@ -23,7 +23,6 @@
 	zip
 	unzip
 	cifs-utils
-        autofs
 
 	# Other system tools
 	htop
