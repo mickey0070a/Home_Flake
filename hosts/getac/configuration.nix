@@ -86,7 +86,7 @@
   services.gvfs.enable = true;
   services.udisks2.enable = true;
 
-  fileSystems."/mnt/shared" = {
+  fileSystems."/home/shared" = {
     device = "//192.168.86.148/public";  # Replace with your actual Samba server IP/share
     fsType = "cifs";
     options = [
