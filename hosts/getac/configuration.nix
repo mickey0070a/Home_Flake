@@ -86,15 +86,15 @@
   services.gvfs.enable = true;
   services.udisks2.enable = true;
 
-  services.autofs = {
-  enable = true;
-  extraConfig = ''
-    /mnt/samba /etc/auto.samba --timeout=60 --ghost
-  '';
-  extraAutoConfig = ''
-    myshare -fstype=cifs,guest ://192.168.86.148/public
-  '';
-};
+  fileSystems."/mnt/shared" = {
+    device = "//192.168.1.10/share";  # Replace with your actual Samba server IP/share
+    fsType = "cifs";
+    options = [
+      "guest"
+      "nofail"
+      "_netdev"
+    ];
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
