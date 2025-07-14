@@ -120,6 +120,8 @@ local cycle_prev   = true  -- cycle with only the previously focused client or a
 local editor       = os.getenv("EDITOR") or "nvim"
 local browser      = "brave"
 local email 	   = "evolution"
+local file_explorer = "thunar"
+local advance_file_explorer = "mucommander"
 awful.util.terminal = terminal
 awful.util.tagnames = { "1", "2", "3", "4", "5" }
 awful.layout.layouts = {
@@ -192,13 +194,18 @@ print("DEBUG: gears is", gears)
 
 -- {{{ Menu
 
+-- Shutdown function
+    
+
 -- Create a launcher widget and a main menu
 local myawesomemenu = {
    { "Hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
    { "Manual", string.format("%s -e man awesome", terminal) },
    { "Edit config", string.format("%s -e %s %s", terminal, editor, awesome.conffile) },
-   { "Restart", awesome.restart },
-   { "Quit", function() awesome.quit() end },
+   { "Restart Awesome", awesome.restart },
+   { "Logout", function() awesome.quit() end },
+   {"Reboot", function() os.execute("systemctl reboot") end  },
+   {"Shutdown", function() os.execute("systemctl poweroff")  end },
 }
 
 awful.util.mymainmenu = freedesktop.menu.build {
@@ -548,6 +555,12 @@ globalkeys = mytable.join(
 	-- Email
     awful.key({ modkey }, "e", function () awful.spawn(email) end,
               {description = "run email", group = "launcher"}),
+    -- File Manager
+    awful.key({ modkey, "Shift" }, "e", function () awful.spawn(file_explorer) end,
+              {description = "run File Manager", group = "launcher"}),
+    -- Advance File Manager
+    awful.key({ modkey, "Control" }, "e", function () awful.spawn(advance_file_explorer) end,
+              {description = "run Advance File Manager", group = "launcher"}),
 
     -- Default
     --[[ Menubar
