@@ -9,7 +9,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../
+      ../../profiles/users.nix
     ];
   
   # Bootloader.
@@ -60,15 +60,15 @@
 
   services.xserver.displayManager = {
   	session = [
-	{
-	manage = "desktop";
-	name = "Xsession";
-	start = ''
-		${pkgs.runtimeShell} $HOME/.xsession &
+	      {
+	      manage = "desktop";
+	      name = "Xsession";
+	      start = ''
+		      ${pkgs.runtimeShell} $HOME/.xsession &
        		waitPID=$!
-	'';
-	}
-	];
+	      '';
+	      }
+	  ];
   };
 
   # Enable the Enlightenment Desktop Environment.

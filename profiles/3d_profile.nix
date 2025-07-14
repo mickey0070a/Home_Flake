@@ -1,3 +1,8 @@
+ { pkgs, system, ... }:
+
+{
+ users.groups.klipper = {};
+
  users.users.octoprint = {
     isSystemUser = true;
     description = "Octoprint";
@@ -23,3 +28,4 @@
 		];
 	}
   ];
+}

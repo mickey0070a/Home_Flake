@@ -8,7 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      #./klipper.nix
+      ../../modules/3dprinting.nix
     ];
 
   # Bootloader.
@@ -52,42 +52,6 @@
   
   services.logind.lidSwitch = "ignore";
 
-  users.groups.klipper = {};
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.ender3 = {
-    isNormalUser = true;
-    description = "Ender3";
-    extraGroups = [ "networkmanager" "wheel" "dialout" "klipper" "octoprint" ];
-    packages = with pkgs; [];
-  };
-
-  users.users.octoprint = {
-    isSystemUser = true;
-    description = "Octoprint";
-    extraGroups = [ "root" "networkmanager" "wheel" "dialout" "klipper" "octoprint" "users" ];
-    packages = with pkgs; [];
-  };
-
-  users.users.klipper = {
-    isSystemUser = true;
-    description = "Klipper";
-    group = "klipper";
-    extraGroups = [ "root" "networkmanager" "wheel" "dialout" "klipper" "octoprint" " users" ];
-  };
-  
-  security.sudo.extraRules = [
-	{
-		users = [ "octoprint" ];
-		commands = [
-			{
-			command = "ALL";
-			options = [ "SETENV" "NOPASSWD" ];
-			}
-		];
-	}
-  ];
-
   # Enable automatic login for the user.
   services.getty.autologinUser = "ender3";
 
@@ -97,99 +61,8 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  wget
-  git
-  gh
-  htop
-  udevil
-  usbutils
-  klipper
-  klipper-flash
-  klipper-firmware
-  klipper-genconf
-  klipper-estimator
-  #mainsail
-  octoprint 
-  moonraker
-
-  # Additional Packages
-  python3
-  pkgsCross.avr.stdenv.cc
-  gcc-arm-embedded
-  bintools-unwrapped
-  libffi
-  libusb1
-  avrdude
-  stm32flash
-  pkg-config
-  python313Packages.pyserial
-  ncurses
+  # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   ];
-
- services.klipper = {
-    enable = true;
-    configFile = ./printer.cfg; 
-   # apiSocket = "/tmp/printer.ser";
-    inputTTY = "/tmp/printer";
-    octoprintIntegration = true;
-    logFile = "/tmp/klippy.log";
-    mutableConfig = true;
-    #firmwares = {
-      #mcu = {
-        #enable = true;
-        #configFile = /home/ender3/klipper.config;
-        #serial = "/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0";
-      #};
-    #};
-   # user = "ender3";
-   # group = "wheel";
-  };
-
-  
-
-
-  services.octoprint = {
-    enable = true;
-    openFirewall = true;
-    plugins = plugins: with plugins; [ octoklipper themeify psucontrol simpleemergencystop bedlevelvisualizer printtimegenius gcodeeditor ];
-    group = "wheel";
-  };
-
-  # Udev Rule to allow Klipper and other Services to access USB port
-  #services.udev.extraRules = ''
-    #SUBSYSTEM=="tty", ATTRS{IdVendor}=="1a86", ATTRS{idProduct}=="7523", MODE="0660", SYMLINK+="Ender3"
-  #'';
-
-  # Enable services like Moonraker (for API)
-  #services.moonraker = {
-    #user = "ender3";
-   # enable = true;
-    #address = "0.0.0.0";
-   # allowSystemControl = true;
-   # klipperSocket = "/tmp/klippy_uds";
-    #settings = {
-     # server = {
-      #  enable_ssl = false;
-    #  };
-    #  authorization = {
-     #   force_logins = true;
-        #cors_domins = [
-          #"*.local"
-          #"*.lan"
-        #"*://app.fluidd.xyz"
-          #"*://my.mainsail.xyz"
-        #];
-     #   trusted_clients = [
-   #       "192.168.86.0/24" 
-     #   ];
-    #    };
-   #   };
-  #  };
-  
-
-  #Enable Mainsail Services
-#  services.mainsail.enable = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
