@@ -35,7 +35,7 @@
             home-manager.nixosModules.home-manager {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.ender3 = import ./profiles/ender3.nix;
+              home-manager.users.octoprint = import ./profiles/octoprint.nix;
               #home-manager.users.ceri = import ./home/ceri.nix;
               home-manager.extraSpecialArgs = { inherit inputs; };
           }
