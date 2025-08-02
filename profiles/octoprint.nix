@@ -5,8 +5,8 @@
     #./hardware-configuration.nix
   ];
 
-  home.username = "ender3";
-  home.homeDirectory = "/home/ender3";
+  home.username = "octoprint";
+  #home.homeDirectory = "/home/octoprint";
 
   home.stateVersion = "25.05";
 
@@ -20,9 +20,6 @@
 
   # Enable Klipper or related printer software
   home.packages = with pkgs; [
-    klipper
-    moonraker
-    mainsail 
   ];
 
 }
