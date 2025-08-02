@@ -6,7 +6,7 @@
   ];
 
   home.username = "octoprint";
-  home.homeDirectory = "/home/octoprint";
+  #home.homeDirectory = "/home/octoprint";
 
   home.stateVersion = "25.05";
 
