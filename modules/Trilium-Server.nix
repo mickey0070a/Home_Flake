@@ -5,7 +5,7 @@
 	inherit (pkgs.stdenv.hostPlatform) system;
 	inherit (config.nixpkgs) config;
   };
-  home.packages = [
+  henvironment.systemPackages = [
 	unstable.trilium-next-server
   ];
   services.nginx.enable = true;
