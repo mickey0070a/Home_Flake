@@ -7,7 +7,7 @@
   };
   home.packages = [
 	pkgs.libreoffice
-	pkgs.unstable.trilium-next-desktop
+	unstable.trilium-next-desktop
 	pkgs.evolutionWithPlugins
 	pkgs.evolution-ews
 	pkgs.brave
