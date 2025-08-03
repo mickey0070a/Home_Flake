@@ -1,4 +1,4 @@
-{ config, inputs, pkgs, pkgs-unstable, ... }:
+{ config, inputs, pkgs, unstable, ... }:
 
 {
   _module.args.unstable = import inputs.nixpkgs-unstable {
