@@ -11,8 +11,8 @@
   services.trilium-server = {
 	enable = true;
  	package = unstable.trilium-next-server;
+	host = "0.0.0.0";
 	port = 8080;
- 	host = "0.0.0.0";
   };
 
   services.tailscale.enable = true;
