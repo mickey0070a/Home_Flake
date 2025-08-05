@@ -10,6 +10,7 @@
   ];
 services.trilium-server = {
 	enable = true;
+ package = unstable.trilium-next-server;
 	port = 8080;
 };
 
