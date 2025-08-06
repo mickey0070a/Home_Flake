@@ -11,6 +11,7 @@
       ./hardware-configuration.nix
       ../../modules/samba.nix
       ../../modules/Trilium-Server.nix
+      ../../modules/3dprinting.nix
     ];
   
   # Bootloader.
