@@ -13,7 +13,7 @@
       ../../modules/Trilium-Server.nix
       ../../modules/3dprinting.nix
       ../../profiles/users.nix
-      ../../profiles/octoprint.nix
+      #../../profiles/octoprint.nix
     ];
   
   # Bootloader.
