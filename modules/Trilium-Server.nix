@@ -13,10 +13,11 @@
  	package = unstable.trilium-next-server;
 	host = "0.0.0.0";
 	port = 8080;
- extraEnvironment = {
-    TRILIUM_PORT = "8080";
-    TRILIUM_HOST = "0.0.0.0";  # Force binding to all interfaces
   };
+
+  systemd.services.trilium-server.environment = {
+    TRILIUM_HOST = "0.0.0.0";
+    TRILIUM_PORT = "8080";
   };
 
   services.tailscale.enable = true;
