@@ -65,7 +65,7 @@
 
 # services.xserver.desktopManager.enlightenment.enable = true;
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  #nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Enable acpid
   services.acpid.enable = true;
