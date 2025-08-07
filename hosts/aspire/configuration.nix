@@ -16,7 +16,7 @@
   boot.loader.grub.device = "/dev/mmcblk0";
   boot.loader.grub.useOSProber = true;
 
-  networking.hostName = "nixos-ender3-server"; # Define your hostname.
+  networking.hostName = "nixos-aspire"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -44,16 +44,57 @@
     LC_TIME = "en_US.UTF-8";
   };
 
+  services.xserver.enable = true;
+
+  services.xserver.displayManager = {
+          session = [
+              {
+              manage = "desktop";
+              name = "Xsession";
+              start = ''
+                      ${pkgs.runtimeShell} $HOME/.xsession &
+                       waitPID=$!
+              '';
+              }
+          ];
+  };
+
+  # Enable the Enlightenment Desktop Environment.
+  services.xserver.displayManager.lightdm.enable = false;
+  services.displayManager.sddm.enable = true;
+
+# services.xserver.desktopManager.enlightenment.enable = true;
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Enable acpid
+  services.acpid.enable = true;
+
+# # Automount Drive
+  services.devmon.enable = true;
+  services.gvfs.enable = true;
+  services.udisks2.enable = true;
+
+  fileSystems."/home/shared" = {
+    device = "//192.168.86.148/public";  # Replace with your actual Samba server IP/share
+    fsType = "cifs";
+    options = [
+      "guest"
+      "nofail"
+      "_netdev"
+    ];
+  };
+
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
     xkbVariant = "";
   };
   
-  services.logind.lidSwitch = "ignore";
+  #services.logind.lidSwitch = "ignore";
 
   # Enable automatic login for the user.
-  services.getty.autologinUser = "ender3";
+  #services.getty.autologinUser = "ender3";
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
