@@ -1,25 +1,31 @@
-{ pkgs, system, ... }:
+ { pkgs, system, ... }:
 
 {
-  imports = [
-    #./hardware-configuration.nix
+ users.groups.klipper = {};
+
+ users.users.octoprint = {
+    isSystemUser = true;
+    description = "Octoprint";
+    extraGroups = [ "root" "networkmanager" "wheel" "dialout" "klipper" "octoprint" "users" ];
+    packages = with pkgs; [];
+  };
+
+  users.users.klipper = {
+    isSystemUser = true;
+    description = "Klipper";
+    group = "klipper";
+    extraGroups = [ "root" "networkmanager" "wheel" "dialout" "klipper" "octoprint" " users" ];
+  };
+  
+  security.sudo.extraRules = [
+	{
+		users = [ "octoprint" ];
+		commands = [
+			{
+			command = "ALL";
+			options = [ "SETENV" "NOPASSWD" ];
+			}
+		];
+	}
   ];
-
-  home.username = "octoprint";
-  #home.homeDirectory = "/home/octoprint";
-
-  home.stateVersion = "25.05";
-
-  programs.home-manager.enable = true;
-
-  programs.zsh.enable = true;
-  programs.zsh.oh-my-zsh.enable = true;
-
-  #networking.hostName = "3d-printer-server";
-  #networking.networkmanager.enable = true;
-
-  # Enable Klipper or related printer software
-  home.packages = with pkgs; [
-  ];
-
 }
