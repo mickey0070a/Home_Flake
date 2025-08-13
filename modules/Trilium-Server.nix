@@ -5,9 +5,11 @@
 	inherit (pkgs.stdenv.hostPlatform) system;
 	inherit (config.nixpkgs) config;
   };
+
   environment.systemPackages = [
 	unstable.trilium-next-server
   ];
+
   services.trilium-server = {
 	enable = true;
  	package = unstable.trilium-next-server;
@@ -20,6 +22,7 @@
     TRILIUM_PORT = "8080";
   };
 
+  virtualisation.docker.enable = true;
   services.tailscale.enable = true;
   networking.firewall.allowedTCPPorts = [ 8080 ];
 }
