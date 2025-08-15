@@ -27,7 +27,7 @@
           tailscaled & sleep 3 && tailscale up --authkey=${builtins.getEnv "TAILSCALE_AUTHKEY"}
         ''
       ];
-      restartPolicy = "always";
+      #restartPolicy = "always";
     };
   };
 
