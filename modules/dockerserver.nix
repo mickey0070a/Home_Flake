@@ -1,3 +1,7 @@
+{ config, inputs, pkgs, unstable, ... }:
+
+{
+
   virtualisation.docker.enable = true;
 
   virtualisation.oci-containers.containers = {
@@ -35,3 +39,5 @@
 
   # Optional firewall config
   networking.firewall.allowedTCPPorts = [ 80 443 ]; # Or 8080 if you want to expose Trilium directly
+
+}
