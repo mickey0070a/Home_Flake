@@ -2,7 +2,7 @@
 
 {
 
-  virtualisation.docker.enable = true;
+ virtualisation.docker.enable = true;
 
 virtualisation.oci-containers.containers = {
   trilium = {
