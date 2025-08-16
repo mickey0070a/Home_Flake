@@ -26,7 +26,7 @@ virtualisation.oci-containers.containers = {
     entrypoint = [ "sh" "-c" "tailscaled & sleep 3 && tailscale up --authkey=${config.virtualisation.oci-containers.containers.tailscale.environment.TAILSCALE_AUTHKEY}" ];
     };
   };
-};
+
 
 # You might need to set up Docker volumes manually
 system.activationScripts.createDockerVolumes.text = ''
