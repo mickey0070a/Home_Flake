@@ -33,17 +33,6 @@ system.activationScripts.createDockerVolumes.text = ''
   docker volume create tailscale-state || true
 '';
 
-# Define a systemd service for the tailscale container
-services.tailscale-container = {
-  description = "Tailscale Docker Container";
-  wantedBy = [ "multi-user.target" ];
-  serviceConfig = {
-    Type = "simple";
-    ExecStart = ''${pkgs.docker}/bin/docker run --name tailscale --network=host --privileged -v /dev/net/tun:/dev/net/tun -v tailscale-state:/var/lib/tailscale -e TAILSCALE_AUTHKEY=${config.virtualisation.oci-containers.containers.tailscale.environment.TAILSCALE_AUTHKEY} tailscale/tailscale sh -c "tailscaled & sleep 3 && tailscale up --authkey=${config.virtualisation.oci-containers.containers.tailscale.environment.TAILSCALE_AUTHKEY}"'';
-    Restart = "always";
-  };
-};
-
   # Optional firewall config
   networking.firewall.allowedTCPPorts = [ 80 443 ]; # Or 8080 if you want to expose Trilium directly
 
