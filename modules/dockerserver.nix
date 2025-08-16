@@ -20,13 +20,13 @@
         "/dev/net/tun:/dev/net/tun"
         "tailscale-state:/var/lib/tailscale"
       ];
-      entrypoint = [
-        "/bin/sh"
-        "-c"
-        ''
-          tailscaled & sleep 3 && tailscale up --authkey=${builtins.getEnv "TAILSCALE_AUTHKEY"}
-        ''
-      ];
+      #entrypoint = [
+      #  "/bin/sh"
+      #  "-c"
+      #  ''
+      #    tailscaled & sleep 3 && tailscale up #--authkey=${builtins.getEnv "TAILSCALE_AUTHKEY"}
+      #  ''
+      #];
       #restartPolicy = "always";
     };
   };
