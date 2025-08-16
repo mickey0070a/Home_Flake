@@ -34,7 +34,7 @@
 
  services.klipper = {
     enable = true;
-    configFile = ./printer.cfg; 
+    configFile = "home/flake/Home_Flake/modules/printer.cfg" ; 
    # apiSocket = "/tmp/printer.ser";
     inputTTY = "/tmp/printer";
     octoprintIntegration = true;
