@@ -23,7 +23,6 @@ virtualisation.oci-containers.containers = {
     environment = {
       TAILSCALE_AUTHKEY = "YOUR_AUTH_KEY"; # Replace with your actual auth key
     };
-    command = [ "sh" "-c" "tailscaled & sleep 3 && tailscale up --authkey=${config.virtualisation.oci-containers.containers.tailscale.environment.TAILSCALE_AUTHKEY}" ];
   };
 };
 
