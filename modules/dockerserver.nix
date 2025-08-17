@@ -27,10 +27,10 @@
   '';
 
 # You might need to set up Docker volumes manually
-system.activationScripts.createDockerVolumes.text = ''
-  docker volume create trilium-data || true
-  docker volume create tailscale-state || true
-'';
+#system.activationScripts.createDockerVolumes.text = ''
+  #docker volume create trilium-data || true
+  #docker volume create tailscale-state || true
+#'';
 
 # Define a systemd service for the tailscale container
 
