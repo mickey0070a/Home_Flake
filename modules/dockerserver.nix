@@ -4,7 +4,7 @@
   # Enable Tailscale globally
   services.tailscale.enable = true;
   services.tailscale.stateDir = "/var/lib/tailscale";
-  services.tailscale.authKey = "tskey-auth-kwe8SMWkSX11CNTRL-pFb7GKB1Xu7zT8d6ARpLv7WZzpuBCBNYd"; # Replace with your actual auth key
+  #services.tailscale.authKey = "tskey-auth-kwe8SMWkSX11CNTRL-pFb7GKB1Xu7zT8d6ARpLv7WZzpuBCBNYd"; # Replace with your actual auth key
 
   # Ensure Docker is enabled
   virtualisation.docker.enable = true;
