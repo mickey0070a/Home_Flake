@@ -22,9 +22,9 @@
   };
 
   # You might need to set up Docker volumes manually
-  system.activationScripts.createDockerVolumes.text = ''
-    docker volume create trilium-data || true
-  '';
+  #system.activationScripts.createDockerVolumes.tex#t = ''
+#    docker volume create trilium-data || true
+ # '';
 
 # You might need to set up Docker volumes manually
 #system.activationScripts.createDockerVolumes.text = ''
