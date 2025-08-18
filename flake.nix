@@ -11,7 +11,7 @@
   };
 
   # Outputs: Define a set of system configurations (machines)
-  outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, home-manager }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, home-manager, builtins }@inputs:
   {
       nixosConfigurations.getac = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
