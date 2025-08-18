@@ -1,4 +1,4 @@
-{ config, pkgs, lib, pkgs-unstable,  ... }:
+{ config, pkgs, inputs, lib, pkgs-unstable,  ... }:
 
 {
     imports = [
@@ -21,7 +21,7 @@
 	enable = true;
     windowManager.awesome = {
 		enable = true;
-		package =  (import <pkgs> { 
+		package =  (import inputs.nixpkgs { 
 			overlays = [
 				(self: super: {
 					awesome = super.awesome.override {
