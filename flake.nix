@@ -15,7 +15,7 @@
   {
       nixosConfigurations.getac = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs builtins; };
           modules = [
             ./hosts/getac/configuration.nix
             home-manager.nixosModules.home-manager {
@@ -29,7 +29,7 @@
       };
         nixosConfigurations.aspire = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs builtins; };
           modules = [
             ./hosts/aspire/configuration.nix
             home-manager.nixosModules.home-manager {
@@ -43,7 +43,7 @@
       };
         nixosConfigurations.MikeDesktop = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs builtins; };
           modules = [
             ./hosts/MikeDesktop/configuration.nix
             home-manager.nixosModules.home-manager {
