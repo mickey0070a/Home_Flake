@@ -10,7 +10,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/samba.nix
-      ../../modules/dockerserver.nix
+      ../../modules/Trilium-Server.nix
       ../../modules/3dprinting.nix
       ../../profiles/users.nix
       ../../profiles/octoprint.nix
