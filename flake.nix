@@ -23,7 +23,7 @@
               home-manager.useUserPackages = true;
               home-manager.users.michaelh = import ./profiles/michaelh/michaelh.nix;
               home-manager.users.cerih = import ./profiles/cerih/cerih.nix;
-              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.extraSpecialArgs = { inherit inputs builtins; };
             }
           ];
       };
@@ -37,7 +37,7 @@
               home-manager.useUserPackages = true;
               home-manager.users.michaelh = import ./profiles/michaelh/michaelh.nix;
               home-manager.users.cerih = import ./profiles/cerih/cerih.nix;
-              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.extraSpecialArgs = { inherit inputs builtins; };
           }
         ];
       };
@@ -51,7 +51,7 @@
               home-manager.useUserPackages = true;
               home-manager.users.michaelh = import ./profiles/michaelh/michaelh.nix;
               home-manager.users.cerih = import ./profiles/cerih/cerih.nix;
-              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.extraSpecialArgs = { inherit inputs builtins; };
             }
           ];
       };
