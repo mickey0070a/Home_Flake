@@ -20,15 +20,11 @@
 	enable = true;
     windowManager.awesome = {
 		enable = true;
-		package =  (pkgs.extend { 
-			overlays = [
-				(self: super: {
+		package =  (pkgs.extend (self: super: { 
 					awesome = super.awesome.override {
 						lua = self.lua53Packages.lua;
 					};
-				})
-  			];
-		}).awesome;
+		})).awesome;
     };
   };
  
