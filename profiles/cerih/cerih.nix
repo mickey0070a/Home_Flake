@@ -20,7 +20,7 @@
 	enable = true;
     windowManager.awesome = {
 		enable = true;
-		package =  (import inputs.nixpkgs { 
+		package =  (pkgs.extend { 
 			overlays = [
 				(self: super: {
 					awesome = super.awesome.override {
