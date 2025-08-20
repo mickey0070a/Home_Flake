@@ -11,7 +11,7 @@
   };
 
   # Outputs: Define a set of system configurations (machines)
-  outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, home-manager, builtins }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, home-manager }@inputs:
   {
       nixosConfigurations.getac = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
@@ -23,7 +23,7 @@
               home-manager.useUserPackages = true;
               home-manager.users.michaelh = import ./profiles/michaelh/michaelh.nix;
               home-manager.users.cerih = import ./profiles/cerih/cerih.nix;
-              home-manager.extraSpecialArgs = { inherit inputs builtins; };
+              home-manager.extraSpecialArgs = { inherit inputs };
             }
           ];
       };
@@ -37,7 +37,7 @@
               home-manager.useUserPackages = true;
               home-manager.users.michaelh = import ./profiles/michaelh/michaelh.nix;
               home-manager.users.cerih = import ./profiles/cerih/cerih.nix;
-              home-manager.extraSpecialArgs = { inherit inputs builtins; };
+              home-manager.extraSpecialArgs = { inherit inputs };
           }
         ];
       };
@@ -51,7 +51,7 @@
               home-manager.useUserPackages = true;
               home-manager.users.michaelh = import ./profiles/michaelh/michaelh.nix;
               home-manager.users.cerih = import ./profiles/cerih/cerih.nix;
-              home-manager.extraSpecialArgs = { inherit inputs builtins; };
+              home-manager.extraSpecialArgs = { inherit inputs };
             }
           ];
       };
