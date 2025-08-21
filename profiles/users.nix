@@ -5,7 +5,7 @@
   users.users.michaelh = {
     isNormalUser = true;
     description = "Michael Hall";
-    extraGroups = [ "networkmanager" "wheel" "storage" "docker" ];
+    extraGroups = [ "networkmanager" "wheel" "storage" "docker" "video" ];
     hashedPassword = "$6$bSnWiQcaHCpYd2qB$8dFX7vGp1TnKm3H/e/NFw/hvOUQ3FooLphnNVZrW4kEwpni910oeSfTo9FZmD5JIHADWV7sAjnYHFZ1/W2feV/";
     packages = with pkgs; [
     #  thunderbird
