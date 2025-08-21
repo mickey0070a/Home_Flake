@@ -62,11 +62,12 @@
     enable = true;
     group = "root";  # default; ensure camera permission
     inputPlugin = "input_uvc.so -d /dev/video0 -r 640x480 -f 30 -yuv";
-    outputPlugin = "output_http.so -w @www@ -n -p 700 -l 0.0.0.0";  # custom port
+    outputPlugin = "output_http.so -w @www@ -p 700 -l 0.0.0.0";  # custom port
     # extra arguments can be specified if needed, though not direct option here
     };
 
 }
+
 
 
 
