@@ -57,4 +57,13 @@
     plugins = plugins: with plugins; [ octoklipper themeify psucontrol simpleemergencystop bedlevelvisualizer printtimegenius gcodeeditor ];
     group = "wheel";
   };
+
+  services.mjpg-streamer = {
+    enable = true;
+    group = "video";  # default; ensure camera permission
+    inputPlugin = "input_uvc.so";
+    outputPlugin = "output_http.so -w @www@ -n -b -p 700 -l 0.0.0.0";  # custom port
+    # extra arguments can be specified if needed, though not direct option here
+    };
+
 }
