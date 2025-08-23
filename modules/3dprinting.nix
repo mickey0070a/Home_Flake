@@ -56,6 +56,11 @@
     openFirewall = true;
     plugins = plugins: with plugins; [ octoklipper themeify psucontrol simpleemergencystop bedlevelvisualizer printtimegenius gcodeeditor ];
     group = "wheel";
+    extraConfig = { 
+      webcam = {
+        stream = "http://localhost:8080/?action=stream";
+      };
+    };
   };
 
   services.mjpg-streamer = {
