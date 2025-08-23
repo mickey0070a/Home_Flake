@@ -58,7 +58,7 @@
     group = "wheel";
     extraConfig = { 
       webcam = {
-        stream = "http://localhost:8080/?action=stream";
+        stream = "http://localhost:40000/?action=stream";
       };
     };
   };
