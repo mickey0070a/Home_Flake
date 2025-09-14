@@ -23,6 +23,5 @@
   };
 
   virtualisation.docker.enable = true;
-  services.tailscale.enable = true;
   networking.firewall.allowedTCPPorts = [ 8080 40000 ];
 }
