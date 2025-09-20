@@ -153,6 +153,8 @@
     publish.userServices = true;
   };
 
+  services.tailscale.enable = true;
+
   # Samba (SMB file share)
   #services.samba = {
     #enable = true;
