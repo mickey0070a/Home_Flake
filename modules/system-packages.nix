@@ -37,5 +37,5 @@
 	openjdk11
   ];
 
-services.tailscale.enable = true;
+
 }
