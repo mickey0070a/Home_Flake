@@ -35,6 +35,9 @@
 	pulseaudioFull
 	pavucontrol
 	openjdk11
+
+	# Display Driver for Splitter
+	displaylink
   ];
 
 
