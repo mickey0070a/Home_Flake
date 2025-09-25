@@ -39,7 +39,7 @@
   virtualisation.oci-containers = {
     backend = "docker";
     containers.trilium = {
-      image = "zadam/trilium:latest";
+      image = "triliumnext/notes:latest";
       autoStart = true;
       ports = [ "0.0.0.0:8080:8080" ]; # only listen locally
       volumes = [
