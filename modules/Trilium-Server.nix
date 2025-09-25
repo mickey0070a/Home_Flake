@@ -30,10 +30,10 @@
   virtualisation.docker.enable = true;
 
   # --- Tailscale ---
-  services.tailscale = {
-    enable = true;
-    useRoutingFeatures = "server";  # optional, for subnet routing
-  };
+ # services.tailscale = {
+  #  enable = true;
+  #  useRoutingFeatures = "server";  # optional, for subnet routing
+ # };
 
   # --- Trilium container ---
   virtualisation.oci-containers = {
@@ -57,5 +57,5 @@
   ];
 
   # Optional: open firewall if you want LAN access
-  networking.firewall.allowedTCPPorts = [ ];
+  #networking.firewall.allowedTCPPorts = [ ];
 }
