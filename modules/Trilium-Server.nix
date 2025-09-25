@@ -41,7 +41,7 @@
     containers.trilium = {
       image = "zadam/trilium:latest";
       autoStart = true;
-      ports = [ "127.0.0.1:8080:8080" ]; # only listen locally
+      ports = [ "0.0.0.0:8080:8080" ]; # only listen locally
       volumes = [
         "/var/lib/trilium:/home/node/trilium-data"
       ];
