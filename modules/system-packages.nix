@@ -37,7 +37,7 @@
 	openjdk11
 
 	# Display Driver for Splitter
-	displaylink
+	#displaylink
   ];
 
 
