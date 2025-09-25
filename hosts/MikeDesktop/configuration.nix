@@ -143,7 +143,7 @@
 
   # Networking tools
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 80 443 445 ]; # SMB, SSH, etc.
+  networking.firewall.allowedTCPPorts = [ 22 80 443 445 8080 ]; # SMB, SSH, etc.
 
   # Avahi (network discovery for SMB)
   services.avahi = {
