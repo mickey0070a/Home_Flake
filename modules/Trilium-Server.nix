@@ -48,9 +48,10 @@
         volumes = [
           "/var/lib/trilium:/home/node/trilium-data"
       ];
-     # environment = {
-      #  TZ = "UTC"; # or your timezone
-    #  };
+     #.  environment = {
+      #    TZ = "UTC"; # or your timezone
+      #  };
+      };
     };
   };
 
