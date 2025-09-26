@@ -39,8 +39,8 @@
   virtualisation = {
     docker.enable = true;
     containers.enable = true;
+    backend = "docker";
     oci-containers.containers = {
-      backend = "docker";
       triliumnext-server = {
         image = "triliumnext/notes:latest";
         #autoStart = true;
