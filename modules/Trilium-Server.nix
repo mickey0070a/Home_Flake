@@ -39,9 +39,9 @@
   virtualisation = {
     docker.enable = true;
     containers.enable = true;
-    backend = "docker";
-    oci-containers.containers = {
-      triliumnext-server = {
+    oci-containers = {
+      backend = "docker";
+      containers.triliumnext-server = {
         image = "triliumnext/notes:latest";
         #autoStart = true;
         ports = [ "0.0.0.0:8080:8080" ]; # only listen locally
