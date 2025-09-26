@@ -40,7 +40,7 @@
     docker.enable = true;
     containers.enable = true;
     oci-containers.containers = {
-   # backend = "docker";
+      backend = "docker";
       triliumnext-server = {
         image = "triliumnext/notes:latest";
         #autoStart = true;
