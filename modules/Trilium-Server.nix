@@ -57,7 +57,7 @@
 
   # --- Persistent data directory ---
   systemd.tmpfiles.rules = [
-    "d /var/lib/trilium 0777 1000 1000 -"
+    "d /var/lib/trilium 0777 root root -"
   ];
 
   # Optional: open firewall if you want LAN access
