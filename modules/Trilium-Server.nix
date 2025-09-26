@@ -27,7 +27,7 @@
 
 
  # --- Enable Docker ---
-  virtualisation.docker.enable = true;
+ # virtualisation.docker.enable = true;
 
   # --- Tailscale ---
  # services.tailscale = {
@@ -36,18 +36,21 @@
  # };
 
   # --- Trilium container ---
-  virtualisation.oci-containers.containers = {
+  virtualisation = {
+    docker.enable = true;
+    containers.enable = true;
+    oci-containers.containers = {
    # backend = "docker";
-   triliumnext-server = {
-      image = "triliumnext/notes:latest";
-      autoStart = true;
-      ports = [ "0.0.0.0:8080:8080" ]; # only listen locally
-      volumes = [
-        "/var/lib/trilium:/home/node/trilium-data"
+      triliumnext-server = {
+        image = "triliumnext/notes:latest";
+        #autoStart = true;
+        ports = [ "0.0.0.0:8080:8080" ]; # only listen locally
+        volumes = [
+          "/var/lib/trilium:/home/node/trilium-data"
       ];
-      environment = {
-        TZ = "UTC"; # or your timezone
-      };
+     # environment = {
+      #  TZ = "UTC"; # or your timezone
+    #  };
     };
   };
 
