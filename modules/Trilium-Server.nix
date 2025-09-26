@@ -45,9 +45,9 @@
         image = "triliumnext/notes:latest";
         #autoStart = true;
         ports = [ "0.0.0.0:8080:8080" ]; # only listen locally
-        volumes = [
-          "/var/lib/trilium:/home/node/trilium-data"
-      ];
+        #volumes = [
+         # "/var/lib/trilium:/home/node/trilium-data"
+      #];
      #.  environment = {
       #    TZ = "UTC"; # or your timezone
       #  };
