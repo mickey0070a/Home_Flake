@@ -46,7 +46,7 @@
         #autoStart = true;
         ports = [ "0.0.0.0:8080:8080" ]; # only listen locally
         volumes = [
-          "/var/lib/trilium:/home/node/trilium-data"
+          "/var/lib/triliumnext:/home/node/trilium-data"
       ];
      #.  environment = {
       #    TZ = "UTC"; # or your timezone
