@@ -61,5 +61,5 @@
   ];
 
   # Optional: open firewall if you want LAN access
-  #networking.firewall.allowedTCPPorts = [ ];
+  networking.firewall.allowedTCPPorts = [ 8080 ];
 }
