@@ -71,6 +71,8 @@
     # extra arguments can be specified if needed, though not direct option here
     };
 
+  networking.firewall.allowedTCPPorts = [ 4000 ]; # SMB, SSH, etc.
+
 }
 
 
