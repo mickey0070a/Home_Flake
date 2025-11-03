@@ -6,6 +6,10 @@ services.nginx = {
   enable = true;
   recommendedProxySettings = true;
   virtualHosts."local.tailscale" = {
+    basicAuth = {
+      Mhall = "password1"; 
+      CHall = "password2";
+    };
     locations = {
       "/trilium" = {
         proxyPass = "http://127.0.0.1:8080/";
@@ -27,5 +31,17 @@ systemd.services.nginx = {
   ReadOnlyPaths = [ "/etc/nginx" "/srv/nginx" ];
   ReadWritePaths = [ "/tmp" "/var/tmp" ];
   CapabilityBoundingSet = [];
+};
+
+services.fail2ban = {
+  enable = true;
+  jails.nginx = {
+    enabled = true;
+    filter = "nginx-http-auth";
+    logPath = "/var/log/nginx/access.log";
+    maxRetry = 3;
+    findTime = "10m";
+    banTime = "4h";
+  };
 };
 }
