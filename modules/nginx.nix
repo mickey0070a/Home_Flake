@@ -1,3 +1,7 @@
+{ config, inputs, pkgs, unstable, ... }:
+
+{
+
 services.nginx = {
   enable = true;
   recommendedProxySettings = true;
@@ -13,12 +17,6 @@ services.nginx = {
   };
 };
 
-networking.tailscale = {
-  enable = true;
-  authKey = "tsauth-yourkey";
-  # Set advertise routes or tags as needed.
-};
-
 systemd.services.nginx = {
   # Nginx runs under sandbox by default, can add or tweak here if needed
   User = "nginx";
@@ -30,3 +28,4 @@ systemd.services.nginx = {
   ReadWritePaths = [ "/tmp" "/var/tmp" ];
   CapabilityBoundingSet = [];
 };
+}
