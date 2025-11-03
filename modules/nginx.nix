@@ -11,7 +11,7 @@ services.nginx = {
         proxyPass = "http://127.0.0.1:8080/";
       };
       "/octoprint" = {
-        proxyPass = "http://127.0.0.1:YOUR_OCTOPRINT_PORT/";
+        proxyPass = "http://127.0.0.1:5000/";
       };
     };
   };
