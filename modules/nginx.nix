@@ -1,4 +1,4 @@
-{ config, inputs, pkgs, unstable, ... }:
+3c d{ config, inputs, pkgs, unstable, ... }:
 
 {
 
@@ -41,7 +41,7 @@ services.fail2ban = {
     logPath = "/var/log/nginx/access.log";
     maxRetry = 3;
     findTime = "10m";
-    banTime = "240m";
+    banTime = "14400";
   };
 };
 }
