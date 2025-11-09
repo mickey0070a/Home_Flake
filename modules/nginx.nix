@@ -1,4 +1,4 @@
-3c d{ config, inputs, pkgs, unstable, ... }:
+{ config, inputs, pkgs, unstable, ... }:
 
 {
 
