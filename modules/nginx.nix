@@ -40,8 +40,8 @@ services.fail2ban = {
     filter = "nginx-http-auth";
     logPath = "/var/log/nginx/access.log";
     maxRetry = 3;
-    findTime = "10m";
-    banTime = "14400";
+    findTime = 60;
+    banTime = 14400;
   };
 };
 }
