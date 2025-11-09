@@ -41,7 +41,7 @@ services.fail2ban = {
     logPath = "/var/log/nginx/access.log";
     maxRetry = 3;
     findTime = "10m";
-    banTime = "4h";
+    banTime = "240m";
   };
 };
 }
