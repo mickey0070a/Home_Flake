@@ -10,5 +10,6 @@
 	gimp
 	freecad
 	super-slicer
+	qgis
   ];
 }
