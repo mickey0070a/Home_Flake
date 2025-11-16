@@ -30,7 +30,7 @@ systemd.services.nginx = {
   ProtectSystem = "strict";
   ReadOnlyPaths = [ "/etc/nginx" "/srv/nginx" ];
   ReadWritePaths = [ "/tmp" "/var/tmp" ];
-  CapabilityBoundingSet = [];
+  #CapabilityBoundingSet = [];
 };
 
 #services.fail2ban = {
