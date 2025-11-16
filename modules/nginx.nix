@@ -23,8 +23,8 @@ services.nginx = {
 
 systemd.services.nginx = {
   # Nginx runs under sandbox by default, can add or tweak here if needed
-  User = "nginx";
-  Group = "nginx";
+  #User = "nginx";
+  #Group = "nginx";
   PrivateTmp = true;
   ProtectHome = true;
   ProtectSystem = "strict";
