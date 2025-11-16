@@ -26,8 +26,8 @@
       browseable = "yes";
       "guest ok" = "yes";
       "read only" = "no";
-      "create mask" = "0664";
-      "directory mask" = "0775";
+      "create mask" = "0777";
+      "directory mask" = "0777";
       "force user" = "server";
       "force group" = "server";
     };
