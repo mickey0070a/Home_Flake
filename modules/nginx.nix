@@ -33,15 +33,15 @@ systemd.services.nginx = {
   CapabilityBoundingSet = [];
 };
 
-services.fail2ban = {
-  enable = true;
-  jails.nginx = {
-    enabled = true;
-    filter = "nginx-http-auth";
-    logPath = "/var/log/nginx/access.log";
-    maxRetry = 3;
-    findTime = 60;
-    banTime = 14400;
-  };
-};
+#services.fail2ban = {
+#  enable = true;
+#  jails.nginx = {
+#    enabled = true;
+#    filter = "nginx-http-auth";
+#    logPath = "/var/log/nginx/access.log";
+#    maxRetry = 3;
+#    findTime = 60;
+#    banTime = 14400;
+#  };
+#};
 }
