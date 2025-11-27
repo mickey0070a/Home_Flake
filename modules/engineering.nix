@@ -14,5 +14,10 @@
 	python311Full
 	python311Packages.networkx
 	python311Packages.openpyxl
+	python311Packages.numpy
+	python311Packages.scipy
+	python311Packages.matplotlib
+	python311Packages.requests
+	python311Packages.pyserial
   ];
 }
