@@ -11,8 +11,8 @@
 	freecad
 	super-slicer
 	qgis
-	python313Full
-	python313Packages.networkx
-	python313Packages.openpyxl
+	python311Full
+	python311Packages.networkx
+	python311Packages.openpyxl
   ];
 }
