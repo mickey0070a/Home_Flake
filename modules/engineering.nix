@@ -21,5 +21,6 @@
 	python311Packages.pyserial
 	python311Packages.pip
 	python311Packages.lxml
+	python311Packages.ezdxf
   ];
 }
