@@ -8,7 +8,7 @@
 	calculix
 	inkscape-with-extensions
 	gimp
-	#freecad
+	freecad
 	super-slicer
 	qgis
 	python311Full
@@ -19,5 +19,6 @@
 	python311Packages.matplotlib
 	python311Packages.requests
 	python311Packages.pyserial
+	python311Packages.pip
   ];
 }
