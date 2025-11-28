@@ -8,7 +8,7 @@
 	calculix
 	inkscape-with-extensions
 	gimp
-	freecad
+	#freecad
 	super-slicer
 	qgis
 	python311Full
