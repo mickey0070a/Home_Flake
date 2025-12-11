@@ -21,17 +21,17 @@ services.nginx = {
   };
 };
 
-systemd.services.nginx = {
+#systemd.services.nginx = {
   # Nginx runs under sandbox by default, can add or tweak here if needed
   #User = "nginx";
   #Group = "nginx";
-  PrivateTmp = true;
-  ProtectHome = true;
-  ProtectSystem = "strict";
-  ReadOnlyPaths = [ "/etc/nginx" "/srv/nginx" ];
-  ReadWritePaths = [ "/tmp" "/var/tmp" ];
+#  PrivateTmp = true;
+#  ProtectHome = true;
+#  ProtectSystem = "strict";
+#  ReadOnlyPaths = [ "/etc/nginx" "/srv/nginx" ];
+#  ReadWritePaths = [ "/tmp" "/var/tmp" ];
   #CapabilityBoundingSet = [];
-};
+#};
 
 #services.fail2ban = {
 #  enable = true;
