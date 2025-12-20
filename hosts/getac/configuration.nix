@@ -91,8 +91,13 @@
   # Enable the Enlightenment Desktop Environment.
   services.xserver.displayManager.lightdm.enable = false;
   services.displayManager.sddm.enable = true;
-  services.displaylink.enable = true;
-  services.xserver.videoDrivers = [ "displaylink" "modesetting" ];
+  
+  hardware.graphics.enable = true;
+  hardware.graphics.extraPackages = with pkgs; [
+  	evdi
+  ];
+  
+  services.xserver.videoDrivers = [ "modesetting" ];
 
 # services.xserver.desktopManager.enlightenment.enable = true;
   
