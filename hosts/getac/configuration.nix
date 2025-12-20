@@ -58,6 +58,23 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
+  services.xserver.extraConfig = ''
+    Section "Monitor"
+      Identifier "eDP-1"
+      Option "Primary" "true"
+    EndSection
+
+    Section "Monitor"
+      Identifier "HDMI-1-1"
+      Option "RightOf" "eDP-1"
+    EndSection
+
+    Section "Monitor"
+      Identifier "HDMI-1-2"
+      Option "RightOf" "HDMI-1-1"
+    EndSection
+  '';
+
   services.xserver.displayManager = {
   	session = [
 	      {
@@ -74,7 +91,9 @@
   # Enable the Enlightenment Desktop Environment.
   services.xserver.displayManager.lightdm.enable = false;
   services.displayManager.sddm.enable = true;
-	
+
+  services.xserver.videoDrivers = [ "displaylink" "modesetting" ];
+
 # services.xserver.desktopManager.enlightenment.enable = true;
   
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -150,6 +169,10 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  environment.systemPackages = with pkgs; [
+  	displaylink
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
