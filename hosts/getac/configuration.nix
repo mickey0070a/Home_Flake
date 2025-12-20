@@ -93,9 +93,9 @@
   services.displayManager.sddm.enable = true;
   
   hardware.graphics.enable = true;
-  hardware.graphics.extraPackages = with pkgs; [
-  	evdi
-  ];
+  #hardware.graphics.extraPackages = with pkgs; [
+  	#evdi
+  #];
   
   services.xserver.videoDrivers = [ "modesetting" ];
 
