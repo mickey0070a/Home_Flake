@@ -157,7 +157,7 @@
 	wantedBy = ["sleep.target"];
   	serviceConfig = {
 		Type = "oneshot";
-		ExecStart = "${pkgs.bash}/bin/bash -c 'modprobe -r psmouse && modprobe psmouse synaptics_intertouch=1'";
+		ExecStart = "${pkgs.bash}/bin/bash -c \"modprobe -r psmouse && modprobe psmouse synaptics_intertouch=1\"";
   	};
   };
 
