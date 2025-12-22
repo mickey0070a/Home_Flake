@@ -155,11 +155,12 @@
   systemd.services.touchpadrestart = {
   	description = "Fixes the touchpad after resume";
 	wantedBy = ["sleep.target"];
-    # Use a script instead of embedding ExecStart directly.
+    # Use a script and call modprobe by absolute path so systemd can find it.
     script = ''
-      #!/bin/sh
-      modprobe -r psmouse
-      modprobe psmouse synaptics_intertouch=1
+      #!${pkgs.bash}/bin/bash
+      # Use kmod's modprobe via absolute path so this works even with a restricted PATH
+      "${pkgs.kmod}/bin/modprobe" -r psmouse || true
+      "${pkgs.kmod}/bin/modprobe" psmouse synaptics_intertouch=1 || true
     '';
   	serviceConfig = {
 		Type = "oneshot";
