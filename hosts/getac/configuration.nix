@@ -151,13 +151,18 @@
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
 
-  # Service to allow touchpad usage after sleep state
+ # Service to allow touchpad usage after sleep state
   systemd.services.touchpadrestart = {
   	description = "Fixes the touchpad after resume";
 	wantedBy = ["sleep.target"];
+    # Use a script instead of embedding ExecStart directly.
+    script = ''
+      #!/bin/sh
+      modprobe -r psmouse
+      modprobe psmouse synaptics_intertouch=1
+    '';
   	serviceConfig = {
 		Type = "oneshot";
-		ExecStart = "${pkgs.bash}/bin/bash -c \"modprobe -r psmouse && modprobe psmouse synaptics_intertouch=1\"";
   	};
   };
 
