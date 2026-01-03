@@ -7,13 +7,13 @@ services.nginx = {
   recommendedProxySettings = true;
   virtualHosts."local.tailscale" = {
     basicAuthFile = "/etc/nginx/htpasswd";
-  };
-  locations = {
-    "/trilium" = {
-      proxyPass = "http://127.0.0.1:8080/";
-    };
-    "/octoprint" = {
-      proxyPass = "http://127.0.0.1:5000/";
+    locations = {
+      "/trilium" = {
+        proxyPass = "http://127.0.0.1:8080/";
+      };
+      "/octoprint" = {
+        proxyPass = "http://127.0.0.1:5000/";
+      };
     };
   };
 };
