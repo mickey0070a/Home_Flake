@@ -2,21 +2,22 @@
 
 {
 
-services.nginx = {
-  enable = true;
-  recommendedProxySettings = true;
-  virtualHosts."local.tailscale" = {
+services.nginx.virtualHosts = {
+  "trilium.local.tailscale" = {
     basicAuthFile = "/etc/nginx/htpasswd";
-    locations = {
-      "/trilium" = {
-        proxyPass = "http://127.0.0.1:8080/";
-      };
-      "/octoprint" = {
-        proxyPass = "http://127.0.0.1:5000/";
-      };
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:8080/";
+    };
+  };
+
+  "octoprint.local.tailscale" = {
+    basicAuthFile = "/etc/nginx/htpasswd";
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:5000/";
     };
   };
 };
+
 
 #systemd.services.nginx = {
   # Nginx runs under sandbox by default, can add or tweak here if needed
