@@ -6,17 +6,14 @@ services.nginx = {
   enable = true;
   recommendedProxySettings = true;
   virtualHosts."local.tailscale" = {
-    basicAuth = {
-      Mhall = "password1"; 
-      CHall = "password2";
+    basicAuthFile = "/etc/nginx/htpasswd";
+  };
+  locations = {
+    "/trilium" = {
+      proxyPass = "http://127.0.0.1:8080/";
     };
-    locations = {
-      "/trilium" = {
-        proxyPass = "http://127.0.0.1:8080/";
-      };
-      "/octoprint" = {
-        proxyPass = "http://127.0.0.1:5000/";
-      };
+    "/octoprint" = {
+      proxyPass = "http://127.0.0.1:5000/";
     };
   };
 };
