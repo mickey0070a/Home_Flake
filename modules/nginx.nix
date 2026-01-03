@@ -18,7 +18,7 @@ services.nginx.virtualHosts = {
   };
 };
 
-
+  networking.firewall.allowedTCPPorts = [ 80 ];
 #systemd.services.nginx = {
   # Nginx runs under sandbox by default, can add or tweak here if needed
   #User = "nginx";
