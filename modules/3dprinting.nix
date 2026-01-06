@@ -56,6 +56,7 @@
     openFirewall = true;
     plugins = plugins: with plugins; [ octoklipper themeify psucontrol simpleemergencystop bedlevelvisualizer printtimegenius gcodeeditor ];
     group = "wheel";
+    host = "0.0.0.0";
     extraConfig = { 
       webcam = {
         stream = "http://localhost:40000/?action=stream";
@@ -74,6 +75,7 @@
   networking.firewall.allowedTCPPorts = [ 40000 5000 ]; # SMB, SSH, etc.
 
 }
+
 
 
 
