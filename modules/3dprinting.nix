@@ -59,7 +59,7 @@
     host = "0.0.0.0";
     extraConfig = {
      server = {
-      baseurl = "/octoprint";
+      baseurl = "/octoprint/";
      };
      webcam = {
       stream = "http://localhost:40000/?action=stream";
@@ -78,6 +78,7 @@
   networking.firewall.allowedTCPPorts = [ 40000 5000 ]; # SMB, SSH, etc.
 
 }
+
 
 
 
