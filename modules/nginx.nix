@@ -22,7 +22,7 @@ services.nginx = {
           '';
         };
 
-        locations."/octoprint/" = {
+        "/octoprint/" = {
           proxyPass = "http://127.0.0.1:5000/"; # note trailing slash
           extraConfig = ''
             proxy_set_header Host $host;
