@@ -60,6 +60,12 @@
     extraConfig = {
      server = { baseurl = "/octoprint"; };
      webcam = { stream = "http://localhost:40000/?action=stream"; };
+     reverseProxy = {
+       trustedProxies = [
+         "127.0.0.1"
+         "192.168.1.0/24"
+       ];
+     };
     };
   };
 
