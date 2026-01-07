@@ -22,26 +22,17 @@ services.nginx = {
           '';
         };
 
-        # OctoPrint at /octoprint
-        "/octoprint/" = {
-          proxyPass = "http://127.0.0.1:5000/";
+        locations."/octoprint/" = {
+          proxyPass = "http://127.0.0.1:5000/"; # note trailing slash
           extraConfig = ''
             proxy_set_header Host $host;
-            proxy_set_header X-real-IP $remote_addr;
+            proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-
-            # WebSocket support
-            proxy_http_version 1.1;
+            proxy_set_header X-Scheme $scheme;
+            proxy_set_header X-Script-Name /octoprint;
             proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection "upgrade";
-            
-            # Needed for subpath
-            proxy_redirect off;
-            sub_filter_types *;
-            sub_filter_once off;
-            sub_filter 'href="/' 'href="/octoprint/';
-            sub_filter 'src="/' 'src="/octoprint/';
+            proxy_set_header Connection $connection_upgrade;
+            proxy_http_version 1.1;
           '';
         };
       };
