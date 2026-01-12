@@ -10,6 +10,7 @@
 	gimp
 	freecad
 	super-slicer
+ orca-slicer
 	qgis
 	python311Full
 	python311Packages.networkx
