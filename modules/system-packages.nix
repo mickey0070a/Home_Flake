@@ -35,7 +35,8 @@
 	pulseaudioFull
 	pavucontrol
 	openjdk11
- gearlever
+ 	gearlever
+	gnome-screenshot
 
 	# Display Driver for Splitter
 	#displaylink
