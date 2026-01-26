@@ -86,6 +86,9 @@
 	      '';
 	      }
 	  ];
+	  sessionCommands = ''
+    	${lib.getBin pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource 2 0
+	  '';
   };
 
   # Enable the Enlightenment Desktop Environment.
