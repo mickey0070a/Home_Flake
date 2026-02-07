@@ -203,9 +203,11 @@ local myawesomemenu = {
    { "Manual", string.format("%s -e man awesome", terminal) },
    { "Edit config", string.format("%s -e %s %s", terminal, editor, awesome.conffile) },
    { "Restart Awesome", awesome.restart },
+   { "Network Manager", function() awful.spawn(terminal .. " -e nmtui") end},
+   { "Bluetooth Manager", function() awful.spawn(terminal .. " -e bluetoothctl") end},
    { "Logout", function() awesome.quit() end },
-   {"Reboot", function() os.execute("systemctl reboot") end  },
-   {"Shutdown", function() os.execute("systemctl poweroff")  end },
+   { "Reboot", function() os.execute("systemctl reboot") end  },
+   { "Shutdown", function() os.execute("systemctl poweroff")  end },
 }
 
 awful.util.mymainmenu = freedesktop.menu.build {
