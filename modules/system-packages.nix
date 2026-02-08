@@ -37,6 +37,7 @@
 	openjdk11
  	gearlever
 	gnome-screenshot
+	libinput
 
 	# Display Driver for Splitter
 	#displaylink
