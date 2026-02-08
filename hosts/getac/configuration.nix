@@ -19,7 +19,7 @@
   boot.supportedFilesystems = [ "ntfs" ];
 
   boot.kernelParams = [
-  "psmouse.synaptics_intertouch=1"
+  "psmouse.proto=imps"
   ];
 
   # tlp Power Saving Settings
