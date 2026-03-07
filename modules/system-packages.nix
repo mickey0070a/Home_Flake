@@ -38,6 +38,7 @@
  	gearlever
 	gnome-screenshot
 	libinput
+	gearlever
 
 	# Display Driver for Splitter
 	#displaylink
