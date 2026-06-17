@@ -5,7 +5,7 @@
 	librecad
 	qalculate-gtk
 	gmsh
-	calculix
+	calculix-cxx
 	inkscape-with-extensions
 	gimp
 	freecad
