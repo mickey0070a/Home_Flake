@@ -11,7 +11,7 @@
 	pkgs.evolutionWithPlugins
 	pkgs.evolution-ews
 	pkgs.brave
-	pkgs.kmymoney
-	pkgs.beeper
+	#pkgs.kmymoney
+	#pkgs.beeper
   ];
 }
