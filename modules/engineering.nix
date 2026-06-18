@@ -19,7 +19,7 @@ in
     inkscape-with-extensions
     gimp
     freecad-with-pip
-    super-slicer
+    # super-slicer
     orca-slicer
     qgis
     steam-run  # Make sure this is available
