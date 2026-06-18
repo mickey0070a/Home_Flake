@@ -2,16 +2,16 @@
 
 {
   home.packages = with pkgs; [
-	xorg.xauth
-        xorg.xinit
-        alacritty
+	xauth
+    xinit
+    alacritty
 
 	# Thunar program and plugins
-	xfce.thunar
-	xfce.thunar-volman
-	xfce.thunar-dropbox-plugin
-	xfce.thunar-archive-plugin
-	xfce.thunar-media-tags-plugin
+	thunar
+	thunar-volman
+	thunar-dropbox-plugin
+	thunar-archive-plugin
+	thunar-media-tags-plugin
 	mucommander
 
 	# Drive/File Managements
@@ -38,7 +38,6 @@
  	gearlever
 	gnome-screenshot
 	libinput
-	gearlever
 
 	# Display Driver for Splitter
 	#displaylink
