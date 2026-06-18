@@ -18,9 +18,9 @@
   boot.loader.grub.useOSProber = true;
   boot.supportedFilesystems = [ "ntfs" ];
 
-  boot.kernelParams = [
-  "psmouse.proto=imps"
-  ];
+  #boot.kernelParams = [
+  #"psmouse.proto=imps"
+  #];
 
   # tlp Power Saving Settings
   services.thermald.enable = true;
