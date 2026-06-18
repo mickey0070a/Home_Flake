@@ -3,7 +3,7 @@
 let
   freecad-with-pip = pkgs.writeShellScriptBin "freecad" ''
     export PIP_PREFIX=$HOME/.local/pip-freecad
-    export PYTHONPATH="$PIP_PREFIX/lib/python3.11/site-packages:$PYTHONPATH"
+    export PYTHONPATH="$PIP_PREFIX/lib/python3.13/site-packages:$PYTHONPATH"
     export PATH="$PIP_PREFIX/bin:$PATH"
     mkdir -p "$PIP_PREFIX"
     
