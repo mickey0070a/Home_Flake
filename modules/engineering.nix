@@ -19,6 +19,8 @@ in
     inkscape-with-extensions
     gimp
     freecad-with-pip
+    python313Packages.pip
+    python313
     # super-slicer
     orca-slicer
     qgis
