@@ -18,10 +18,6 @@
   boot.loader.grub.useOSProber = true;
   boot.supportedFilesystems = [ "ntfs" ];
 
-  #boot.kernelParams = [
-  #"psmouse.proto=imps"
-  #];
-
   # tlp Power Saving Settings
   services.thermald.enable = true;
   services.tlp.enable = true;
@@ -155,6 +151,15 @@
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
+
+  boot.kernelParams = [
+    "psmouse.synaptics_intertouch=0"
+  ];
+
+  boot.blacklistedKernelModules = [
+    "rmi_smbus"
+    "rmi_core"
+  ];
 
  # Service to allow touchpad usage after sleep state
   systemd.services.touchpadrestart = {
