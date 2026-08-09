@@ -109,7 +109,7 @@
 
     # Let the client choose concurrency; let the remote determine cores
  #   max-jobs = auto
- 3   cores = 0
+ #3   cores = 0
  # '';
 
   # Enable acpid
