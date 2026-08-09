@@ -102,13 +102,10 @@
   # Enable the nix daemon (useful for builds and remote builders)
   nix.daemon.enable = true;
 
-  # Configure remote build via SSH.
-  # You mentioned you'll use a temporary IP while re-authenticating tailcale.
-  # Replace "builduser" and "TEMP_IP" below with the actual username and temporary IP.
-  # Example: builders = ssh://build@203.0.113.5
+  # Configure remote build via SSH using password auth over the LAN/Tailscale
+  # Remote builder: michaelh@192.168.86.148 (use password when prompted)
   nix.extraOptions = ''
-    # Set the remote SSH builder(s) for this client. Replace with your temporary IP.
-    builders = ssh://builduser@TEMP_IP
+    builders = ssh://michaelh@192.168.86.148
 
     # Let the client choose concurrency; let the remote determine cores
     max-jobs = auto
