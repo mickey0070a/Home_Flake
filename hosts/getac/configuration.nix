@@ -100,17 +100,17 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Enable the nix daemon (useful for builds and remote builders)
-  nix.daemon.enable = true;
+  #nix.daemon.enable = true;
 
   # Configure remote build via SSH using password auth over the LAN/Tailscale
   # Remote builder: michaelh@192.168.86.148 (use password when prompted)
-  nix.extraOptions = ''
-    builders = ssh://michaelh@192.168.86.148
+  #nix.extraOptions = ''
+  #  builders = ssh://michaelh@192.168.86.148
 
     # Let the client choose concurrency; let the remote determine cores
-    max-jobs = auto
-    cores = 0
-  '';
+ #   max-jobs = auto
+ 3   cores = 0
+ # '';
 
   # Enable acpid
   services.acpid.enable = true;
