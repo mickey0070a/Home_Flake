@@ -1,8 +1,3 @@
-
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, pkgs-unstable, ... }:
 
 {
@@ -80,12 +75,12 @@
 	      name = "Xsession";
 	      start = ''
 		      ${pkgs.runtimeShell} $HOME/.xsession &
-       		waitPID=$!
+          		waitPID=$!
 	      '';
 	      }
 	  ];
 	  #sessionCommands = ''
-    	#${lib.getBin pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource 2 0
+     	#${lib.getBin pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource 2 0
 	  #'';
   };
 
@@ -102,7 +97,24 @@
 
 # services.xserver.desktopManager.enlightenment.enable = true;
   
+  # Enable experimental nix features (nix-command + flakes) and set up remote builders
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Enable the nix daemon (useful for builds and remote builders)
+  nix.daemon.enable = true;
+
+  # Configure remote build via SSH. Replace builduser@buildserver with your server's user and host
+  # Example: builders = ssh://build@build.example.com
+  # You can list multiple builders separated by spaces or newlines.
+  # Setting max-jobs = auto lets nix pick a suitable number of concurrent build jobs.
+  # Setting cores = 0 delegates core counting to the remote builder.
+  # NOTE: You must set up SSH access from this machine to the build server (SSH keys) and
+  # ensure the build user on the server has Nix installed and has permission to build.
+  nix.extraOptions = ''
+    builders = ssh://builduser@buildserver
+    max-jobs = auto
+    cores = 0
+  '';
 
   # Enable acpid
   services.acpid.enable = true;
@@ -174,7 +186,7 @@
     '';
   	serviceConfig = {
 		Type = "oneshot";
-  	};
+   	};
   };
 
   # Install firefox.
