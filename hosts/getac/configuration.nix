@@ -69,18 +69,18 @@
   '';
 
   services.xserver.displayManager = {
-  	session = [
+	session = [
 	      {
 	      manage = "desktop";
 	      name = "Xsession";
 	      start = ''
 		      ${pkgs.runtimeShell} $HOME/.xsession &
-          		waitPID=$!
+        		waitPID=$!
 	      '';
 	      }
 	  ];
 	  #sessionCommands = ''
-     	#${lib.getBin pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource 2 0
+    	#${lib.getBin pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource 2 0
 	  #'';
   };
 
@@ -97,21 +97,20 @@
 
 # services.xserver.desktopManager.enlightenment.enable = true;
   
-  # Enable experimental nix features (nix-command + flakes) and set up remote builders
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Enable the nix daemon (useful for builds and remote builders)
   nix.daemon.enable = true;
 
-  # Configure remote build via SSH. Replace builduser@buildserver with your server's user and host
-  # Example: builders = ssh://build@build.example.com
-  # You can list multiple builders separated by spaces or newlines.
-  # Setting max-jobs = auto lets nix pick a suitable number of concurrent build jobs.
-  # Setting cores = 0 delegates core counting to the remote builder.
-  # NOTE: You must set up SSH access from this machine to the build server (SSH keys) and
-  # ensure the build user on the server has Nix installed and has permission to build.
+  # Configure remote build via SSH.
+  # You mentioned you'll use a temporary IP while re-authenticating tailcale.
+  # Replace "builduser" and "TEMP_IP" below with the actual username and temporary IP.
+  # Example: builders = ssh://build@203.0.113.5
   nix.extraOptions = ''
-    builders = ssh://builduser@buildserver
+    # Set the remote SSH builder(s) for this client. Replace with your temporary IP.
+    builders = ssh://builduser@TEMP_IP
+
+    # Let the client choose concurrency; let the remote determine cores
     max-jobs = auto
     cores = 0
   '';
