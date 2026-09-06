@@ -2,6 +2,11 @@
 
 {
  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.root = {
+    hashedPassword = "$y$j9T$tC/kRF6NCYQCqtRE.aUNt0$n5uokNrDfmv7c2jESKqlL8fjg.2uWK1bbrTs1i5Ocf0";
+  };
+
+
   users.users.michaelh = {
     isNormalUser = true;
     description = "Michael Hall";
