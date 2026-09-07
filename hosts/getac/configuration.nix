@@ -121,7 +121,7 @@
   services.udisks2.enable = true;
 
   fileSystems."/home/shared" = {
-    device = "//192.168.86.148/public";  # Replace with your actual Samba server IP/share
+    device = "//100.84.145.123/public";  # Replace with your actual Samba server IP/share
     fsType = "cifs";
     options = [
       "guest"

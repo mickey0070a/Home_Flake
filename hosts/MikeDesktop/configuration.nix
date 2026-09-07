@@ -19,7 +19,7 @@
   
   # Bootloader.
   boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sdc";
+  boot.loader.grub.device = "/dev/disk/by-id/wwn-0x5000c50073f4c6ca";
   boot.loader.grub.useOSProber = true;
   boot.supportedFilesystems = [ "ext4" "btrfs" "ntfs" ];
 
