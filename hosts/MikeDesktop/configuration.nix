@@ -19,9 +19,9 @@
   
   # Bootloader.
   boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.device = "/dev/sdc";
   boot.loader.grub.useOSProber = true;
-  boot.supportedFilesystems = [ "ntfs" ];
+  boot.supportedFilesystems = [ "ext4" "btrfs" "ntfs" ];
 
   boot.kernelParams = [
   "psmouse.synaptics_intertouch=1"

@@ -3,8 +3,8 @@
 {
 
   fileSystems."/mnt/network" = {
-    device = "/dev/disk/by-uuid/a195148e-9531-4520-b483-0f429fb5a8bb";  # or use the actual UUID
-    fsType = "ext4";
+    device = "/dev/disk/by-uuid/5c3bcf46-2d5d-427f-9add-f8f3dd71a299";  # or use the actual UUID
+    fsType = "btrfs";
     options = [ "defaults" ];
   };
 

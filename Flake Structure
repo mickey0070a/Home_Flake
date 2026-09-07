@@ -8,3 +8,34 @@
     ├── 3d-printer-server.nix
     ├── michael.nix
     └── ceri.nix
+
+[nixos@nixos:~]$ lsblk -f
+NAME FSTYPE FSVER LABEL                    UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
+loop0
+     squash 4.0                                                                       0   100% /nix/.ro-store
+sda                                                                                            
+├─sda1
+│    ntfs         Recovery                 B8A87705A876C204                                    
+├─sda2
+│    ntfs         Windows                  CE7A78867A786CD9                                    
+└─sda3
+     ntfs                                  827C3C477C3C386D                                    
+sdb                                                                                            
+└─sdb1
+     ext4   1.0                            1a4f2c07-d02c-4e1b-9898-0300988d31a6                
+sdc                                                                                            
+├─sdc1
+│    ext4   1.0                            22b75f29-4ed3-4dd5-806c-8e37f4b53f9a  391.3G     6% /mnt/Server
+└─sdc2
+     swap   1     swap                     fcf65c5e-be64-410a-995d-3efbe6725859                [SWAP]
+sdd                                                                                            
+└─sdd1
+     btrfs                                 5c3bcf46-2d5d-427f-9add-f8f3dd71a299    3.5T     3% /run/media/nixos/5c3bcf46-2d5d-427f-9add-f8f3dd71a299
+sde                                                                                            
+├─sde1
+│    exfat  1.0   Ventoy                   9A68-B4BC                                           
+│ └─ventoy
+│    iso966 Jolie nixos-gnome-24.05-x86_64 1980-01-01-00-00-00-00                     0   100% /iso
+└─sde2
+     vfat   FAT16 VTOYEFI                  3925-9DE7                                           
+sr0                                                                                         
