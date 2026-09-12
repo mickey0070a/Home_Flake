@@ -1130,3 +1130,154 @@ If you are serious about print quality, especially for high-speed printing or pr
 Attach
 Search
 Study
+
+
+
+------------------------
+
+Docker Compose Yaml.
+
+# SPDX-FileCopyrightText: 2025 Amritpal Singh <amrit3701@gmail.com>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+services:
+  mongodb:
+    image: mongo:8.0.23
+    ports:
+      - "${EXPOSE_DB_PORT:-27018}:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  backend:
+    image: lens-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT:-3030}:${PORT:-3030}"
+    environment:
+      - HOSTNAME=${HOSTNAME:-localhost}
+      - PORT=${PORT:-3030}
+      - DB_URL=mongodb://mongodb:27017/backend-db
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
+      - VITE_APP_API_URL=${VITE_APP_API_URL:-http://localhost:3030/}
+      - FC_WORKER_URL=http://0.0.0.0:8080/2015-03-31/functions/function/invocations
+      - SMTP_HOST
+      - SMTP_PORT=${SMTP_PORT:-465}
+      - SMTP_USER
+      - SMTP_PASS
+      - SMTP_FROM
+      - USE_S3
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_CLIENT_MODELS_BUCKET
+      - AWS_REGION
+      - DEFAULT_ADMIN_EMAIL
+      - DEFAULT_ADMIN_USERNAME
+      - DEFAULT_ADMIN_PASSWORD
+      - DEFAULT_ADMIN_NAME
+      - LOCAL_SIGNED_URL_SECRET
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      - mongodb
+
+  frontend:
+    image: lens-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_APP_API_URL=${VITE_APP_API_URL:-http://localhost:3030/}
+        - VITE_MATOMO_URL=${VITE_MATOMO_URL:-http://localhost:7000}
+        - VITE_MATOMO_SITE=${VITE_MATOMO_SITE:-1}
+        - VITE_STRIPE_PURCHASE_PEER_URL
+    environment:
+      - VITE_APP_API_URL
+      - VITE_MATOMO_URL
+      - VITE_MATOMO_SITE
+      - VITE_STRIPE_PURCHASE_PEER_URL
+      - PROXY_SCHEME_PREFIX=${PROXY_SCHEME_PREFIX:-https://}
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  fc-worker-redis:
+    image: redis:alpine
+
+  fc-worker-api:
+    image: lens-fc-worker-api
+    build:
+      context: ./FC-Worker
+      dockerfile: Dockerfile.api
+    environment:
+      - REDIS_HOST=fc-worker-redis
+      - REDIS_PORT=6379
+    network_mode: "service:backend"
+    depends_on:
+      - backend
+      - fc-worker-redis
+
+  fc-worker-celery:
+    image: lens-fc-worker-celery
+    build:
+      context: ./FC-Worker
+      dockerfile: Dockerfile.celery
+    environment:
+      - REDIS_HOST=fc-worker-redis
+      - REDIS_PORT=6379
+      - BACKEND_URL=${BACKEND_URL:-http://localhost:3030}
+    # bubblewrap (RUN_CODE_SNIPPET sandbox) needs CAP_SYS_ADMIN + writable cgroup.
+    privileged: true
+    network_mode: "service:backend"
+    depends_on:
+      - backend
+      - fc-worker-redis
+
+  matomo-db:
+    profiles:
+      - matomo-enabled
+    image: mariadb:11.4.4
+    command: --max-allowed-packet=128M
+    environment:
+      - MYSQL_ROOT_PASSWORD=matomo
+      - MYSQL_DATABASE=matomo
+      - MYSQL_USER=matomo 
+      - MYSQL_PASSWORD=matomo
+    volumes:
+      - matomo_db:/var/lib/mysql
+
+  matomo:
+    profiles:
+      - matomo-enabled
+    image: amrit3701/bitnami-matomo:5.8.0-debian-12-r4
+    ports:
+      - "7000:8080"
+    environment:
+      - MATOMO_DATABASE_HOST=matomo-db
+      - MATOMO_DATABASE_TABLE_PREFIX=matomo_
+      - MATOMO_DATABASE_USER=matomo
+      - MATOMO_DATABASE_PASSWORD=matomo
+      - MATOMO_DATABASE_NAME=matomo
+      - MATOMO_WEBSITE_NAME=Lens
+      - MATOMO_WEBSITE_HOST=${FRONTEND_URL:-http://localhost:3000}
+      - MATOMO_USERNAME=${MATOMO_USERNAME:-admin}
+      - MATOMO_PASSWORD=${MATOMO_PASSWORD:-admin@local.test}
+      - MATOMO_EMAIL=${MATOMO_EMAIL:-admin@local.test}
+    volumes:
+      - matomo_data:/bitnami/matomo
+    depends_on:
+      - matomo-db
+
+volumes:
+  mongodb_data:
+    name: mongodb_data
+  uploads_data:
+    name: uploads_data
+  matomo_db:
+    name: matomo_db
+  matomo_data:
+    name: matomo_data
+
