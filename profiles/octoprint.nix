@@ -6,6 +6,7 @@
  users.users.octoprint = {
     isSystemUser = true;
     description = "Octoprint";
+	group = "octoprint";
     extraGroups = [ "root" "networkmanager" "wheel" "dialout" "klipper" "octoprint" "users" ];
     packages = with pkgs; [];
   };
