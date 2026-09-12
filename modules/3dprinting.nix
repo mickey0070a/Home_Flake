@@ -33,14 +33,13 @@
   ];
 
   services.klipper = {
-     enable = true;
+     enable = false;  # Disabled for lazy-loading via socket activation
      configFile = "/home/flake/Home_Flake/modules/printer.cfg" ; 
     # apiSocket = "/tmp/printer.ser";
      inputTTY = "/tmp/printer";
      octoprintIntegration = true;
      logFile = "/tmp/klippy.log";
      mutableConfig = true;
-     wantedBy = [ ];  # Don't auto-start, only via socket activation for 3d-printer-stack
      #firmwares = {
        #mcu = {
          #enable = true;
@@ -53,12 +52,11 @@
    };
 
    services.octoprint = {
-     enable = true;
+     enable = false;  # Disabled for lazy-loading via socket activation
      openFirewall = true;
      plugins = plugins: with plugins; [ octoklipper themeify psucontrol simpleemergencystop bedlevelvisualizer printtimegenius gcodeeditor ];
      group = "wheel";
      host = "0.0.0.0";
-     wantedBy = [ ];  # Don't auto-start, only via socket activation for 3d-printer-stack
      extraConfig = {
       server = { baseurl = "/octoprint"; };
       webcam = { stream = "http://localhost:40000/?action=stream"; };
@@ -72,11 +70,10 @@
    };
 
    services.mjpg-streamer = {
-     enable = true;
+     enable = false;  # Disabled for lazy-loading via socket activation
      group = "video";  # default; ensure camera permission
      inputPlugin = "input_uvc.so -d /dev/video0 -r 640x480 -f 30 -yuv";
      outputPlugin = "output_http.so -w @www@ -p 40000 -l 0.0.0.0";  # custom port
-     wantedBy = [ ];  # Don't auto-start, only via socket activation for 3d-printer-stack
      # extra arguments can be specified if needed, though not direct option here
      };
 
