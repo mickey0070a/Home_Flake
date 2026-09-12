@@ -2,7 +2,7 @@
 
 {
  users.groups.klipper = {};
-
+ users.groups.octoprint = {};
  users.users.octoprint = {
     isSystemUser = true;
     description = "Octoprint";
