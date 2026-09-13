@@ -1,224 +1,38 @@
- { pkgs, system, ... }:
+{ pkgs, lib, ... }:
 
 {
- environment.systemPackages = with pkgs; [
-  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  wget
-  git
-  gh
-  htop
-  udevil
-  usbutils
-  klipper
-  klipper-flash
-  klipper-firmware
-  klipper-genconf
-  klipper-estimator
-  #mainsail
-  octoprint 
-  moonraker
+  environment.systemPackages = with pkgs; [
+    vim
+    wget
+    git
+    gh
+    htop
+    udevil
+    usbutils
 
-  # Additional Packages
-  python3
-  pkgsCross.avr.stdenv.cc
-  gcc-arm-embedded
-  bintools-unwrapped
-  libffi
-  libusb1
-  avrdude
-  stm32flash
-  pkg-config
-  python313Packages.pyserial
-  ncurses
+    klipper
+    klipper-flash
+    klipper-firmware
+    klipper-genconf
+    klipper-estimator
+
+    octoprint
+    moonraker
+
+    python3
+    pkgsCross.avr.stdenv.cc
+    gcc-arm-embedded
+    bintools-unwrapped
+    libffi
+    libusb1
+    avrdude
+    stm32flash
+    pkg-config
+    python313Packages.pyserial
+    ncurses
   ];
-{ pkgs, lib, system, ... }:
-let
-
-  # ------------------------------------------------------------
-  # Socket-activated OctoPrint wake/proxy
-  #
-  # systemd owns 127.0.0.1:5000.
-  # OctoPrint itself listens on 127.0.0.1:5001.
-  #
-  # The proxy receives the socket from systemd as FD 3,
-  # starts the printer stack, waits for OctoPrint, then
-  # forwards the connection to OctoPrint.
-  # ------------------------------------------------------------
-
-  octoprintWakeProxy = pkgs.writeText "octoprint-wake-proxy.py" ''
-    import os
-    import socket
-    import subprocess
-    import sys
-    import threading
-    import time
-
-    LISTEN_FD = 3
-    BACKEND_HOST = "127.0.0.1"
-    BACKEND_PORT = 5001
-
-    START_SERVICES = [
-        "klipper.service",
-        "mjpg-streamer.service",
-        "octoprint.service",
-    ]
-
-    def log(message):
-        print(f"[3d-printer-stack] {message}", flush=True)
-
-    def start_stack():
-        log("Starting 3D printer stack...")
-
-        for service in START_SERVICES:
-            log(f"Starting {service}")
-            result = subprocess.run(
-                ["/run/current-system/sw/bin/systemctl", "start", service],
-                check=False,
-            )
-
-            if result.returncode != 0:
-                log(f"WARNING: {service} returned {result.returncode}")
-
-    def wait_for_octoprint(timeout=60):
-        log("Waiting for OctoPrint on 127.0.0.1:5001...")
-
-        deadline = time.monotonic() + timeout
-
-        while time.monotonic() < deadline:
-            try:
-                with socket.create_connection(
-                    (BACKEND_HOST, BACKEND_PORT),
-                    timeout=2,
-                ):
-                    log("OctoPrint is ready.")
-                    return True
-            except OSError:
-                time.sleep(1)
-
-        log("ERROR: OctoPrint did not become ready.")
-        return False
-
-    def relay(source, destination):
-        try:
-            while True:
-                data = source.recv(65536)
-
-                if not data:
-                    break
-
-                destination.sendall(data)
-
-        except (BrokenPipeError, ConnectionResetError, OSError):
-            pass
-
-        finally:
-            try:
-                destination.shutdown(socket.SHUT_WR)
-            except OSError:
-                pass
-
-    def proxy_connection(client):
-        backend = None
-
-        try:
-            backend = socket.create_connection(
-                (BACKEND_HOST, BACKEND_PORT),
-                timeout=10,
-            )
-
-            backend.settimeout(None)
-            client.settimeout(None)
-
-            client_to_backend = threading.Thread(
-                target=relay,
-                args=(client, backend),
-                daemon=True,
-            )
-
-            backend_to_client = threading.Thread(
-                target=relay,
-                args=(backend, client),
-                daemon=True,
-            )
-
-            client_to_backend.start()
-            backend_to_client.start()
-
-            client_to_backend.join()
-            backend_to_client.join()
-
-        except Exception as error:
-            log(f"Proxy connection error: {error}")
-
-        finally:
-            if backend is not None:
-                try:
-                    backend.close()
-                except OSError:
-                    pass
-
-            try:
-                client.close()
-            except OSError:
-                pass
-
-    def main():
-
-        if os.environ.get("LISTEN_FDS") != "1":
-            log("ERROR: expected exactly one systemd socket.")
-            sys.exit(1)
-
-        if os.environ.get("LISTEN_PID") != str(os.getpid()):
-            log("ERROR: LISTEN_PID does not match this process.")
-            sys.exit(1)
-
-        # systemd has already created and bound the listening socket.
-        listener = socket.fromfd(
-            LISTEN_FD,
-            socket.AF_INET,
-            socket.SOCK_STREAM,
-        )
-
-        # Start the actual printer services.
-        start_stack()
-
-        # Do not accept connections until OctoPrint is actually ready.
-        if not wait_for_octoprint():
-            log("Printer stack failed to become ready.")
-            sys.exit(1)
-
-        log("3D printer stack ready.")
-
-        while True:
-            try:
-                client, address = listener.accept()
-                log(f"Accepted connection from {address}")
-
-                thread = threading.Thread(
-                    target=proxy_connection,
-                    args=(client,),
-                    daemon=True,
-                )
-
-                thread.start()
-
-            except KeyboardInterrupt:
-                break
-
-            except OSError as error:
-                log(f"Listener error: {error}")
-                break
-
-        listener.close()
 
 
-    if __name__ == "__main__":
-        main()
-  '';
-
-in
-
-{
   # ============================================================
   # KLIPPER
   # ============================================================
@@ -245,12 +59,6 @@ in
   services.octoprint = {
     enable = true;
 
-    # OctoPrint itself listens on 5001.
-    # Nginx talks to the wake proxy on 5000.
-    port = 5001;
-    host = "127.0.0.1";
-
-    # Nginx is the externally accessible interface.
     openFirewall = false;
 
     plugins = plugins: with plugins; [
@@ -265,13 +73,19 @@ in
 
     group = "wheel";
 
+    # OctoPrint itself does NOT own port 5000.
+    # Port 5000 belongs to the systemd socket.
+    host = "127.0.0.1";
+
+    port = 5001;
+
     extraConfig = {
       server = {
         baseurl = "/octoprint";
       };
 
       webcam = {
-        stream = "http://localhost:40000/?action=stream";
+        stream = "http://127.0.0.1:40000/?action=stream";
       };
 
       reverseProxy = {
@@ -302,205 +116,170 @@ in
 
 
   # ============================================================
-  # DO NOT START THE THREE PRINTER SERVICES AT BOOT
+  # DO NOT START THE PRINTER SERVICES AT BOOT
   #
-  # enable = true above causes NixOS to generate the services,
-  # but mkForce removes their normal multi-user startup.
-  # They will instead be started by the wake proxy.
+  # The services still exist and are fully generated by NixOS.
+  # We are only removing their normal multi-user.target startup.
   # ============================================================
 
-  systemd.services.klipper.wantedBy = lib.mkForce [];
+  systemd.services.klipper.wantedBy = lib.mkForce [ ];
 
-  systemd.services.octoprint.wantedBy = lib.mkForce [];
+  systemd.services.octoprint.wantedBy = lib.mkForce [ ];
 
-  systemd.services.mjpg-streamer.wantedBy = lib.mkForce [];
+  systemd.services.mjpg-streamer.wantedBy = lib.mkForce [ ];
 
 
   # ============================================================
-  # SOCKET-ACTIVATED WAKE PROXY
+  # SOCKET ACTIVATION
   #
-  # Nginx continues to use:
+  # Nginx -> 127.0.0.1:5000
   #
-  #   http://127.0.0.1:5000/
-  #
-  # This socket exists even while the printer stack is stopped.
+  # Nothing needs to be running on 5000 until something connects.
   # ============================================================
 
   systemd.sockets."3d-printer-stack" = {
-    description = "3D Printer Stack Wake Socket";
+    description = "3D Printer Stack Socket";
 
     wantedBy = [ "sockets.target" ];
 
     socketConfig = {
       ListenStream = "127.0.0.1:5000";
-      Accept = "no";
-      Backlog = 128;
+      Accept = false;
+      NoDelay = true;
     };
   };
 
+
+  # ============================================================
+  # SOCKET-ACTIVATED PRINTER PROXY
+  #
+  # The socket activation starts this service.
+  #
+  # The service then requires the actual printer services and
+  # proxies traffic from port 5000 -> OctoPrint port 5001.
+  # ============================================================
 
   systemd.services."3d-printer-stack" = {
-    description = "3D Printer Stack Wake Proxy";
-
-    after = [
-      "3d-printer-stack.socket"
-      "network-online.target"
-    ];
+    description = "3D Printer Stack";
 
     requires = [
-      "3d-printer-stack.socket"
+      "klipper.service"
+      "octoprint.service"
+      "mjpg-streamer.service"
     ];
-
-    serviceConfig = {
-      Type = "simple";
-
-      ExecStart =
-        "${pkgs.python3}/bin/python3 ${octoprintWakeProxy}";
-
-      # We don't want this service to respawn by itself.
-      # The socket will activate it again when needed.
-      Restart = "no";
-
-      User = "root";
-
-      # Give the proxy enough time for OctoPrint to start.
-      TimeoutStartSec = "90s";
-
-      # Make sure fd 3 remains available.
-      FileDescriptorStoreMax = 1;
-    };
-  };
-
-
-  # ============================================================
-  # PRINTER ACTIVITY TRACKER
-  #
-  # This watches the Nginx access log and records the last
-  # /octoprint/ request.
-  # ============================================================
-
-  systemd.services."3d-printer-traffic-check" = {
-    description = "Track OctoPrint Web Traffic";
 
     after = [
-      "nginx.service"
-    ];
-
-    wants = [
-      "3d-printer-idle-shutdown.timer"
+      "klipper.service"
+      "octoprint.service"
+      "mjpg-streamer.service"
     ];
 
     serviceConfig = {
       Type = "simple";
 
-      ExecStart = ''
-        ${pkgs.bash}/bin/bash -c '
-          while true; do
+      ExecStartPre =
+        "${pkgs.bash}/bin/bash -c '" +
+        "for i in $(seq 1 60); do " +
+        "${pkgs.curl}/bin/curl -fsS http://127.0.0.1:5001/ " +
+        ">/dev/null 2>&1 && exit 0; " +
+        "sleep 1; " +
+        "done; " +
+        "echo \"OctoPrint failed to become ready\"; " +
+        "exit 1'";
 
-            if ${pkgs.systemd}/bin/systemctl is-active --quiet octoprint.service; then
+      ExecStart =
+        "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd " +
+        "127.0.0.1:5001";
 
-              if ${pkgs.grep}/bin/grep -q "/octoprint/" /var/log/nginx/access.log 2>/dev/null; then
-                ${pkgs.coreutils}/bin/touch /run/3d-printer-last-traffic
-              fi
-
-            fi
-
-            sleep 60
-          done
-        '
-      '';
-
-      Restart = "always";
-      RestartSec = 5;
+      Restart = "on-failure";
+      RestartSec = "5s";
     };
   };
 
 
   # ============================================================
-  # IDLE SHUTDOWN TIMER
+  # PRINTER TRAFFIC MONITOR
   #
-  # Runs every 10 minutes and shuts down the entire stack
-  # after 1 hour without OctoPrint traffic.
+  # Every minute, look at the most recent OctoPrint request.
+  # If there has been no request for an hour, shut everything down.
   # ============================================================
 
-  systemd.timers."3d-printer-idle-shutdown" = {
-    description = "Auto-stop 3D Printer Stack after inactivity";
-
-    wantedBy = [
-      "timers.target"
-    ];
-
-    timerConfig = {
-      OnBootSec = "1h";
-      OnUnitActiveSec = "10min";
-      Persistent = true;
-    };
-  };
-
-
-  systemd.services."3d-printer-idle-shutdown" = {
-    description = "Stop Idle 3D Printer Stack";
-
-    script = ''
-      if ${pkgs.systemd}/bin/systemctl is-active --quiet octoprint.service; then
-
-        if [ -f /run/3d-printer-last-traffic ]; then
-
-          LAST_TRAFFIC=$(
-            ${pkgs.coreutils}/bin/stat -c %Y \
-            /run/3d-printer-last-traffic
-          )
-
-          CURRENT_TIME=$(
-            ${pkgs.coreutils}/bin/date +%s
-          )
-
-          IDLE_TIME=$(
-            (CURRENT_TIME - LAST_TRAFFIC)
-          )
-
-          if [ "$IDLE_TIME" -gt 3600 ]; then
-
-            echo "3D Printer Stack idle for more than 1 hour."
-
-            ${pkgs.systemd}/bin/systemctl stop \
-              octoprint.service \
-              klipper.service \
-              mjpg-streamer.service \
-              3d-printer-stack.service
-
-            ${pkgs.coreutils}/bin/rm -f \
-              /run/3d-printer-last-traffic
-
-          fi
-
-        else
-
-          echo "No OctoPrint traffic recorded."
-
-          ${pkgs.systemd}/bin/systemctl stop \
-            octoprint.service \
-            klipper.service \
-            mjpg-streamer.service \
-            3d-printer-stack.service
-
-        fi
-      fi
-    '';
+  systemd.services."3d-printer-idle-check" = {
+    description = "Check 3D Printer Stack for inactivity";
 
     serviceConfig = {
       Type = "oneshot";
-      User = "root";
     };
+
+    script = ''
+      set -eu
+
+      STACK="3d-printer-stack.service"
+
+      if ! ${pkgs.systemd}/bin/systemctl is-active --quiet "$STACK"; then
+        exit 0
+      fi
+
+      LOG="/var/log/nginx/access.log"
+
+      if [ ! -f "$LOG" ]; then
+        exit 0
+      fi
+
+      LAST_LINE=$(
+        ${pkgs.gnugrep}/bin/grep '"/octoprint/' "$LOG" |
+        ${pkgs.coreutils}/bin/tail -1 ||
+        true
+      )
+
+      if [ -z "$LAST_LINE" ]; then
+        echo "No OctoPrint traffic found."
+        exit 0
+      fi
+
+      # Extract nginx's timestamp:
+      # [13/Sep/2026:11:30:42 -0400]
+      TIMESTAMP=$(
+        echo "$LAST_LINE" |
+        ${pkgs.gawk}/bin/awk -F'[][]' '{print $2}'
+      )
+
+      LAST_REQUEST=$(
+        ${pkgs.coreutils}/bin/date -d "$TIMESTAMP" +%s
+      )
+
+      NOW=$(${pkgs.coreutils}/bin/date +%s)
+
+      IDLE_TIME=$((NOW - LAST_REQUEST))
+
+      echo "Last OctoPrint request was $IDLE_TIME seconds ago."
+
+      if [ "$IDLE_TIME" -ge 3600 ]; then
+        echo "3D Printer Stack idle for one hour. Stopping."
+
+        ${pkgs.systemd}/bin/systemctl stop \
+          3d-printer-stack.service \
+          octoprint.service \
+          klipper.service \
+          mjpg-streamer.service
+      fi
+    '';
   };
 
 
   # ============================================================
-  # FIREWALL
-  #
-  # OctoPrint and MJPG are localhost-only.
-  # Nginx is already handling external HTTP on port 80.
+  # IDLE CHECK TIMER
   # ============================================================
 
-  networking.firewall.allowedTCPPorts = [];
+  systemd.timers."3d-printer-idle-check" = {
+    description = "Check 3D Printer Stack inactivity";
+
+    wantedBy = [ "timers.target" ];
+
+    timerConfig = {
+      OnBootSec = "5min";
+      OnUnitActiveSec = "1min";
+      Unit = "3d-printer-idle-check.service";
+    };
+  };
 }
