@@ -32,7 +32,7 @@ services.nginx = {
 	};
 
         "/octoprint/" = {
-          proxyPass = "http://127.0.0.1:5000/"; # note trailing slash
+          proxyPass = "http://127.0.0.1:5001/"; # note trailing slash
           extraConfig = ''
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
