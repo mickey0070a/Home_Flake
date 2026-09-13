@@ -31,7 +31,7 @@
   python313Packages.pyserial
   ncurses
   ];
-
+{ pkgs, lib, system, ... }:
 let
 
   # ------------------------------------------------------------
