@@ -38,6 +38,8 @@
  	gearlever
 	gnome-screenshot
 	libinput
+ docker-compose
+ docker
 
 	# Display Driver for Splitter
 	#displaylink
