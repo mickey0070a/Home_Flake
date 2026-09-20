@@ -173,22 +173,23 @@ systemd.services.onskel-lens = {
     # Start the Lens stack in the background.
     #
     # systemd-socket-proxyd will become the main process below.
-    ExecStartPre = "${pkgs.bash}/bin/bash -c ''\
-      ${pkgs.docker-compose}/bin/docker-compose up -d
+    
+ExecStartPre = pkgs.writeShellScript "onskel-lens-start" ''
+  ${pkgs.docker-compose}/bin/docker-compose up -d
 
-      for i in $(seq 1 60); do
-        if ${pkgs.curl}/bin/curl -fsS \
-          http://127.0.0.1:3000/ \
-          >/dev/null 2>&1; then
-          exit 0
-        fi
+  for i in $(seq 1 60); do
+    if ${pkgs.curl}/bin/curl -fsS \
+      http://127.0.0.1:3000/ \
+      >/dev/null 2>&1; then
+      exit 0
+    fi
 
-        sleep 1
-      done
+    sleep 1
+  done
 
-      echo "Lens failed to become ready"
-      exit 1
-    ''";
+  echo "Lens failed to become ready"
+  exit 1
+'';
 
     # Forward the systemd socket (3001) to the
     # actual Lens frontend (3000).
