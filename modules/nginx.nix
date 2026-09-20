@@ -5,7 +5,6 @@ services.nginx = {
   enable = true;
   recommendedProxySettings = true;
 
-  # Catch-all vhost so Tailscale IP access works
   virtualHosts = {
     "_" = {
       basicAuthFile = "/etc/nginx/htpasswd";
@@ -13,33 +12,15 @@ services.nginx = {
       locations = {
         "/trilium/" = {
           proxyPass = "http://127.0.0.1:8080/";
+
           extraConfig = ''
             proxy_set_header Host $host;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
-          '';
-        };
-
-        "/Onsdel-Server/" = {
-          # 3001 = systemd lazy-load socket
-          # Lens Docker frontend remains on 3000
-          proxyPass = "http://127.0.0.1:3001/";
-
-          extraConfig = ''
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection $connection_upgrade;
           '';
         };
 
         "/octoprint/" = {
-          # Existing OctoPrint lazy-load socket.
-          # Leave OctoPrint itself on port 5001.
           proxyPass = "http://127.0.0.1:5000/";
 
           extraConfig = ''
@@ -75,7 +56,6 @@ services.nginx = {
       basicAuthFile = "/etc/nginx/htpasswd";
 
       locations."/" = {
-        # Existing OctoPrint lazy-load socket
         proxyPass = "http://127.0.0.1:5000/";
 
         extraConfig = ''
@@ -95,8 +75,6 @@ services.nginx = {
       basicAuthFile = "/etc/nginx/htpasswd";
 
       locations."/" = {
-        # Systemd activation socket.
-        # Docker Lens itself owns port 3000.
         proxyPass = "http://127.0.0.1:3001/";
 
         extraConfig = ''
