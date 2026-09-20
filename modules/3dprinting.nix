@@ -165,13 +165,13 @@
     requires = [
       "klipper.service"
       "octoprint.service"
-      "mjpg-streamer.service"
+      #"mjpg-streamer.service"
     ];
 
     after = [
       "klipper.service"
       "octoprint.service"
-      "mjpg-streamer.service"
+      #"mjpg-streamer.service"
     ];
 
     serviceConfig = {
@@ -261,7 +261,7 @@
           3d-printer-stack.service \
           octoprint.service \
           klipper.service \
-          mjpg-streamer.service
+          #mjpg-streamer.service
       fi
     '';
   };
