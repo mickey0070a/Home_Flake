@@ -206,3 +206,5 @@ systemd.services.onskel-lens = {
 
     User = "root";
   };
+  };
+}
