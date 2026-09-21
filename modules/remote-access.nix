@@ -519,7 +519,7 @@ in
   # ---------------------------------------------------------------
 
   systemd.tmpfiles.rules = [
-    "d /var/lib/remote-access 0700 root root -"
+    "d /var/lib/remote-access 0755 root root -"
     "f /var/lib/remote-access/state.json 0600 root root -"
     "f /var/lib/remote-access/public-routes.conf 0644 root root -"
   ];
