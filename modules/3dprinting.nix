@@ -30,6 +30,9 @@
     pkg-config
     python313Packages.pyserial
     ncurses
+    nginx
+    docker
+    docker-compose
   ];
 
 
