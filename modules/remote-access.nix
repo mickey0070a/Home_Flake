@@ -35,7 +35,7 @@ def run(cmd):
         )
 
 
-    def load_state():
+def load_state():
         try:
             with open(STATE_FILE, "r") as f:
                 state = json.load(f)
@@ -50,7 +50,7 @@ def run(cmd):
             return DEFAULT_STATE.copy()
 
 
-    def save_state(state):
+def save_state(state):
         tmp = STATE_FILE + ".tmp"
 
         with open(tmp, "w") as f:
@@ -60,7 +60,7 @@ def run(cmd):
         os.replace(tmp, STATE_FILE)
 
 
-    def generate_routes(state):
+def generate_routes(state):
         routes = []
 
         # ---------------------------------------------------------
@@ -188,7 +188,7 @@ def run(cmd):
         return result.returncode == 0, result.stderr
 
 
-    def apply_state(state):
+def apply_state(state):
         save_state(state)
         generate_routes(state)
 
@@ -212,7 +212,7 @@ def run(cmd):
         return True, ""
 
 
-    HTML = r'''
+HTML = r'''
 <!doctype html>
 <html>
 <head>
@@ -387,16 +387,35 @@ def run(cmd):
 '''
 
 
-    class Handler(BaseHTTPRequestHandler):
+class Handler(BaseHTTPRequestHandler):
 
-        def send_json(self, data, status=200):
+    def send_json(self, data, status=200):
 
-            body = json.dumps(data).encode()
+        body = json.dumps(data).encode()
 
-            self.send_response(status)
+        self.send_response(status)
+        self.send_header(
+            "Content-Type",
+            "application/json"
+        )
+        self.send_header(
+            "Content-Length",
+            str(len(body))
+        )
+        self.end_headers()
+
+        self.wfile.write(body)
+
+
+    def do_GET(self):
+
+        if self.path == "/":
+            body = HTML.encode()
+
+            self.send_response(200)
             self.send_header(
                 "Content-Type",
-                "application/json"
+                "text/html; charset=utf-8"
             )
             self.send_header(
                 "Content-Length",
@@ -405,112 +424,91 @@ def run(cmd):
             self.end_headers()
 
             self.wfile.write(body)
+            return
 
 
-        def do_GET(self):
+        if self.path == "/api/state":
 
-            if self.path == "/":
-                body = HTML.encode()
+            self.send_json(load_state())
+            return
 
-                self.send_response(200)
-                self.send_header(
-                    "Content-Type",
-                    "text/html; charset=utf-8"
-                )
-                self.send_header(
-                    "Content-Length",
-                    str(len(body))
-                )
-                self.end_headers()
-
-                self.wfile.write(body)
-                return
+        self.send_error(404)
 
 
-            if self.path == "/api/state":
+    def do_POST(self):
 
-                self.send_json(load_state())
-                return
-
-
+        if self.path != "/api/state":
             self.send_error(404)
+            return
 
+        try:
 
-        def do_POST(self):
+            length = int(
+                self.headers.get("Content-Length", "0")
+            )
 
-            if self.path != "/api/state":
-                self.send_error(404)
-                return
+            body = self.rfile.read(length)
 
-            try:
+            requested = json.loads(body)
 
-                length = int(
-                    self.headers.get("Content-Length", "0")
+            state = {
+                "lens": bool(requested.get("lens", False)),
+                "octoprint": bool(
+                    requested.get("octoprint", False)
+                ),
+                "trilium": bool(
+                    requested.get("trilium", False)
                 )
+            }
 
-                body = self.rfile.read(length)
+            ok, error = apply_state(state)
 
-                requested = json.loads(body)
-
-                state = {
-                    "lens": bool(requested.get("lens", False)),
-                    "octoprint": bool(
-                        requested.get("octoprint", False)
-                    ),
-                    "trilium": bool(
-                        requested.get("trilium", False)
-                    )
-                }
-
-                ok, error = apply_state(state)
-
-                if ok:
-                    self.send_json({
-                        "ok": True,
-                        "state": state
-                    })
-                else:
-                    self.send_json({
-                        "ok": False,
-                        "error": error
-                    }, 500)
-
-            except Exception as e:
-
+            if ok:
+                self.send_json({
+                    "ok": True,
+                    "state": state
+                })
+            else:
                 self.send_json({
                     "ok": False,
-                    "error": str(e)
+                    "error": error
                 }, 500)
 
+        except Exception as e:
 
-        def log_message(self, format, *args):
-            pass
+            self.send_json({
+                "ok": False,
+                "error": str(e)
+            }, 500)
 
 
-    if __name__ == "__main__":
+    def log_message(self, format, *args):
+        pass
 
-        state = load_state()
 
-        save_state(state)
-        generate_routes(state)
+if __name__ == "__main__":
 
-        # Make sure Nginx reflects the stored state after boot.
-        reload_nginx()
+    state = load_state()
 
-        if any(state.values()):
-            funnel_on()
-        else:
-            funnel_off()
+    save_state(state)
+    generate_routes(state)
 
-        server = HTTPServer(
-            (LISTEN, PORT),
-            Handler
-        )
+    # Make sure Nginx reflects the stored state after boot.
+    reload_nginx()
 
-        server.serve_forever()
+    if any(state.values()):
+        funnel_on()
+    else:
+        funnel_off()
+
+    server = HTTPServer(
+        (LISTEN, PORT),
+        Handler
+    )
+
+    server.serve_forever()
 
   '';
-
 in
 {
 
