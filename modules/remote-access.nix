@@ -213,178 +213,178 @@ let
 
 
     HTML = r'''
-    <!doctype html>
-    <html>
-    <head>
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>NixServer Remote Access</title>
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>NixServer Remote Access</title>
 
-        <style>
-            body {
-                font-family: system-ui, sans-serif;
-                max-width: 600px;
-                margin: auto;
-                padding: 20px;
-                background: #111;
-                color: #eee;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .service {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 18px;
-                margin: 12px 0;
-                border: 1px solid #444;
-                border-radius: 10px;
-                background: #1b1b1b;
-            }
-
-            .name {
-                font-size: 1.2rem;
-            }
-
-            button {
-                font-size: 1rem;
-                padding: 10px 18px;
-                border-radius: 8px;
-                border: 0;
-                cursor: pointer;
-            }
-
-            .on {
-                background: #347a46;
-                color: white;
-            }
-
-            .off {
-                background: #555;
-                color: white;
-            }
-
-            #status {
-                margin: 20px 0;
-                padding: 12px;
-                border-radius: 8px;
-                background: #222;
-            }
-
-            #url {
-                margin-top: 15px;
-                padding: 12px;
-                background: #222;
-                word-break: break-all;
-            }
-        </style>
-    </head>
-
-    <body>
-
-        <h1>NixServer Remote Access</h1>
-
-        <div id="status">Loading...</div>
-
-        <div class="service">
-            <div class="name">Lens</div>
-            <button id="lens" onclick="toggle('lens')"></button>
-        </div>
-
-        <div class="service">
-            <div class="name">OctoPrint</div>
-            <button id="octoprint" onclick="toggle('octoprint')"></button>
-        </div>
-
-        <div class="service">
-            <div class="name">Trilium</div>
-            <button id="trilium" onclick="toggle('trilium')"></button>
-        </div>
-
-        <div id="url"></div>
-
-        <script>
-
-        let state = {};
-
-        async function load() {
-            const response = await fetch("/api/state");
-            state = await response.json();
-            update();
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: #111;
+            color: #eee;
         }
 
-        function update() {
+        h1 {
+            font-size: 1.5rem;
+        }
 
-            for (const name of ["lens", "octoprint", "trilium"]) {
+        .service {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px;
+            margin: 12px 0;
+            border: 1px solid #444;
+            border-radius: 10px;
+            background: #1b1b1b;
+        }
 
-                const button = document.getElementById(name);
+        .name {
+            font-size: 1.2rem;
+        }
 
-                if (state[name]) {
-                    button.textContent = "ON";
-                    button.className = "on";
-                } else {
-                    button.textContent = "OFF";
-                    button.className = "off";
-                }
-            }
+        button {
+            font-size: 1rem;
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: 0;
+            cursor: pointer;
+        }
 
-            const active =
-                state.lens ||
-                state.octoprint ||
-                state.trilium;
+        .on {
+            background: #347a46;
+            color: white;
+        }
 
-            const status = document.getElementById("status");
+        .off {
+            background: #555;
+            color: white;
+        }
 
-            if (active) {
-                status.textContent = "Public access ACTIVE";
+        #status {
+            margin: 20px 0;
+            padding: 12px;
+            border-radius: 8px;
+            background: #222;
+        }
+
+        #url {
+            margin-top: 15px;
+            padding: 12px;
+            background: #222;
+            word-break: break-all;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>NixServer Remote Access</h1>
+
+    <div id="status">Loading...</div>
+
+    <div class="service">
+        <div class="name">Lens</div>
+        <button id="lens" onclick="toggle('lens')"></button>
+    </div>
+
+    <div class="service">
+        <div class="name">OctoPrint</div>
+        <button id="octoprint" onclick="toggle('octoprint')"></button>
+    </div>
+
+    <div class="service">
+        <div class="name">Trilium</div>
+        <button id="trilium" onclick="toggle('trilium')"></button>
+    </div>
+
+    <div id="url"></div>
+
+    <script>
+
+    let state = {};
+
+    async function load() {
+        const response = await fetch("/api/state");
+        state = await response.json();
+        update();
+    }
+
+    function update() {
+
+        for (const name of ["lens", "octoprint", "trilium"]) {
+
+            const button = document.getElementById(name);
+
+            if (state[name]) {
+                button.textContent = "ON";
+                button.className = "on";
             } else {
-                status.textContent = "Public access OFF";
-            }
-
-            const url = document.getElementById("url");
-
-            if (active) {
-                url.textContent =
-                    "https://nixserver-1.tail90d1f7.ts.net";
-            } else {
-                url.textContent = "";
+                button.textContent = "OFF";
+                button.className = "off";
             }
         }
 
-        async function toggle(name) {
+        const active =
+            state.lens ||
+            state.octoprint ||
+            state.trilium;
 
-            const newState = Object.assign({}, state);
-            newState[name] = !newState[name];
+        const status = document.getElementById("status");
 
-            document.getElementById("status").textContent =
-                "Applying...";
-
-            const response = await fetch("/api/state", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(newState)
-            });
-
-            const result = await response.json();
-
-            if (!result.ok) {
-                alert(result.error || "Failed to apply state");
-            }
-
-            await load();
+        if (active) {
+            status.textContent = "Public access ACTIVE";
+        } else {
+            status.textContent = "Public access OFF";
         }
 
-        load();
+        const url = document.getElementById("url");
 
-        </script>
+        if (active) {
+            url.textContent =
+                "https://nixserver-1.tail90d1f7.ts.net";
+        } else {
+            url.textContent = "";
+        }
+    }
 
-    </body>
-    </html>
-    '''
+    async function toggle(name) {
+
+        const newState = Object.assign({}, state);
+        newState[name] = !newState[name];
+
+        document.getElementById("status").textContent =
+            "Applying...";
+
+        const response = await fetch("/api/state", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newState)
+        });
+
+        const result = await response.json();
+
+        if (!result.ok) {
+            alert(result.error || "Failed to apply state");
+        }
+
+        await load();
+    }
+
+    load();
+
+    </script>
+
+</body>
+</html>
+'''
 
 
     class Handler(BaseHTTPRequestHandler):
