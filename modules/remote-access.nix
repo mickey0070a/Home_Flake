@@ -6,27 +6,27 @@ let
   remoteAccessRoutes = "/var/lib/remote-access/public-routes.conf";
 
   controllerScript = pkgs.writeText "remote-access-controller.py" ''
-    #!/usr/bin/env python3
+#!/usr/bin/env python3
 
-    import json
-    import os
-    import subprocess
-    from http.server import BaseHTTPRequestHandler, HTTPServer
+import json
+import os
+import subprocess
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
-    STATE_FILE = "${remoteAccessState}"
-    ROUTES_FILE = "${remoteAccessRoutes}"
+STATE_FILE = "${remoteAccessState}"
+ROUTES_FILE = "${remoteAccessRoutes}"
 
-    LISTEN = "127.0.0.1"
-    PORT = 8787
+LISTEN = "127.0.0.1"
+PORT = 8787
 
-    DEFAULT_STATE = {
+DEFAULT_STATE = {
         "lens": False,
         "octoprint": False,
         "trilium": False
-    }
+}
 
 
-    def run(cmd):
+def run(cmd):
         return subprocess.run(
             cmd,
             stdout=subprocess.PIPE,
