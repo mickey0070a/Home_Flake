@@ -13,6 +13,7 @@ import os
 import subprocess
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
+
 STATE_FILE = "${remoteAccessState}"
 ROUTES_FILE = "${remoteAccessRoutes}"
 
@@ -20,57 +21,58 @@ LISTEN = "127.0.0.1"
 PORT = 8787
 
 DEFAULT_STATE = {
-        "lens": False,
-        "octoprint": False,
-        "trilium": False
+    "lens": False,
+    "octoprint": False,
+    "trilium": False,
 }
 
 
 def run(cmd):
-        return subprocess.run(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True
-        )
+    return subprocess.run(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
 
 
 def load_state():
-        try:
-            with open(STATE_FILE, "r") as f:
-                state = json.load(f)
+    try:
+        with open(STATE_FILE, "r") as f:
+            state = json.load(f)
 
-            return {
-                "lens": bool(state.get("lens", False)),
-                "octoprint": bool(state.get("octoprint", False)),
-                "trilium": bool(state.get("trilium", False))
-            }
+        return {
+            "lens": bool(state.get("lens", False)),
+            "octoprint": bool(state.get("octoprint", False)),
+            "trilium": bool(state.get("trilium", False)),
+        }
 
-        except Exception:
-            return DEFAULT_STATE.copy()
+    except Exception:
+        return DEFAULT_STATE.copy()
 
 
 def save_state(state):
-        tmp = STATE_FILE + ".tmp"
+    tmp = STATE_FILE + ".tmp"
 
-        with open(tmp, "w") as f:
-            json.dump(state, f, indent=2)
-            f.write("\n")
+    with open(tmp, "w") as f:
+        json.dump(state, f, indent=2)
+        f.write("\n")
 
-        os.replace(tmp, STATE_FILE)
+    os.replace(tmp, STATE_FILE)
 
 
 def generate_routes(state):
-        routes = []
+    routes = []
 
-        # ---------------------------------------------------------
-        # Lens
-        #
-        # Lens gets the root URL because it works correctly there.
-        # ---------------------------------------------------------
+    # ---------------------------------------------------------
+    # Lens
+    #
+    # Lens gets the root URL because it works correctly there.
+    # ---------------------------------------------------------
 
-        if state["lens"]:
-            routes.append(r'''
+    if state["lens"]:
+        routes.append(
+            r"""
     location / {
         proxy_pass http://127.0.0.1:3001/;
 
@@ -83,15 +85,16 @@ def generate_routes(state):
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $connection_upgrade;
     }
-    ''')
+    """
+        )
 
+    # ---------------------------------------------------------
+    # OctoPrint
+    # ---------------------------------------------------------
 
-        # ---------------------------------------------------------
-        # OctoPrint
-        # ---------------------------------------------------------
-
-        if state["octoprint"]:
-            routes.append(r'''
+    if state["octoprint"]:
+        routes.append(
+            r"""
     location /octoprint/ {
         proxy_pass http://127.0.0.1:5000/;
 
@@ -104,15 +107,16 @@ def generate_routes(state):
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $connection_upgrade;
     }
-    ''')
+    """
+        )
 
+    # ---------------------------------------------------------
+    # Trilium
+    # ---------------------------------------------------------
 
-        # ---------------------------------------------------------
-        # Trilium
-        # ---------------------------------------------------------
-
-        if state["trilium"]:
-            routes.append(r'''
+    if state["trilium"]:
+        routes.append(
+            r"""
     location /trilium/ {
         proxy_pass http://127.0.0.1:8080/;
 
@@ -125,94 +129,102 @@ def generate_routes(state):
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $connection_upgrade;
     }
-    ''')
+    """
+        )
 
-
-        if not routes:
-            routes.append(r'''
+    if not routes:
+        routes.append(
+            r"""
     location / {
         return 404;
     }
-    ''')
+    """
+        )
+
+    tmp = ROUTES_FILE + ".tmp"
+
+    with open(tmp, "w") as f:
+        f.write("\n".join(routes))
+        f.write("\n")
+
+    os.replace(tmp, ROUTES_FILE)
 
 
-        tmp = ROUTES_FILE + ".tmp"
-
-        with open(tmp, "w") as f:
-            f.write("\n".join(routes))
-            f.write("\n")
-
-        os.replace(tmp, ROUTES_FILE)
-
-
-    def reload_nginx():
-        result = run([
+def reload_nginx():
+    result = run(
+        [
             "${pkgs.nginx}/bin/nginx",
-            "-t"
-        ])
+            "-t",
+        ]
+    )
 
-        if result.returncode != 0:
-            return False, result.stderr
+    if result.returncode != 0:
+        return False, result.stderr
 
-        result = run([
+    result = run(
+        [
             "${pkgs.systemd}/bin/systemctl",
             "reload",
-            "nginx.service"
-        ])
+            "nginx.service",
+        ]
+    )
 
-        if result.returncode != 0:
-            return False, result.stderr
+    if result.returncode != 0:
+        return False, result.stderr
 
-        return True, ""
+    return True, ""
 
 
-    def funnel_on():
-        result = run([
+def funnel_on():
+    result = run(
+        [
             "${pkgs.tailscale}/bin/tailscale",
             "funnel",
             "--bg",
             "--yes",
-            "8088"
-        ])
+            "8088",
+        ]
+    )
 
-        return result.returncode == 0, result.stderr
+    return result.returncode == 0, result.stderr
 
 
-    def funnel_off():
-        result = run([
+def funnel_off():
+    result = run(
+        [
             "${pkgs.tailscale}/bin/tailscale",
             "funnel",
-            "reset"
-        ])
+            "reset",
+        ]
+    )
 
-        return result.returncode == 0, result.stderr
+    return result.returncode == 0, result.stderr
 
 
 def apply_state(state):
-        save_state(state)
-        generate_routes(state)
+    save_state(state)
+    generate_routes(state)
 
-        ok, error = reload_nginx()
+    ok, error = reload_nginx()
+
+    if not ok:
+        return False, "Nginx reload failed: " + error
+
+    if any(state.values()):
+        ok, error = funnel_on()
 
         if not ok:
-            return False, "Nginx reload failed: " + error
+            return False, "Funnel enable failed: " + error
+    else:
+        ok, error = funnel_off()
 
-        if any(state.values()):
-            ok, error = funnel_on()
+        if not ok:
+            return False, "Funnel disable failed: " + error
 
-            if not ok:
-                return False, "Funnel enable failed: " + error
-
-        else:
-            ok, error = funnel_off()
-
-            if not ok:
-                return False, "Funnel disable failed: " + error
-
-        return True, ""
+    return True, ""
 
 
-HTML = r'''
+HTML = r"""
 <!doctype html>
 <html>
 <head>
@@ -306,7 +318,6 @@ HTML = r'''
     <div id="url"></div>
 
     <script>
-
     let state = {};
 
     async function load() {
@@ -316,9 +327,7 @@ HTML = r'''
     }
 
     function update() {
-
         for (const name of ["lens", "octoprint", "trilium"]) {
-
             const button = document.getElementById(name);
 
             if (state[name]) {
@@ -354,7 +363,6 @@ HTML = r'''
     }
 
     async function toggle(name) {
-
         const newState = Object.assign({}, state);
         newState[name] = !newState[name];
 
@@ -379,76 +387,66 @@ HTML = r'''
     }
 
     load();
-
     </script>
 
 </body>
 </html>
-'''
+"""
 
 
 class Handler(BaseHTTPRequestHandler):
 
     def send_json(self, data, status=200):
-
         body = json.dumps(data).encode()
 
         self.send_response(status)
         self.send_header(
             "Content-Type",
-            "application/json"
+            "application/json",
         )
         self.send_header(
             "Content-Length",
-            str(len(body))
+            str(len(body)),
         )
         self.end_headers()
 
         self.wfile.write(body)
 
-
     def do_GET(self):
-
         if self.path == "/":
             body = HTML.encode()
 
             self.send_response(200)
             self.send_header(
                 "Content-Type",
-                "text/html; charset=utf-8"
+                "text/html; charset=utf-8",
             )
             self.send_header(
                 "Content-Length",
-                str(len(body))
+                str(len(body)),
             )
             self.end_headers()
 
             self.wfile.write(body)
             return
 
-
         if self.path == "/api/state":
-
             self.send_json(load_state())
             return
 
         self.send_error(404)
 
-
     def do_POST(self):
-
         if self.path != "/api/state":
             self.send_error(404)
             return
 
         try:
-
             length = int(
                 self.headers.get("Content-Length", "0")
             )
 
             body = self.rfile.read(length)
-
             requested = json.loads(body)
 
             state = {
@@ -458,36 +456,41 @@ class Handler(BaseHTTPRequestHandler):
                 ),
                 "trilium": bool(
                     requested.get("trilium", False)
-                )
+                ),
             }
 
             ok, error = apply_state(state)
 
             if ok:
-                self.send_json({
-                    "ok": True,
-                    "state": state
-                })
+                self.send_json(
+                    {
+                        "ok": True,
+                        "state": state,
+                    }
+                )
             else:
-                self.send_json({
-                    "ok": False,
-                    "error": error
-                }, 500)
+                self.send_json(
+                    {
+                        "ok": False,
+                        "error": error,
+                    },
+                    500,
+                )
 
         except Exception as e:
-
-            self.send_json({
-                "ok": False,
-                "error": str(e)
-            }, 500)
-
+            self.send_json(
+                {
+                    "ok": False,
+                    "error": str(e),
+                },
+                500,
+            )
 
     def log_message(self, format, *args):
         pass
 
 
 if __name__ == "__main__":
-
     state = load_state()
 
     save_state(state)
@@ -503,7 +506,7 @@ if __name__ == "__main__":
 
     server = HTTPServer(
         (LISTEN, PORT),
-        Handler
+        Handler,
     )
 
     server.serve_forever()
