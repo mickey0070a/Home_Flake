@@ -10,8 +10,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/samba.nix
-      ../../modules/nginx.nix
-	  ../../modules/remote-access.nix
+	     ../../modules/nginx_remote_controller.nix
       ../../modules/Trilium-Server.nix
       ../../modules/3dprinting.nix
       ../../profiles/users.nix
