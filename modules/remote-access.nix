@@ -221,34 +221,7 @@ def service_ready(name):
 def generate_routes(state):
     routes = []
 
-    # Lens owns the root URL.  Do not put it behind /lens/ because
-    # Lens generates root-relative/websocket URLs.
-    if state["lens"]:
-        routes.append(
-            r"""
-location / {
-    proxy_pass http://127.0.0.1:3000;
-
-    proxy_http_version 1.1;
-
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-
-    proxy_read_timeout 3600;
-}
-"""
-        )
-    else:
-        routes.append(
-            r"""
-location / {
-    return 404;
-}
+    
 """
         )
 
