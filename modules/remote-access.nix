@@ -3,7 +3,7 @@
 let
 
   remoteAccessState = "/var/lib/remote-access/state.json";
-  remoteAccessRoutes = "/var/lib/remote-access/public-routes.conf";
+  remoteAccessRoutesDir = "/var/lib/remote-access/routes";
 
   controllerScript = pkgs.writeText "remote-access-controller.py" ''
 #!/usr/bin/env python3
@@ -15,7 +15,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
 STATE_FILE = "${remoteAccessState}"
-ROUTES_FILE = "${remoteAccessRoutes}"
+ROUTES_DIR = "${remoteAccessRoutesDir}"
 
 LISTEN = "127.0.0.1"
 PORT = 8787
@@ -24,6 +24,7 @@ DEFAULT_STATE = {
     "lens": False,
     "octoprint": False,
     "trilium": False,
+    "broadcast": False,
 }
 
 
@@ -45,6 +46,7 @@ def load_state():
             "lens": bool(state.get("lens", False)),
             "octoprint": bool(state.get("octoprint", False)),
             "trilium": bool(state.get("trilium", False)),
+            "broadcast": bool(state.get("broadcast", False)),
         }
 
     except Exception:
@@ -61,94 +63,172 @@ def save_state(state):
     os.replace(tmp, STATE_FILE)
 
 
+def service_command(name, action):
+    """
+    Start or stop an application.
+
+    Verify the OctoPrint and Trilium unit names against the
+    NixOS configuration before using those toggles.
+    """
+
+    if name == "lens":
+        if action == "start":
+            return run([
+                "${pkgs.docker-compose}/bin/docker-compose",
+                "-f", "/home/Docker_Files/Lens/docker-compose.yml",
+                "up", "-d",
+            ])
+
+        return run([
+            "${pkgs.docker-compose}/bin/docker-compose",
+            "-f", "/home/Docker_Files/Lens/docker-compose.yml",
+            "down",
+        ])
+
+    if name == "octoprint":
+        return run([
+            "${pkgs.systemd}/bin/systemctl",
+            action,
+            "octoprint.service",
+        ])
+
+    if name == "trilium":
+        return run([
+            "${pkgs.systemd}/bin/systemctl",
+            action,
+            "trilium.service",
+        ])
+
+    return subprocess.CompletedProcess(
+        [], 1, "", "Unknown service"
+    )
+
+
+def apply_services(old_state, new_state):
+    """
+    Make actual application state match requested state.
+    """
+
+    for name in ["lens", "octoprint", "trilium"]:
+        if old_state.get(name, False) == new_state.get(name, False):
+            continue
+
+        action = "start" if new_state[name] else "stop"
+        result = service_command(name, action)
+
+        if result.returncode != 0:
+            error = result.stderr.strip() or result.stdout.strip()
+            return False, f"{name} {action} failed: {error}"
+
+    return True, ""
+
+
 def generate_routes(state):
-    routes = []
+    """
+    Generate one Nginx server block per active service.
+    """
 
-    # ---------------------------------------------------------
-    # Lens
-    #
-    # Lens gets the root URL because it works correctly there.
-    # ---------------------------------------------------------
+    os.makedirs(ROUTES_DIR, exist_ok=True)
 
-    if state["lens"]:
-        routes.append(
-            r"""
+    routes = {
+        "lens": r"""
+server {
+    listen 80;
+    server_name lens.nixserver.tailnet;
+
+    auth_basic "Restricted";
+    auth_basic_user_file /etc/nginx/htpasswd;
+
     location / {
-        proxy_pass http://127.0.0.1:3001/;
+        proxy_pass http://127.0.0.1:3000;
 
         proxy_http_version 1.1;
+
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
 
         proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $connection_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        proxy_read_timeout 3600;
     }
-    """
-        )
+}
+""",
 
-    # ---------------------------------------------------------
-    # OctoPrint
-    # ---------------------------------------------------------
+        "octoprint": r"""
+server {
+    listen 80;
+    server_name octoprint.nixserver.tailnet;
 
-    if state["octoprint"]:
-        routes.append(
-            r"""
-    location /octoprint/ {
-        proxy_pass http://127.0.0.1:5000/;
+    auth_basic "Restricted";
+    auth_basic_user_file /etc/nginx/htpasswd;
 
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $connection_upgrade;
-    }
-    """
-        )
-
-    # ---------------------------------------------------------
-    # Trilium
-    # ---------------------------------------------------------
-
-    if state["trilium"]:
-        routes.append(
-            r"""
-    location /trilium/ {
-        proxy_pass http://127.0.0.1:8080/;
-
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $connection_upgrade;
-    }
-    """
-        )
-
-    if not routes:
-        routes.append(
-            r"""
     location / {
-        return 404;
+        proxy_pass http://127.0.0.1:5000;
+
+        proxy_http_version 1.1;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        proxy_read_timeout 3600;
     }
-    """
-        )
+}
+""",
 
-    tmp = ROUTES_FILE + ".tmp"
+        "trilium": r"""
+server {
+    listen 80;
+    server_name trilium.nixserver.tailnet;
 
-    with open(tmp, "w") as f:
-        f.write("\n".join(routes))
-        f.write("\n")
+    auth_basic "Restricted";
+    auth_basic_user_file /etc/nginx/htpasswd;
 
-    os.replace(tmp, ROUTES_FILE)
+    location / {
+        proxy_pass http://127.0.0.1:8080;
 
+        proxy_http_version 1.1;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        proxy_read_timeout 3600;
+    }
+}
+""",
+    }
+
+    filenames = {
+        "lens": "lens.conf",
+        "octoprint": "octoprint.conf",
+        "trilium": "trilium.conf",
+    }
+
+    for name, filename in filenames.items():
+        path = os.path.join(ROUTES_DIR, filename)
+
+        if state[name]:
+            tmp = path + ".tmp"
+            with open(tmp, "w") as f:
+                f.write(routes[name].strip() + "\n")
+            os.replace(tmp, path)
+        else:
+            try:
+                os.remove(path)
+            except FileNotFoundError:
+                pass
 
 def reload_nginx():
     result = run(
@@ -202,7 +282,18 @@ def funnel_off():
 
 
 def apply_state(state):
+    old_state = load_state()
+
+    # Start/stop the actual applications first.
+    ok, error = apply_services(old_state, state)
+
+    if not ok:
+        return False, error
+
+    # Only save the requested state after service changes succeeded.
     save_state(state)
+
+    # Expose only active services through Nginx.
     generate_routes(state)
 
     ok, error = reload_nginx()
@@ -210,7 +301,13 @@ def apply_state(state):
     if not ok:
         return False, "Nginx reload failed: " + error
 
-    if any(state.values()):
+    # Broadcast is independent of service activation.
+    services_active = any(
+        state[name]
+        for name in ["lens", "octoprint", "trilium"]
+    )
+
+    if state["broadcast"] and services_active:
         ok, error = funnel_on()
 
         if not ok:
@@ -222,7 +319,6 @@ def apply_state(state):
             return False, "Funnel disable failed: " + error
 
     return True, ""
-
 
 HTML = r"""
 <!doctype html>
@@ -315,6 +411,11 @@ HTML = r"""
         <button id="trilium" onclick="toggle('trilium')"></button>
     </div>
 
+    <div class="service">
+        <div class="name">Internet Access</div>
+        <button id="broadcast" onclick="toggle('broadcast')"></button>
+    </div>
+
     <div id="url"></div>
 
     <script>
@@ -327,7 +428,7 @@ HTML = r"""
     }
 
     function update() {
-        for (const name of ["lens", "octoprint", "trilium"]) {
+        for (const name of ["lens", "octoprint", "trilium", "broadcast"]) {
             const button = document.getElementById(name);
 
             if (state[name]) {
@@ -346,10 +447,12 @@ HTML = r"""
 
         const status = document.getElementById("status");
 
-        if (active) {
-            status.textContent = "Public access ACTIVE";
+        if (state.broadcast && active) {
+            status.textContent = "Internet access ACTIVE";
+        } else if (active) {
+            status.textContent = "Services active — LAN/Tailscale only";
         } else {
-            status.textContent = "Public access OFF";
+            status.textContent = "All services OFF";
         }
 
         const url = document.getElementById("url");
@@ -457,6 +560,9 @@ class Handler(BaseHTTPRequestHandler):
                 "trilium": bool(
                     requested.get("trilium", False)
                 ),
+                "broadcast": bool(
+                    requested.get("broadcast", False)
+                ),
             }
 
             ok, error = apply_state(state)
@@ -493,13 +599,27 @@ class Handler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     state = load_state()
 
+    # Reconcile actual application state with saved controller state.
+    ok, error = apply_services(DEFAULT_STATE, state)
+
+    if not ok:
+        print("Service startup reconciliation failed:", error)
+
     save_state(state)
     generate_routes(state)
 
     # Make sure Nginx reflects the stored state after boot.
-    reload_nginx()
+    ok, error = reload_nginx()
 
-    if any(state.values()):
+    if not ok:
+        print("Nginx reload failed:", error)
+
+    services_active = any(
+        state[name]
+        for name in ["lens", "octoprint", "trilium"]
+    )
+
+    if state["broadcast"] and services_active:
         funnel_on()
     else:
         funnel_off()
@@ -521,37 +641,9 @@ in
 
   systemd.tmpfiles.rules = [
     "d /var/lib/remote-access 0755 root root -"
+    "d /var/lib/remote-access/routes 0755 root root -"
     "f /var/lib/remote-access/state.json 0600 root root -"
-    "f /var/lib/remote-access/public-routes.conf 0644 root root -"
   ];
-
-
-  # ---------------------------------------------------------------
-  # Dedicated PUBLIC Funnel gateway
-  #
-  # IMPORTANT:
-  # This is localhost-only.
-  #
-  # Funnel is the only thing that should ever reach it from outside.
-  # ---------------------------------------------------------------
-
-  services.nginx.virtualHosts."remote-access-public" = {
-
-    listen = [
-      {
-        addr = "127.0.0.1";
-        port = 8088;
-      }
-    ];
-
-    serverName = "_";
-
-    basicAuthFile = "/etc/nginx/htpasswd";
-
-    extraConfig = ''
-      include /var/lib/remote-access/public-routes.conf;
-    '';
-  };
 
 
   # ---------------------------------------------------------------
