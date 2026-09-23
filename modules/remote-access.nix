@@ -889,10 +889,6 @@ in
             proxyPass = "http://127.0.0.1:8787/";
             proxyWebsockets = true;
           };
-
-          "/" = {
-            return = "404";
-          };
         };
 
         extraConfig = ''
@@ -960,4 +956,3 @@ in
 
   networking.firewall.allowedTCPPorts = [ 80 ];
 }
-
