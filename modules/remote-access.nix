@@ -226,7 +226,7 @@ def generate_routes(state):
     if state["lens"]:
         routes.append(
             r"""
-location /lens/ {
+location / {
     proxy_pass http://127.0.0.1:3000;
 
     proxy_http_version 1.1;
