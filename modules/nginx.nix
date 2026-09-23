@@ -9,9 +9,9 @@
       "_" = {
         basicAuthFile = "/etc/nginx/htpasswd";
 
-        #locations."/" = {
-       #   return = "404";
-       # };
+        locations."/" = {
+          return = "404";
+        };
       };
     };
 
