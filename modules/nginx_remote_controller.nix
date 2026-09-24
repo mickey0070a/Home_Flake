@@ -138,17 +138,17 @@ def apply_state(requested):
 
     active = any(requested[name] for name in SERVICES)
 
-if requested["broadcast"] and active:
-    if not old["broadcast"]:
-        ok, error = funnel_on()
-        if not ok:
+    if requested["broadcast"] and active:
+        if not old["broadcast"]:
+            ok, error = funnel_on()
+            if not ok:
             return False, "Funnel enable failed: " + (error or "unknown error")
-else:
-    if old["broadcast"]:
-        ok, error = funnel_off()
-        if not ok:
-            return False, "Funnel disable failed: " + (error or "unknown error")
-    requested["broadcast"] = False
+    else:
+        if old["broadcast"]:
+            ok, error = funnel_off()
+            if not ok:
+                return False, "Funnel disable failed: " + (error or "unknown error")
+        requested["broadcast"] = False
 
     save_state(requested)
     return True, ""
