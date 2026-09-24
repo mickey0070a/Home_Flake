@@ -172,7 +172,7 @@ button:disabled{opacity:.5;cursor:wait}.on{background:#347a46;color:white}.off{b
 <h1>NixServer Remote Access</h1>
 <div class="subtitle">Application power and network exposure control</div>
 <div id="status">Loading...</div>
-<div class="service"><div class="row"><div><div class="name">Lens</div><div class="access">/ → :3000</div></div><button id="lens" onclick="toggle('lens')"></button></div></div>
+<div class="service"><div class="row"><div><div class="name">Lens</div><div class="access">/ → :3000, /lens-backend/ → :3030</div></div><button id="lens" onclick="toggle('lens')"></button></div></div>
 <div class="service"><div class="row"><div><div class="name">OctoPrint</div><div class="access">/octoprint/ → :5000</div></div><button id="octoprint" onclick="toggle('octoprint')"></button></div></div>
 <div class="service"><div class="row"><div><div class="name">Trilium</div><div class="access">/trilium/ → :8080</div></div><button id="trilium" onclick="toggle('trilium')"></button></div></div>
 <div class="service broadcast"><div class="row"><div><div class="name">Internet Access</div><div class="access">Tailscale Funnel — all active services</div></div><button id="broadcast" onclick="toggle('broadcast')"></button></div></div>
@@ -289,11 +289,23 @@ in
             proxyWebsockets = true;
           };
 
+          # Lens Frontend
           "/" = {
             proxyPass = "http://127.0.0.1:3000";
             proxyWebsockets = true;
             extraConfig = ''
               proxy_read_timeout 3600;
+            '';
+          };
+
+          # Lens Backend API - strips /lens-backend/ prefix before forwarding
+          "/lens-backend/" = {
+            proxyPass = "http://127.0.0.1:3030/";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_read_timeout 3600;
+              # Strip the /lens-backend/ prefix so backend receives root paths
+              rewrite ^/lens-backend/(.*) /$1 break;
             '';
           };
 
@@ -322,11 +334,22 @@ in
         basicAuthFile = "/etc/nginx/htpasswd";
 
         locations = {
+          # Lens Frontend
           "/" = {
             proxyPass = "http://127.0.0.1:3000";
             proxyWebsockets = true;
             extraConfig = ''
               proxy_read_timeout 3600;
+            '';
+          };
+
+          # Lens Backend API
+          "/lens-backend/" = {
+            proxyPass = "http://127.0.0.1:3030/";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_read_timeout 3600;
+              rewrite ^/lens-backend/(.*) /$1 break;
             '';
           };
 
