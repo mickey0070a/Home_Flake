@@ -248,7 +248,6 @@ def reconcile_startup():
         if not ok:
             state["broadcast"] = False
     else:
-        funnel_off()
         state["broadcast"] = False
 
     save_state(state)
