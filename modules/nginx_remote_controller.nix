@@ -150,7 +150,7 @@ def apply_state(requested):
     return True, ""
 
 
-HTML = r'''<!doctype html>
+HTML = r"""<!doctype html>
 <html><head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NixServer Remote Access</title>
@@ -179,7 +179,7 @@ async function load(){try{const r=await fetch('api/state',{cache:'no-store'});if
 function update(){for(const n of names){const b=document.getElementById(n);b.textContent=state[n]?'ON':'OFF';b.className=state[n]?'on':'off';b.disabled=busy}const active=state.lens||state.octoprint||state.trilium;document.getElementById('status').textContent=state.broadcast&&active?'Internet access ACTIVE':active?'Services active — LAN / Tailscale only':'All application services stopped';document.getElementById('url').textContent=state.broadcast&&active?'https://nixserver-1.tail90d1f7.ts.net':''}
 async function toggle(name){if(busy)return;const next=Object.assign({},state);next[name]=!next[name];busy=true;update();document.getElementById('status').textContent='Applying '+name+'...';try{const r=await fetch('api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(next)});const text=await r.text();let result;try{result=JSON.parse(text)}catch(_){throw Error('Controller returned HTTP '+r.status+' without valid JSON.')}if(!r.ok||!result.ok)throw Error(result.error||('HTTP '+r.status));state=result.state;update()}catch(e){alert(e.message);await load()}finally{busy=false;update()}}
 load();
-</script></body></html>'''
+</script></body></html>"""
 
 
 class Handler(BaseHTTPRequestHandler):
