@@ -142,7 +142,7 @@ def apply_state(requested):
         if not old["broadcast"]:
             ok, error = funnel_on()
             if not ok:
-            return False, "Funnel enable failed: " + (error or "unknown error")
+                return False, "Funnel enable failed: " + (error or "unknown error")
     else:
         if old["broadcast"]:
             ok, error = funnel_off()
