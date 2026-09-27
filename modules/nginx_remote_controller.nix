@@ -112,8 +112,7 @@ def funnel_off():
     result = run([
         "${pkgs.tailscale}/bin/tailscale",
         "funnel",
-        "8088",
-        "--disable",
+        "reset",
     ])
     return result.returncode == 0, result.stderr.strip()
 
