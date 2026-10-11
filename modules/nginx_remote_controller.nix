@@ -307,27 +307,22 @@ in
               rewrite ^/lens-backend/(.*) /$1 break;
             '';
           };
-
-          
+    
         "/octoprint/" = {
             proxyPass = "http://127.0.0.1:5000/";
             proxyWebsockets = true;
 
             extraConfig = ''
-                proxy_http_version 1.1;
                 proxy_set_header Host $host;
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                 proxy_set_header X-Forwarded-Proto $scheme;
-
                 proxy_set_header X-Script-Name /octoprint;
                 proxy_set_header X-Scheme $scheme;
                 proxy_set_header X-Forwarded-Host $host;
-
                 proxy_read_timeout 3600;
             '';
         };
-
 
           "/trilium/" = {
             proxyPass = "http://127.0.0.1:8080/";
@@ -364,27 +359,22 @@ in
               rewrite ^/lens-backend/(.*) /$1 break;
             '';
           };
+        
+            "/octoprint/" = {
+                proxyPass = "http://127.0.0.1:5000/";
+                proxyWebsockets = true;
 
-          
-        "/octoprint/" = {
-            proxyPass = "http://127.0.0.1:5000/";
-            proxyWebsockets = true;
-
-            extraConfig = ''
-                proxy_http_version 1.1;
-                proxy_set_header Host $host;
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header X-Forwarded-Proto $scheme;
-
-                proxy_set_header X-Script-Name /octoprint;
-                proxy_set_header X-Scheme $scheme;
-                proxy_set_header X-Forwarded-Host $host;
-
-                proxy_read_timeout 3600;
-            '';
-        };
-
+                extraConfig = ''
+                    proxy_set_header Host $host;
+                    proxy_set_header X-Real-IP $remote_addr;
+                    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                    proxy_set_header X-Forwarded-Proto $scheme;
+                    proxy_set_header X-Script-Name /octoprint;
+                    proxy_set_header X-Scheme $scheme;
+                    proxy_set_header X-Forwarded-Host $host;
+                    proxy_read_timeout 3600;
+                '';
+            };
 
           "/trilium/" = {
             proxyPass = "http://127.0.0.1:8080/";
