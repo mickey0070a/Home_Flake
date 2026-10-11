@@ -25,8 +25,8 @@ DEFAULT_STATE = {
 
 SERVICES = {
     "lens": ("Lens", "http://127.0.0.1:3000/"),
-    "octoprint": ("OctoPrint", "http://127.0.0.1:5000/"),
-    "trilium": ("Trilium", "http://127.0.0.1:8080/"),
+    "octoprint": ("OctoPrint", "http://127.0.0.1:5000/octoprint/"),
+    "trilium": ("Trilium", "http://127.0.0.1:8080/trilium/"),
 }
 
 
@@ -55,12 +55,12 @@ def save_state(state):
 
 def service_command(name, action):
     if name == "lens":
+        if action == "start":
+            return run([
+                "${pkgs.docker-compose}/bin/docker-compose", "up", "-d"
+            ], cwd=LENS_DIR)
         return run([
-            "${pkgs.docker-compose}/bin/docker-compose",
-            action if action == "down" else "up",
-            "-d" if action == "start" else "" if action == "down" else "-d",
-        ], cwd=LENS_DIR) if action == "start" else run([
-            "${pkgs.docker-compose}/bin/docker-compose", "down"
+            "${pkgs.docker-compose}/bin/docker-compose", "stop"
         ], cwd=LENS_DIR)
 
     if name == "octoprint":
@@ -79,8 +79,11 @@ def service_command(name, action):
 
 def service_start(name):
     result = service_command(name, "start")
+    if result.returncode != 0:
+        err = result.stderr.lower()
+        if "already running" in err or "is already" in err:
+            return True, ""
     return result.returncode == 0, result.stderr.strip()
-
 
 def service_stop(name):
     result = service_command(name, "stop")
@@ -90,16 +93,18 @@ def service_stop(name):
 
 
 def service_ready(name):
-    _, url = SERVICES[name]
+    checks = {
+        "lens": ["http://127.0.0.1:3000/", "http://127.0.0.1:3030/"],
+        "octoprint": ["http://127.0.0.1:5000/octoprint/"],
+        "trilium": ["http://127.0.0.1:8080/trilium/"],
+    }[name]
     for _ in range(60):
-        result = run([
+        if all(run([
             "${pkgs.curl}/bin/curl", "-fsS", "--max-time", "2", url
-        ])
-        if result.returncode == 0:
+        ]).returncode == 0 for url in checks):
             return True
         time.sleep(1)
     return False
-
 
 def funnel_on():
     result = run([
@@ -288,7 +293,7 @@ in
             proxyWebsockets = true;
           };
 
-          # Lens Frontend
+          # Lens Frontend (root mount - no trailing slash on proxyPass)
           "/" = {
             proxyPass = "http://127.0.0.1:3000";
             proxyWebsockets = true;
@@ -297,36 +302,33 @@ in
             '';
           };
 
-          # Lens Backend API - strips /lens-backend/ prefix before forwarding
+          # Lens Backend API - prefix stripped by trailing slash on proxyPass.
+          # FIX: removed the redundant `rewrite ... break`.
           "/lens-backend/" = {
             proxyPass = "http://127.0.0.1:3030/";
             proxyWebsockets = true;
             extraConfig = ''
               proxy_read_timeout 3600;
-              # Strip the /lens-backend/ prefix so backend receives root paths
-              rewrite ^/lens-backend/(.*) /$1 break;
             '';
           };
-    
-        "/octoprint/" = {
-            proxyPass = "http://127.0.0.1:5000/";
+
+          # FIX: proxyPass has NO trailing slash so the /octoprint/ prefix is
+          # preserved and matches X-Script-Name. OctoPrint must be started
+          # with `--prefix /octoprint` (or scriptName=/octoprint).
+          "/octoprint/" = {
+            proxyPass = "http://127.0.0.1:5000";
             proxyWebsockets = true;
-
             extraConfig = ''
-                proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto https;
-    proxy_set_header X-Forwarded-Host $host;
-    proxy_set_header X-Forwarded-Server $hostname;
-    proxy_set_header X-Script-Name /octoprint;
-    proxy_set_header X-Scheme https;
-    proxy_read_timeout 3600;
+              proxy_set_header X-Script-Name /octoprint;
+              proxy_set_header X-Scheme $scheme;
+              proxy_read_timeout 3600;
             '';
-        };
+          };
 
+          # FIX: proxyPass has NO trailing slash so the /trilium/ prefix is
+          # preserved. Set TRILIUM_HOST / base path to match.
           "/trilium/" = {
-            proxyPass = "http://127.0.0.1:8080/";
+            proxyPass = "http://127.0.0.1:8080";
             proxyWebsockets = true;
             extraConfig = ''
               proxy_read_timeout 3600;
@@ -342,7 +344,6 @@ in
         basicAuthFile = "/etc/nginx/htpasswd";
 
         locations = {
-          # Lens Frontend
           "/" = {
             proxyPass = "http://127.0.0.1:3000";
             proxyWebsockets = true;
@@ -351,35 +352,26 @@ in
             '';
           };
 
-          # Lens Backend API
           "/lens-backend/" = {
             proxyPass = "http://127.0.0.1:3030/";
             proxyWebsockets = true;
             extraConfig = ''
               proxy_read_timeout 3600;
-              rewrite ^/lens-backend/(.*) /$1 break;
             '';
           };
-        
-            "/octoprint/" = {
-                proxyPass = "http://127.0.0.1:5000/";
-                proxyWebsockets = true;
 
-                extraConfig = ''
-                   proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto https;
-    proxy_set_header X-Forwarded-Host $host;
-    proxy_set_header X-Forwarded-Server $hostname;
-    proxy_set_header X-Script-Name /octoprint;
-    proxy_set_header X-Scheme https;
-    proxy_read_timeout 3600;
+          "/octoprint/" = {
+            proxyPass = "http://127.0.0.1:5000";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_set_header X-Script-Name /octoprint;
+              proxy_set_header X-Scheme $scheme;
+              proxy_read_timeout 3600;
             '';
-            };
+          };
 
           "/trilium/" = {
-            proxyPass = "http://127.0.0.1:8080/";
+            proxyPass = "http://127.0.0.1:8080";
             proxyWebsockets = true;
             extraConfig = ''
               proxy_read_timeout 3600;
