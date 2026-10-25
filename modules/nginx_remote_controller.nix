@@ -367,6 +367,14 @@ in
             '';
           };
 
+          "/socket.io/" = {
+            proxyPass = "http://127.0.0.1:3030/socket.io/";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_read_timeout 3600;
+            '';
+          };
+
           "/octoprint/" = {
             proxyPass = "http://127.0.0.1:5000";
             proxyWebsockets = true;
