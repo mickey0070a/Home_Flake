@@ -312,6 +312,13 @@ in
             '';
           };
 
+          "/socket.io/" = {
+            proxyPass = "http://127.0.0.1:3030/socket.io/";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_read_timeout 3600;
+            '';
+          };
           # FIX: proxyPass has NO trailing slash so the /octoprint/ prefix is
           # preserved and matches X-Script-Name. OctoPrint must be started
           # with `--prefix /octoprint` (or scriptName=/octoprint).
