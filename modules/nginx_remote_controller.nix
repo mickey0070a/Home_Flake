@@ -278,64 +278,134 @@ in
   # Python never writes or reloads Nginx configuration.
   # ---------------------------------------------------------------
 
-  services.nginx = {
-    enable = true;
-    recommendedProxySettings = true;
-    recommendedTlsSettings = true;
+services.nginx = {
+  enable = true;
+  recommendedProxySettings = true;
+  recommendedTlsSettings = true;
 
-    virtualHosts."nixserver=1.tail90d1f7.ts.net" = {
-      forceSSl = true;
-      sslCertificate = "/var/lib/tailscale/certs/nixserver-1.tail90d1f7.ts.net.crt";
-      sslCertificateKey = "/var/lib/tailsacel/cets/nixserver-1.tail90d1f7.ts.net.net.key";
-
+  virtualHosts = {
+    # Main Virtual Host (LAN / Direct Tailscale access)
+    "_" = {
+      serverName = "_";
       basicAuthFile = "/etc/nginx/htpasswd";
-        locations = {
-          "/remote-access/" = 
-            proxyPass = "http://127.0.0.1:8787/";
-            proxyWebsockets = true;
+
+      locations = {
+        # Management Controller UI
+        "/remote-access/" = {
+          proxyPass = "http://127.0.0.1:8787/";
+          proxyWebsockets = true;
         };
 
-			#Lens Frontend
-			"/" = {
-				proxyPass = "https://127.0.0.1:3000";
-				proxyWebsockets = true;
-				extraConfig = ''
-					auth_basic off;
-					proxy_read_timeout 3600;
-				'';
-			};
+        # Lens Frontend
+        "/" = {
+          proxyPass = "http://127.0.0.1:3000";
+          proxyWebsockets = true;
+          extraConfig = ''
+            proxy_read_timeout 3600;
+          '';
+        };
 
-			#Socket.io WebSockets 
-			"/socket.io/" = {
-				proxyPass = "http://127.0.0.1:2020/socket.io/";
-				proxyWebsockets = true;
-				extraConfig = ''
-					auth_basic off;
-					proxy_read_timeout 3600;
-				'';
-			};
+        # Lens Backend API (Bypass Basic Auth for fetch requests)
+        "/lens-backend/" = {
+          proxyPass = "http://127.0.0.1:3030/";
+          proxyWebsockets = true;
+          extraConfig = ''
+            auth_basic off;
+            proxy_read_timeout 3600;
+          '';
+        };
 
-			"/octoprint/" = {
-				proxyPass = "http://127.0.0.1:5000";
-				proxyWebsockets = true;
-				extraConfig = '' 
-					proxy_set_header X-Script-Name /octoprint;
-					proxy_set_header X-Scheme $scheme;
-					proxy_read_timeout 3600;
-				'';
-			};
+        # WebSockets (Bypass Basic Auth for Socket.io)
+        "/socket.io/" = {
+          proxyPass = "http://127.0.0.1:3030/socket.io/";
+          proxyWebsockets = true;
+          extraConfig = ''
+            auth_basic off;
+            proxy_read_timeout 3600;
+          '';
+        };
 
-			"trilium/" = {
-				proxyPass = "http://127.0.0.1:8080";
-				proxyWebsockets = true;
-				extraConfig = ''
-					proxy_read_timeout 3600;
-				'';
-			};
-		};
-	};
+        # OctoPrint
+        "/octoprint/" = {
+          proxyPass = "http://127.0.0.1:5000";
+          proxyWebsockets = true;
+          extraConfig = ''
+            proxy_set_header X-Script-Name /octoprint;
+            proxy_set_header X-Scheme $scheme;
+            proxy_read_timeout 3600;
+          '';
+        };
+
+        # Trilium
+        "/trilium/" = {
+          proxyPass = "http://127.0.0.1:8080";
+          proxyWebsockets = true;
+          extraConfig = ''
+            proxy_read_timeout 3600;
+          '';
+        };
+      };
+    };
+
+    # Tailscale Funnel Listener (Port 8088)
+    "remote-access-public" = {
+      listen = [
+        {
+          addr = "127.0.0.1";
+          port = 8088;
+        }
+      ];
+      serverName = "_";
+      basicAuthFile = "/etc/nginx/htpasswd";
+
+      locations = {
+        "/" = {
+          proxyPass = "http://127.0.0.1:3000";
+          proxyWebsockets = true;
+          extraConfig = ''
+            proxy_read_timeout 3600;
+          '';
+        };
+
+        "/lens-backend/" = {
+          proxyPass = "http://127.0.0.1:3030/";
+          proxyWebsockets = true;
+          extraConfig = ''
+            auth_basic off;
+            proxy_read_timeout 3600;
+          '';
+        };
+
+        "/socket.io/" = {
+          proxyPass = "http://127.0.0.1:3030/socket.io/";
+          proxyWebsockets = true;
+          extraConfig = ''
+            auth_basic off;
+            proxy_read_timeout 3600;
+          '';
+        };
+
+        "/octoprint/" = {
+          proxyPass = "http://127.0.0.1:5000";
+          proxyWebsockets = true;
+          extraConfig = ''
+            proxy_set_header X-Script-Name /octoprint;
+            proxy_set_header X-Scheme $scheme;
+            proxy_read_timeout 3600;
+          '';
+        };
+
+        "/trilium/" = {
+          proxyPass = "http://127.0.0.1:8080";
+          proxyWebsockets = true;
+          extraConfig = ''
+            proxy_read_timeout 3600;
+          '';
+        };
+      };
+    };
+  };
 };
-
 
   # ---------------------------------------------------------------
   # Controller service
