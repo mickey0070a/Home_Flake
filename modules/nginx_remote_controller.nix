@@ -281,121 +281,19 @@ in
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
+    recommendedTlsSettings = true;
 
-    virtualHosts = {
-      "_" = {
-        serverName = "_";
-        basicAuthFile = "/etc/nginx/htpasswd";
+    virtualHosts."nixserver=1.tail90d1f7.ts.net" = }
+      forceSSl = true;
+      sslCertificate = "/var/lib/tailscale/certs/nixserver-1.tail90d1f7.ts.net.crt";
+      sslCertificateKey = "/var/lib/tailsacel/cets/nixserver-1.tail90d1f7.ts.net.net.key";
 
+      basicAuthFile = "/etc/nginx/htpasswd";
         locations = {
-          "/remote-access/" = {
+          "/remote-access/" = 
             proxyPass = "http://127.0.0.1:8787/";
             proxyWebsockets = true;
-          };
-
-          # Lens Frontend (root mount - no trailing slash on proxyPass)
-          "/" = {
-            proxyPass = "http://127.0.0.1:3000";
-            proxyWebsockets = true;
-            extraConfig = ''
-              proxy_read_timeout 3600;
-            '';
-          };
-
-          # Lens Backend API - prefix stripped by trailing slash on proxyPass.
-          # FIX: removed the redundant `rewrite ... break`.
-          "/lens-backend/" = {
-            proxyPass = "http://127.0.0.1:3030/";
-            proxyWebsockets = true;
-            extraConfig = ''
-              proxy_read_timeout 3600;
-            '';
-          };
-
-          "/socket.io/" = {
-            proxyPass = "http://127.0.0.1:3030/socket.io/";
-            proxyWebsockets = true;
-            extraConfig = ''
-              proxy_read_timeout 3600;
-            '';
-          };
-          # FIX: proxyPass has NO trailing slash so the /octoprint/ prefix is
-          # preserved and matches X-Script-Name. OctoPrint must be started
-          # with `--prefix /octoprint` (or scriptName=/octoprint).
-          "/octoprint/" = {
-            proxyPass = "http://127.0.0.1:5000";
-            proxyWebsockets = true;
-            extraConfig = ''
-              proxy_set_header X-Script-Name /octoprint;
-              proxy_set_header X-Scheme $scheme;
-              proxy_read_timeout 3600;
-            '';
-          };
-
-          # FIX: proxyPass has NO trailing slash so the /trilium/ prefix is
-          # preserved. Set TRILIUM_HOST / base path to match.
-          "/trilium/" = {
-            proxyPass = "http://127.0.0.1:8080";
-            proxyWebsockets = true;
-            extraConfig = ''
-              proxy_read_timeout 3600;
-            '';
-          };
         };
-      };
-
-      # Tailscale Funnel targets this localhost-only listener.
-      "remote-access-public" = {
-        listen = [{ addr = "127.0.0.1"; port = 8088; }];
-        serverName = "_";
-        basicAuthFile = "/etc/nginx/htpasswd";
-
-        locations = {
-          "/" = {
-            proxyPass = "http://127.0.0.1:3000";
-            proxyWebsockets = true;
-            extraConfig = ''
-              proxy_read_timeout 3600;
-            '';
-          };
-
-          "/lens-backend/" = {
-            proxyPass = "http://127.0.0.1:3030/";
-            proxyWebsockets = true;
-            extraConfig = ''
-              proxy_read_timeout 3600;
-            '';
-          };
-
-          "/socket.io/" = {
-            proxyPass = "http://127.0.0.1:3030/socket.io/";
-            proxyWebsockets = true;
-            extraConfig = ''
-              proxy_read_timeout 3600;
-            '';
-          };
-
-          "/octoprint/" = {
-            proxyPass = "http://127.0.0.1:5000";
-            proxyWebsockets = true;
-            extraConfig = ''
-              proxy_set_header X-Script-Name /octoprint;
-              proxy_set_header X-Scheme $scheme;
-              proxy_read_timeout 3600;
-            '';
-          };
-
-          "/trilium/" = {
-            proxyPass = "http://127.0.0.1:8080";
-            proxyWebsockets = true;
-            extraConfig = ''
-              proxy_read_timeout 3600;
-            '';
-          };
-        };
-      };
-    };
-  };
 
   # ---------------------------------------------------------------
   # Controller service
