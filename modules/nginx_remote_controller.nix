@@ -283,7 +283,7 @@ in
     recommendedProxySettings = true;
     recommendedTlsSettings = true;
 
-    virtualHosts."nixserver=1.tail90d1f7.ts.net" = }
+    virtualHosts."nixserver=1.tail90d1f7.ts.net" = {
       forceSSl = true;
       sslCertificate = "/var/lib/tailscale/certs/nixserver-1.tail90d1f7.ts.net.crt";
       sslCertificateKey = "/var/lib/tailsacel/cets/nixserver-1.tail90d1f7.ts.net.net.key";
@@ -294,6 +294,48 @@ in
             proxyPass = "http://127.0.0.1:8787/";
             proxyWebsockets = true;
         };
+
+			#Lens Frontend
+			"/" = {
+				proxyPass = "https://127.0.0.1:3000";
+				proxyWebsockets = true;
+				extraConfig = ''
+					auth_basic off;
+					proxy_read_timeout 3600;
+				'';
+			};
+
+			#Socket.io WebSockets 
+			"/socket.io/" = {
+				proxyPass = "http://127.0.0.1:2020/socket.io/";
+				proxyWebsockets = true;
+				extraConfig = ''
+					auth_basic off;
+					proxy_read_timeout 3600;
+				'';
+			};
+
+			"/octoprint/" = {
+				proxyPass = "http://127.0.0.1:5000";
+				proxyWebsockets = true;
+				extraConfig = '' 
+					proxy_set_header X-Script-Name /octoprint;
+					proxy_set_header X-Scheme $scheme;
+					proxy_read_timeout 3600;
+				'';
+			};
+
+			"trilium/" = {
+				proxyPass = "http://127.0.0.1:8080";
+				proxyWebsockets = true;
+				extraConfig = ''
+					proxy_read_timeout 3600;
+				'';
+			};
+		};
+	};
+};
+
 
   # ---------------------------------------------------------------
   # Controller service
