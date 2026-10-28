@@ -301,6 +301,7 @@ services.nginx = {
           proxyPass = "http://127.0.0.1:3000";
           proxyWebsockets = true;
           extraConfig = ''
+            auth_basic off;
             proxy_read_timeout 3600;
           '';
         };
