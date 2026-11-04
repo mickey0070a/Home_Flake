@@ -327,7 +327,7 @@ services.nginx = {
         };
 
         "/matomo/" = {
-          proxyPass = "http://127.0.0.1:7000/"
+          proxyPass = "http://127.0.0.1:7000/";
           proxyWebsockets = true;
           extraConfig = ''
             auth_basic off;
@@ -396,7 +396,7 @@ services.nginx = {
         };
 
         "/matomo/" = {
-          proxyPass = "http://127.0.0.1:7000/"
+          proxyPass = "http://127.0.0.1:7000/";
           proxyWebsockets = true;
           extraConfig = ''
             auth_basic off;
