@@ -326,6 +326,15 @@ services.nginx = {
           '';
         };
 
+        "/matomo/" = {
+          proxyPass = "http://127.0.0.1:7000/"
+          proxyWebsockets = true;
+          extraConfig = ''
+            auth_basic off;
+            proxy_read_timeout 3600;
+          '';
+        };
+
         # OctoPrint
         "/octoprint/" = {
           proxyPass = "http://127.0.0.1:5000";
@@ -379,6 +388,15 @@ services.nginx = {
 
         "/socket.io/" = {
           proxyPass = "http://127.0.0.1:3030/socket.io/";
+          proxyWebsockets = true;
+          extraConfig = ''
+            auth_basic off;
+            proxy_read_timeout 3600;
+          '';
+        };
+
+        "/matomo/" = {
+          proxyPass = "http://127.0.0.1:7000/"
           proxyWebsockets = true;
           extraConfig = ''
             auth_basic off;
