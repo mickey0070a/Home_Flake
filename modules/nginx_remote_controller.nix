@@ -278,16 +278,17 @@ in
   # Python never writes or reloads Nginx configuration.
   # ---------------------------------------------------------------
 
+
 services.nginx = {
   enable = true;
   recommendedProxySettings = true;
   recommendedTlsSettings = true;
 
-  # FCStd/STEP uploads exceed the 1m default
   clientMaxBodySize = "512m";
 
-  # Preserve the real scheme when tailscaled has already terminated TLS
-  appendHttpConfig = ''
+  # Must be defined before the vhosts that reference it, so commonHttpConfig
+  # (early in the http block) rather than appendHttpConfig (after the include).
+  commonHttpConfig = ''
     map $http_x_forwarded_proto $forwarded_scheme {
       default $http_x_forwarded_proto;
       ""      $scheme;
@@ -299,11 +300,13 @@ services.nginx = {
       serverName = "_";
       basicAuthFile = "/etc/nginx/htpasswd";
 
-      extraConfig = ''
-        location = /remote-access { return 301 /remote-access/; }
-      '';
-
       locations = {
+        # Longer prefix /remote-access/ wins for subpaths, so this only
+        # catches the bare path and adds the slash the relative fetches need.
+        "/remote-access" = {
+          extraConfig = "return 301 /remote-access/;";
+        };
+
         "/remote-access/" = {
           proxyPass = "http://127.0.0.1:8787/";
           proxyWebsockets = true;
@@ -375,11 +378,11 @@ services.nginx = {
       serverName = "_";
       basicAuthFile = "/etc/nginx/htpasswd";
 
-      extraConfig = ''
-        location = /remote-access { return 301 /remote-access/; }
-      '';
-
       locations = {
+        "/remote-access" = {
+          extraConfig = "return 301 /remote-access/;";
+        };
+
         "/remote-access/" = {
           proxyPass = "http://127.0.0.1:8787/";
           proxyWebsockets = true;
@@ -388,8 +391,6 @@ services.nginx = {
           '';
         };
 
-        # Optional: drop basic auth here so /share/<id> links are openable
-        # by people you send them to. Delete this block to keep them gated.
         "/share/" = {
           proxyPass = "http://127.0.0.1:3000";
           extraConfig = ''
@@ -451,11 +452,6 @@ services.nginx = {
     };
   };
 };
-
-# Only nginx needs to be reachable. 3030 must stay open so the frontend
-# container's Lua blocks can reach http://<tailscale-ip>:3030.
-#networking.firewall.allowedTCPPorts = [ 80 3030 ];
-
 
   # ---------------------------------------------------------------
   # Controller service
