@@ -350,7 +350,6 @@ services.nginx = {
           proxyPass = "http://127.0.0.1:5000";
           proxyWebsockets = true;
           extraConfig = ''
-            proxy_set_header Host $http_host;
             proxy_set_header X-Script-Name /octoprint;
             proxy_set_header X-Scheme $forwarded_scheme;
             proxy_read_timeout 3600;
@@ -433,7 +432,6 @@ services.nginx = {
           proxyPass = "http://127.0.0.1:5000";
           proxyWebsockets = true;
           extraConfig = ''
-            proxy_set_header Host $http_host;
             proxy_set_header X-Script-Name /octoprint;
             proxy_set_header X-Scheme $forwarded_scheme;
             proxy_read_timeout 3600;
