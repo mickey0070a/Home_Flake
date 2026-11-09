@@ -278,178 +278,150 @@ in
   # Python never writes or reloads Nginx configuration.
   # ---------------------------------------------------------------
 
-
 services.nginx = {
-  enable = true;
-  recommendedProxySettings = true;
-  recommendedTlsSettings = true;
+    enable = true;
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
 
-  clientMaxBodySize = "512m";
+    virtualHosts = {
+      # LAN / tailnet on 80 — no auth anywhere
+      "_" = {
+        serverName = "_";
+        extraConfig = ''
+          client_max_body_size 512m;
+        '';
 
-  # Must be defined before the vhosts that reference it, so commonHttpConfig
-  # (early in the http block) rather than appendHttpConfig (after the include).
-  commonHttpConfig = ''
-    map $http_x_forwarded_proto $forwarded_scheme {
-      default $http_x_forwarded_proto;
-      ""      $scheme;
-    }
-  '';
+        locations = {
+          "/remote-access/" = {
+            proxyPass = "http://127.0.0.1:8787/";
+            proxyWebsockets = true;
+          };
 
-  virtualHosts = {
-    "_" = {
-      serverName = "_";
-      basicAuthFile = "/etc/nginx/htpasswd";
+          "/lens-backend/" = {
+            proxyPass = "http://127.0.0.1:3030/";
+            proxyWebsockets = true;
+            extraConfig = "proxy_read_timeout 3600;";
+          };
 
-      locations = {
-        # Longer prefix /remote-access/ wins for subpaths, so this only
-        # catches the bare path and adds the slash the relative fetches need.
-        "/remote-access" = {
-          extraConfig = "return 301 /remote-access/;";
-        };
+          "/socket.io/" = {
+            proxyPass = "http://127.0.0.1:3030/socket.io/";
+            proxyWebsockets = true;
+            extraConfig = "proxy_read_timeout 3600;";
+          };
 
-        "/remote-access/" = {
-          proxyPass = "http://127.0.0.1:8787/";
-          proxyWebsockets = true;
-          extraConfig = ''
-            proxy_read_timeout 3600;
-          '';
-        };
+          "/matomo/" = {
+            proxyPass = "http://127.0.0.1:7000/";
+            proxyWebsockets = true;
+          };
 
-        "/" = {
-          proxyPass = "http://127.0.0.1:3000";
-          proxyWebsockets = true;
-          extraConfig = ''
-            auth_basic off;
-            proxy_read_timeout 3600;
-            proxy_send_timeout 3600;
-          '';
-        };
+          "/octoprint/" = {
+            proxyPass = "http://127.0.0.1:5000";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_set_header X-Script-Name /octoprint;
+              proxy_set_header X-Scheme $scheme;
+              proxy_read_timeout 3600;
+            '';
+          };
 
-        "/lens-backend/" = {
-          proxyPass = "http://127.0.0.1:3030/";
-          proxyWebsockets = true;
-          extraConfig = ''
-            auth_basic off;
-            proxy_buffering off;
-            proxy_read_timeout 3600;
-            proxy_send_timeout 3600;
-          '';
-        };
+          "/trilium/" = {
+            proxyPass = "http://127.0.0.1:8080";
+            proxyWebsockets = true;
+            extraConfig = "proxy_read_timeout 3600;";
+          };
 
-        "/matomo/" = {
-          proxyPass = "http://127.0.0.1:7000/";
-          proxyWebsockets = true;
-          extraConfig = ''
-            auth_basic off;
-            proxy_set_header X-Forwarded-Prefix /matomo;
-            proxy_read_timeout 3600;
-          '';
-        };
-
-        "/octoprint/" = {
-          proxyPass = "http://127.0.0.1:5000";
-          proxyWebsockets = true;
-          extraConfig = ''
-            proxy_set_header X-Script-Name /octoprint;
-            proxy_set_header X-Scheme $forwarded_scheme;
-            proxy_read_timeout 3600;
-          '';
-        };
-
-        "/trilium/" = {
-          proxyPass = "http://127.0.0.1:8080";
-          proxyWebsockets = true;
-          extraConfig = ''
-            proxy_set_header X-Forwarded-Proto $forwarded_scheme;
-            proxy_read_timeout 3600;
-          '';
+          "/" = {
+            proxyPass = "http://127.0.0.1:3000";
+            proxyWebsockets = true;
+            extraConfig = "proxy_read_timeout 3600;";
+          };
         };
       };
-    };
 
-    "remote-access-public" = {
-      listen = [
-        {
-          addr = "127.0.0.1";
-          port = 8088;
-        }
-      ];
-      serverName = "_";
-      basicAuthFile = "/etc/nginx/htpasswd";
+      # Funnel listener on 8088 — Basic auth, tailnet/LAN exempt
+      "remote-access-public" = {
+        listen = [ { addr = "127.0.0.1"; port = 8088; } ];
+        serverName = "_";
+        basicAuthFile = "/etc/nginx/htpasswd";
+        extraConfig = ''
+          client_max_body_size 512m;
 
-      locations = {
-        "/remote-access" = {
-          extraConfig = "return 301 /remote-access/;";
-        };
+          # Unwrap the real client first; tailscaled proxies from loopback.
+          set_real_ip_from 127.0.0.1;
+          real_ip_header X-Forwarded-For;
 
-        "/remote-access/" = {
-          proxyPass = "http://127.0.0.1:8787/";
-          proxyWebsockets = true;
-          extraConfig = ''
-            proxy_read_timeout 3600;
-          '';
-        };
+          satisfy any;
+          allow 100.64.0.0/10;
+          allow 192.168.0.0/16;
+          allow 127.0.0.1;
+          deny all;
+        '';
 
-        "/share/" = {
-          proxyPass = "http://127.0.0.1:3000";
-          extraConfig = ''
-            auth_basic off;
-            proxy_read_timeout 3600;
-          '';
-        };
+        locations = {
+          "/remote-access/" = {
+            proxyPass = "http://127.0.0.1:8787/";
+            proxyWebsockets = true;
+          };
 
-        "/" = {
-          proxyPass = "http://127.0.0.1:3000";
-          proxyWebsockets = true;
-          extraConfig = ''
-            proxy_read_timeout 3600;
-            proxy_send_timeout 3600;
-          '';
-        };
+          # Exact match, so the no-slash form doesn't fall into "/"
+          "= /lens-backend" = {
+            extraConfig = "return 301 /lens-backend/;";
+          };
 
-        "/lens-backend/" = {
-          proxyPass = "http://127.0.0.1:3030/";
-          proxyWebsockets = true;
-          extraConfig = ''
-            auth_basic off;
-            proxy_buffering off;
-            proxy_read_timeout 3600;
-            proxy_send_timeout 3600;
-          '';
-        };
+          "/lens-backend/" = {
+            proxyPass = "http://127.0.0.1:3030/";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_set_header X-Forwarded-Proto https;
+              proxy_read_timeout 3600;
+            '';
+          };
 
-        "/matomo/" = {
-          proxyPass = "http://127.0.0.1:7000/";
-          proxyWebsockets = true;
-          extraConfig = ''
-            auth_basic off;
-            proxy_set_header X-Forwarded-Prefix /matomo;
-            proxy_read_timeout 3600;
-          '';
-        };
+          "/socket.io/" = {
+            proxyPass = "http://127.0.0.1:3030/socket.io/";
+            proxyWebsockets = true;
+            extraConfig = ''
+              auth_basic off;
+              proxy_set_header X-Forwarded-Proto https;
+              proxy_read_timeout 3600;
+            '';
+          };
 
-        "/octoprint/" = {
-          proxyPass = "http://127.0.0.1:5000";
-          proxyWebsockets = true;
-          extraConfig = ''
-            proxy_set_header X-Script-Name /octoprint;
-            proxy_set_header X-Scheme $forwarded_scheme;
-            proxy_read_timeout 3600;
-          '';
-        };
+          "/matomo/" = {
+            proxyPass = "http://127.0.0.1:7000/";
+            proxyWebsockets = true;
+            extraConfig = "auth_basic off;";
+          };
 
-        "/trilium/" = {
-          proxyPass = "http://127.0.0.1:8080";
-          proxyWebsockets = true;
-          extraConfig = ''
-            proxy_set_header X-Forwarded-Proto $forwarded_scheme;
-            proxy_read_timeout 3600;
-          '';
+          "/octoprint/" = {
+            proxyPass = "http://127.0.0.1:5000";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_set_header X-Script-Name /octoprint;
+              proxy_set_header X-Forwarded-Proto https;
+              proxy_read_timeout 3600;
+            '';
+          };
+
+          "/trilium/" = {
+            proxyPass = "http://127.0.0.1:8080";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_set_header X-Forwarded-Proto https;
+              proxy_read_timeout 3600;
+            '';
+          };
+
+          "/" = {
+            proxyPass = "http://127.0.0.1:3000";
+            proxyWebsockets = true;
+            extraConfig = "proxy_read_timeout 3600;";
+          };
         };
       };
     };
   };
-};
+
 
   # ---------------------------------------------------------------
   # Controller service
@@ -482,5 +454,5 @@ services.nginx = {
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 80  3030 ];
+  networking.firewall.allowedTCPPorts = [ 80 ];
 }
