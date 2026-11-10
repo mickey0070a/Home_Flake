@@ -346,7 +346,24 @@ services.nginx = {
       };
 
       # Remote Access Controller
-
+      "remote-access-controller" = {
+        listen = [ { addr = "127.0.0.1"; port = 8089; } ];
+        serverName = "_";
+        basicAuthFile = "/etc/nginx/htpasswd";
+        extraConfig = ''
+          set_real_ip_from 127.0.0.1;
+          real_ip_header X-Forwarded-For;
+          satisfy any;
+          allow 100.64.0.0/10;
+          allow 192.168.0.0/16;
+          allow 127.0.0.1;
+          deny all;
+        '';
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:8787/";
+          proxyWebsockets = true;
+        };
+      };
 
       # Funnel listener on 8088 — Basic auth, tailnet/LAN exempt
       "remote-access-public" = {
@@ -427,6 +444,28 @@ services.nginx = {
         };
       };
     };
+  };
+
+
+ # ---------------------------------------------------------------
+  # Oneshot Tailscale Serve
+  # ---------------------------------------------------------------
+
+systemd.services.tailscale-serve = {
+    description = "Tailscale serve baseline rules";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "tailscaled.service" "nginx.service" ];
+    requires = [ "tailscaled.service" "nginx.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      Restart = "on-failure";
+      RestartSec = "5s";
+    };
+    script = ''
+      ${pkgs.tailscale}/bin/tailscale serve --bg --yes --https=443 8088
+      ${pkgs.tailscale}/bin/tailscale serve --bg --yes --https=8443 8089
+    '';
   };
 
 
