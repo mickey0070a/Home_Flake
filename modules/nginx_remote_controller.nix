@@ -388,6 +388,7 @@ services.nginx = {
           "= /lens-backend" = {
             extraConfig = "return 301 /lens-backend/;";
           };
+          locations = {
 
           "/lens-backend/" = {
             proxyPass = "http://127.0.0.1:3030/";
