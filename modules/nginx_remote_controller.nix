@@ -300,13 +300,19 @@ services.nginx = {
           "/lens-backend/" = {
             proxyPass = "http://127.0.0.1:3030/";
             proxyWebsockets = true;
-            extraConfig = "proxy_read_timeout 3600;";
+            extraConfig = "
+              proxy_buffering off;
+              proxy_read_timeout 3600;
+            ";
           };
 
           "/socket.io/" = {
             proxyPass = "http://127.0.0.1:3030/socket.io/";
             proxyWebsockets = true;
-            extraConfig = "proxy_read_timeout 3600;";
+            extraConfig = "
+              proxy_read_timeout 3600;
+              proxy_buffering off;
+            ";
           };
 
           "/matomo/" = {
@@ -373,6 +379,7 @@ services.nginx = {
             proxyWebsockets = true;
             extraConfig = ''
               proxy_set_header X-Forwarded-Proto https;
+              proxy_buffering off;
               proxy_read_timeout 3600;
             '';
           };
@@ -383,6 +390,7 @@ services.nginx = {
             extraConfig = ''
               auth_basic off;
               proxy_set_header X-Forwarded-Proto https;
+              proxy_buffering off;
               proxy_read_timeout 3600;
             '';
           };
