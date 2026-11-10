@@ -383,13 +383,12 @@ services.nginx = {
           allow 127.0.0.1;
           deny all;
         '';
-
+          locations = {
           # Exact match, so the no-slash form doesn't fall into "/"
           "= /lens-backend" = {
             extraConfig = "return 301 /lens-backend/;";
           };
-          locations = {
-
+          
           "/lens-backend/" = {
             proxyPass = "http://127.0.0.1:3030/";
             proxyWebsockets = true;
