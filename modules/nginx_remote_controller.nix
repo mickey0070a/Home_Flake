@@ -108,16 +108,14 @@ def service_ready(name):
 
 def funnel_on():
     result = run([
-        "${pkgs.tailscale}/bin/tailscale", "funnel", "--bg", "--yes", "8088"
+        "${pkgs.tailscale}/bin/tailscale", "funnel", "--bg", "--yes", "--https=433", "8088"
     ])
     return result.returncode == 0, result.stderr.strip()
 
 
 def funnel_off():
     result = run([
-        "${pkgs.tailscale}/bin/tailscale",
-        "funnel",
-        "reset",
+        "${pkgs.tailscale}/bin/tailscale", "funnel", "serve", "--bg", "--yes", "8088"
     ])
     return result.returncode == 0, result.stderr.strip()
 
@@ -252,6 +250,9 @@ def reconcile_startup():
         if not ok:
             state["broadcast"] = False
     else:
+        ok, _ = funnel_off()
+        if not ok:
+          state["broadcast"] = False
         state["broadcast"] = False
 
     save_state(state)
@@ -344,6 +345,9 @@ services.nginx = {
         };
       };
 
+      # Remote Access Controller
+
+
       # Funnel listener on 8088 — Basic auth, tailnet/LAN exempt
       "remote-access-public" = {
         listen = [ { addr = "127.0.0.1"; port = 8088; } ];
@@ -363,12 +367,6 @@ services.nginx = {
           deny all;
         '';
 
-        locations = {
-          "/remote-access/" = {
-            proxyPass = "http://127.0.0.1:8787/";
-            proxyWebsockets = true;
-          };
-
           # Exact match, so the no-slash form doesn't fall into "/"
           "= /lens-backend" = {
             extraConfig = "return 301 /lens-backend/;";
@@ -378,6 +376,7 @@ services.nginx = {
             proxyPass = "http://127.0.0.1:3030/";
             proxyWebsockets = true;
             extraConfig = ''
+              auth_basic off;
               proxy_set_header X-Forwarded-Proto https;
               proxy_buffering off;
               proxy_read_timeout 3600;
