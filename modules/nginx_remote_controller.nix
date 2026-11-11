@@ -108,13 +108,14 @@ def service_ready(name):
 
 def funnel_on():
     result = run([
-        "${pkgs.tailscale}/bin/tailscale", "funnel", "--bg", "--yes", "--https=433", "8088"
+        "${pkgs.tailscale}/bin/tailscale", "funnel", "--bg", "--yes", "--https=443", "8088"
     ])
     return result.returncode == 0, result.stderr.strip()
 
 
 def funnel_off():
     result = run([
+        "${pkgs.tailscale}/bin/tailscale", "funnel", "--https=443", "off"
         "${pkgs.tailscale}/bin/tailscale", "serve", "--bg", "--yes", "8088"
     ])
     return result.returncode == 0, result.stderr.strip()
