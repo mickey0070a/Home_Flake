@@ -115,7 +115,7 @@ def funnel_on():
 
 def funnel_off():
     result = run([
-        "${pkgs.tailscale}/bin/tailscale", "funnel", "serve", "--bg", "--yes", "8088"
+        "${pkgs.tailscale}/bin/tailscale", "serve", "--bg", "--yes", "8088"
     ])
     return result.returncode == 0, result.stderr.strip()
 
