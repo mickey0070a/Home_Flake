@@ -114,9 +114,12 @@ def funnel_on():
 
 
 def funnel_off():
-    result = run([
+    # Drop the public rule entirely, then re-add it as tailnet-only.
+    run([
         "${pkgs.tailscale}/bin/tailscale", "funnel", "--https=443", "off"
-        "${pkgs.tailscale}/bin/tailscale", "serve", "--bg", "--yes", "8088"
+    ])
+    result = run([
+        "${pkgs.tailscale}/bin/tailscale", "serve", "--bg", "--yes", "--https=443", "8088"
     ])
     return result.returncode == 0, result.stderr.strip()
 
@@ -142,15 +145,13 @@ def apply_state(requested):
     active = any(requested[name] for name in SERVICES)
 
     if requested["broadcast"] and active:
-        if not old["broadcast"]:
-            ok, error = funnel_on()
-            if not ok:
-                return False, "Funnel enable failed: " + (error or "unknown error")
+        ok, error = funnel_on()
+        if not ok:
+            return False, "Funnel enable failed: " + (error or "unknown error")
     else:
-        if old["broadcast"]:
-            ok, error = funnel_off()
-            if not ok:
-                return False, "Funnel disable failed: " + (error or "unknown error")
+        ok, error = funnel_off()
+        if not ok:
+            return False, "Funnel disable failed: " + (error or "unknown error")
         requested["broadcast"] = False
 
     save_state(requested)
