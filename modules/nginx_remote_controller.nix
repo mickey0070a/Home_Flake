@@ -302,6 +302,7 @@ services.nginx = {
             proxyPass = "http://127.0.0.1:3030/";
             proxyWebsockets = true;
             extraConfig = "
+              auth_basic off;
               proxy_buffering off;
               proxy_read_timeout 3600;
             ";
@@ -381,7 +382,7 @@ services.nginx = {
           allow 100.64.0.0/10;
           allow 192.168.0.0/16;
           allow 127.0.0.1;
-          deny all;
+          #deny all;
         '';
           locations = {
           # Exact match, so the no-slash form doesn't fall into "/"
