@@ -19,9 +19,9 @@ appimageTools.wrapType2 {
   ];
 
   # Give the executable a predictable name.
-  extraInstallCommands = ''
-    mv "$out/bin/${pname}-${version}" "$out/bin/${pname}"
-  '';
+  #extraInstallCommands = ''
+  #  mv "$out/bin/${pname}-${version}" "$out/bin/${pname}"
+  #'';
 
   meta = {
     description = "FreeCAD 26.3 Release Candidate 2";
