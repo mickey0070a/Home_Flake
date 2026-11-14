@@ -1,7 +1,8 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 let
   freecadRC = pkgs.callPackage ./freecad-appimage.nix {
+    inherit inputs;
     pname = "freecad-rc";
     version = "26.3rc2";
     src = pkgs.fetchurl {
