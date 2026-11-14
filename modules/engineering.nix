@@ -11,19 +11,20 @@ let
     export PIP_BREAK_SYSTEM_PACKAGES=1
     export PYTHONPATH="$mods''${PYTHONPATH:+:$PYTHONPATH}"
 
-    exec ${freecadRC}/bin/freecad-rc --python-path "$mods" "$@"
+    exec ${freecadRC}/libexec/FreeCAD.AppImage \
+      --python-path "$mods" "$@"
   '';
+
 in
 {
   home.packages = with pkgs; [
+    freecad-with-pip
     librecad
     qalculate-gtk
     gmsh
     calculix-ccx
     inkscape-with-extensions
     gimp
-    freecad-with-pip
-    # super-slicer
     orca-slicer
     qgis
     steam-run
