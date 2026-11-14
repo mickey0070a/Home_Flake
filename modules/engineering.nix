@@ -1,17 +1,25 @@
 { pkgs, ... }:
 
 let
-freecad-with-pip = pkgs.writeShellScriptBin "freecad" ''
-  export PYTHONUSERBASE="$HOME/.local"
+  freecadRC = pkgs.callPackage ./freecad-appimage.nix {
+    pname = "freecad-rc";
+    version = "26.3rc2";
+    src = pkgs.fetchurl {
+      url = "https://github.com/FreeCAD/FreeCAD/releases/download/26.3rc2/FreeCAD_26.3rc2-Linux-x86_64.AppImage";
+      hash = "sha256-LPQhLVo0hXTnhtp9Wo+u6z6D3UJFwjiY3t6SzoLOSQg=";
+    };
+  };
 
-  ${pkgs.python313Packages.pip}/bin/pip install \
-    --target "$PYTHONUSERBASE/lib/python3.13/site-packages" \
-    pip setuptools wheel >/dev/null 2>&1 || true
+  freecad-with-pip = pkgs.writeShellScriptBin "freecad" ''
+    mods="$HOME/.local/share/freecad/mods"
+    mkdir -p "$mods"
 
-  export PYTHONPATH="$PYTHONUSERBASE/lib/python3.13/site-packages:$PYTHONPATH"
+    export PIP_DISABLE_PIP_VERSION_CHECK=1
+    export PIP_BREAK_SYSTEM_PACKAGES=1
+    export PYTHONPATH="$mods''${PYTHONPATH:+:$PYTHONPATH}"
 
-  exec ${pkgs.steam-run}/bin/steam-run ${pkgs.freecad}/bin/freecad "$@"
-'';
+    exec ${freecadRC}/bin/freecad-rc --python-path "$mods" "$@"
+  '';
 in
 {
   home.packages = with pkgs; [
@@ -22,11 +30,9 @@ in
     inkscape-with-extensions
     gimp
     freecad-with-pip
-    python313Packages.pip
-    python313
     # super-slicer
     orca-slicer
     qgis
-    steam-run  # Make sure this is available
+    steam-run
   ];
 }
