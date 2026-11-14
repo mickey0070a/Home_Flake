@@ -192,6 +192,13 @@
   programs.appimage = {
 	enable = true;
 	binfmt = true;
+
+	package = pkgs.appimage-run.override {
+		extraPkgs = appPkgs: with appPkgs; [
+			python312
+			python312Packages.pip
+		];
+	};
   };
 
   # Allow unfree packages
