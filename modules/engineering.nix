@@ -1,15 +1,7 @@
-{ inputs, pkgs, ... }:
+{ pkgs, ... }:
 
 let
-  freecadRC = pkgs.callPackage ./freecad-appimage.nix {
-    inherit inputs;
-    pname = "freecad-rc";
-    version = "26.3rc2";
-    src = pkgs.fetchurl {
-      url = "https://github.com/FreeCAD/FreeCAD/releases/download/26.3rc2/FreeCAD_26.3rc2-Linux-x86_64.AppImage";
-      hash = "sha256-LPQhLVo0hXTnhtp9Wo+u6z6D3UJFwjiY3t6SzoLOSQg=";
-    };
-  };
+  freecadRC = pkgs.callPackage ./freecad-appimage.nix {};
 
   freecad-with-pip = pkgs.writeShellScriptBin "freecad" ''
     mods="$HOME/.local/share/freecad/mods"
