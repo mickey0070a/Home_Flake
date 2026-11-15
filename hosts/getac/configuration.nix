@@ -99,6 +99,11 @@
   
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  nix.settings.trusted-users = [
+	"root"
+	"michaelh"
+  ];
+
   # Enable the nix daemon (useful for builds and remote builders)
   #nix.daemon.enable = true;
 
