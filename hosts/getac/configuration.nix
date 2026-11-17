@@ -132,6 +132,9 @@
       "guest"
       "nofail"
       "_netdev"
+	  "gid=1"
+	  "file_mode=0775"
+	  "dir_mode=0775"
     ];
   };
 
